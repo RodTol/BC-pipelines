@@ -12,6 +12,17 @@ pipeline {
         pollSCM '* * * * *'
     }
     stages {
+        stage('Create Initial file') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {    
+                sh '''
+                #ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 python configuration.py
+                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 whoami
+                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 id
+                '''
+                }
+            }
+        }
         stage('Start basecalling run') {
             steps {
                 script {
@@ -24,15 +35,6 @@ pipeline {
                         '''
                     }
                 }
-            }
-        }
-        stage('Create Initial file') {
-            steps {
-                sh '''
-                #ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 python configuration.py
-                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 whoami
-                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 id
-                '''
             }
         }
         stage('Create Final file') {
