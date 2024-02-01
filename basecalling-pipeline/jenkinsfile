@@ -12,6 +12,16 @@ pipeline {
         pollSCM '* * * * *'
     }
     stages {
+        stage('Pull project repository') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {    
+                sh '''
+                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 rm -rf BC-pipeline_orfeo 
+                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 git pull https://github.com/RodTol/BC-pipelines
+                '''
+                }
+            }
+        }
         stage('Create Initial file') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {    
