@@ -18,8 +18,12 @@ pipeline {
                     //sshagent(['orfeo_jenkins_lage_test_ssh']) {
                         script {
                             echo "Current directory: ${PWD}"
+                            ls -lrt
+                            ls /orfeo/LTS/LADE/LT_storage/tolloi
                             echo "Running 'git pull' in BC-pipelines directory"
-                            sh 'cd BC-pipelines && git pull'
+                            dir('BC-pipelines') {
+                                sh 'git pull'
+                            }
                         }
                     //}
                 }    
