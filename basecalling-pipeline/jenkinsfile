@@ -16,15 +16,14 @@ pipeline {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
                     //sshagent(['orfeo_jenkins_lage_test_ssh']) {
-                        script {
+                        sh '''
                             echo "Current directory: ${PWD}"
                             ls -lrt
                             ls /orfeo/LTS/LADE/LT_storage/tolloi
                             echo "Running 'git pull' in BC-pipelines directory"
-                            dir('BC-pipelines') {
-                                sh 'git pull'
-                            }
-                        }
+                            cd BC-pipelines 
+                            git pull
+                        '''
                     //}
                 }    
             }
