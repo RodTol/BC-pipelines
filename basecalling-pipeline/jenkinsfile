@@ -15,13 +15,13 @@ pipeline {
         stage('Pull project repository') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                    sshagent(['orfeo_jenkins_lage_test_ssh']) {
+                    //sshagent(['orfeo_jenkins_lage_test_ssh']) {
                         script {
                             echo "Current directory: ${PWD}"
                             echo "Running 'git pull' in BC-pipelines directory"
                             sh 'cd BC-pipelines && git pull'
                         }
-                    }
+                    //}
                 }    
             }
         }
