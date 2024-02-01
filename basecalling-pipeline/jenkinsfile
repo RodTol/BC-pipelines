@@ -30,8 +30,8 @@ pipeline {
                                 echo "INPUT_DIR: ${INPUT_DIR}"
                                 echo "OUTPUT_DIR: ${OUTPUT_DIR}"
 
-                                export INPUT_DIR ='/u/dssc/tolloi/LTS'
-                                export OUTPUT_DIR ='/orfeo/scratch/dssc/tolloi'
+                                export INPUT_DIR='/u/dssc/tolloi/LTS'
+                                export OUTPUT_DIR='/orfeo/scratch/dssc/tolloi'
                             '
                         """
                     //}
