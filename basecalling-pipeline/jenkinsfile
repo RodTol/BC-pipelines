@@ -4,6 +4,10 @@ pipeline {
             label 'docker'
             }
       }
+    environment {
+        INPUT_DIR = ''
+        OUTPUT_DIR = ''
+    }
     triggers {
         pollSCM '* * * * *'
     }
@@ -11,7 +15,7 @@ pipeline {
         stage('Create Initial file') {
             steps {
                 sh '''
-                echo "Fai un python per un file di recap da leggere degli input e impostazioni"
+                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 python configuration.py
                 '''
             }
         }
