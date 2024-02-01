@@ -7,6 +7,8 @@ pipeline {
     environment {
         ANSI_RESET = '\u001B[0m'
         ANSI_RED = '\u001B[31m'
+        INPUT_DIR = ''
+        OUTPUT_DIR = ''
     }
     triggers {
         pollSCM '* * * * *'
@@ -24,6 +26,8 @@ pipeline {
                                 echo ""
                                 echo "${ANSI_RED}ls on my LTS dir${ANSI_RESET}"
                                 ls /orfeo/LTS/LADE/LT_storage/tolloi
+                                echo "INPUT_DIR: ${INPUT_DIR}"
+                                echo "OUTPUT_DIR: ${OUTPUT_DIR}"
                             '
                         """
                     //}
@@ -32,11 +36,22 @@ pipeline {
         }
         stage('Create Initial file') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {    
-                sh '''
-                #ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 python configuration.py
-                '''
-                }
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                    //sshagent(['orfeo_jenkins_lage_test_ssh']) {
+                        env.INPUT_DIR = '/u/dssc/tolloi/LTS'
+                        env.OUTPUT_DIR = '/orfeo/scratch/dssc/tolloi'
+                        sh """
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                                echo modified variables
+                                echo "INPUT_DIR: ${INPUT_DIR}"
+                                echo "OUTPUT_DIR: ${OUTPUT_DIR}"
+
+                                echo "Running the python script"
+                                python basecalling-pipeline configuration.py
+                            '
+                        """
+                    //}
+                }    
             }
         }
         stage('Start basecalling run') {
