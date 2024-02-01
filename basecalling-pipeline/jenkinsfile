@@ -28,6 +28,9 @@ pipeline {
                                 ls /orfeo/LTS/LADE/LT_storage/tolloi
                                 echo "INPUT_DIR: ${INPUT_DIR}"
                                 echo "OUTPUT_DIR: ${OUTPUT_DIR}"
+
+                                env.INPUT_DIR = '/u/dssc/tolloi/LTS'
+                                env.OUTPUT_DIR = '/orfeo/scratch/dssc/tolloi'
                             '
                         """
                     //}
@@ -37,20 +40,16 @@ pipeline {
         stage('Create Initial file') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                    //sshagent(['orfeo_jenkins_lage_test_ssh']) {
-                        env.INPUT_DIR = '/u/dssc/tolloi/LTS'
-                        env.OUTPUT_DIR = '/orfeo/scratch/dssc/tolloi'
-                        sh """
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                                echo modified variables
-                                echo "INPUT_DIR: ${INPUT_DIR}"
-                                echo "OUTPUT_DIR: ${OUTPUT_DIR}"
+                    sh """
+                        ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                            echo modified variables
+                            echo "INPUT_DIR: ${INPUT_DIR}"
+                            echo "OUTPUT_DIR: ${OUTPUT_DIR}"
 
-                                echo "Running the python script"
-                                python basecalling-pipeline configuration.py
-                            '
-                        """
-                    //}
+                            echo "Running the python script"
+                            python basecalling-pipeline configuration.py
+                        '
+                    """
                 }    
             }
         }
