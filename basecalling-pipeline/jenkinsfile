@@ -1,0 +1,49 @@
+pipeline {
+    agent { 
+        node {
+            label 'docker'
+            }
+      }
+    triggers {
+        pollSCM '* * * * *'
+    }
+    stages {
+        stage('Create Initial file') {
+            steps {
+                sh '''
+                echo "Fai un python per un file di recap da leggere degli input e impostazioni"
+                '''
+            }
+        }
+        stage('Start basecalling run') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                        echo "Starting the basecalling"
+                        sh '''
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 ls -lrt
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 squeue
+                            echo "sbatch il commando per far partire la run"
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Create Final file') {
+            steps {
+                sh '''
+                echo "python per creare il file di recap delle perfomance della run"
+                '''
+            }
+        }
+        stage('Send Report to User') {
+            steps {
+                sh '''
+                echo "invio il report finale allo user"
+                cd basecalling-pipeline
+                #bash telegram_bot.sh
+                '''
+            }
+        }
+    }
+}
