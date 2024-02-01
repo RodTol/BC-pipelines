@@ -18,8 +18,8 @@ pipeline {
                     //sshagent(['orfeo_jenkins_lage_test_ssh']) {
                         sh '''
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 "
-                                echo "Current directory: ${PWD}"
-                                ls -lrt
+                                echo "Current directory:" && pwd
+                                echo "ls on my LTS dir"
                                 ls /orfeo/LTS/LADE/LT_storage/tolloi
                                 echo "Running 'git pull' in BC-pipelines directory"
                                 cd BC-pipelines 
