@@ -1,4 +1,4 @@
-def pretty_jenkins = load 'pretty_jenkins.groovy'
+//def pretty_jenkins = load 'pretty_jenkins.groovy'
 
 pipeline {
     agent { 
