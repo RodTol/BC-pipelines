@@ -21,11 +21,14 @@ pipeline {
                 }
             }
         }        
+
         stage('Pull project repository') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                    pretty_jenkins.echoBanner("PULL PROJECT ON ORFEO")
-                    //sshagent(['orfeo_jenkins_lage_test_ssh']) {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                        // Call echoBanner from pretty_jenkins.groovy
+                        pretty_jenkins.echoBanner("Welcome to Pretty Jenkins!")
+
                         sh """
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
                                 echo "${ANSI_RED}Current directory: \${PWD}${ANSI_RESET}" && pwd
@@ -36,7 +39,7 @@ pipeline {
                                 ls /orfeo/LTS/LADE/LT_storage/tolloi
                             '
                         """
-                    //}
+                    }
                 }    
             }
         }
