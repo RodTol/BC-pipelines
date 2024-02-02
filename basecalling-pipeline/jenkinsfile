@@ -24,7 +24,7 @@ pipeline {
         stage('Pull project repository') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                    pretty_jenkins.echoBanner()
+                    pretty_jenkins.echoBanner("PULL PROJECT ON ORFEO")
                     //sshagent(['orfeo_jenkins_lage_test_ssh']) {
                         sh """
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
