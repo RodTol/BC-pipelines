@@ -13,22 +13,11 @@ pipeline {
     triggers {
         pollSCM '* * * * *'
     }
-    stages {
-        stage('Load External Script') {
-            steps {
-                script {
-                    def pretty_jenkins = load 'pretty_jenkins.groovy'
-                }
-            }
-        }        
-
+    stages {   
         stage('Pull project repository') {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                        // Call echoBanner from pretty_jenkins.groovy
-                        pretty_jenkins.echoBanner("Welcome to Pretty Jenkins!")
-
                         sh """
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
                                 echo "${ANSI_RED}Current directory: \${PWD}${ANSI_RESET}" && pwd
