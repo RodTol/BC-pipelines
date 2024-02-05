@@ -56,6 +56,18 @@ pipeline {
                 }    
             }
         }
+        stage('Slurm cleanup') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                        sh '''
+                            
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                                ls /orfeo/cephfs/home/area/jenkins_lage_test/
+                            '    
+                        '''
+                }
+            }
+        }
         stage('Start basecalling run') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
@@ -65,6 +77,7 @@ pipeline {
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
                                 #sacctmgr list associations Users=$(whoami) format=Account,User,Partition
                                 echo "Launching the basecalling"
+                                cd ~/BC-pipelines/basecalling-pipeline
                                 sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                                 
                                 ls ~/BC-pipelines/basecalling-pipeline/
