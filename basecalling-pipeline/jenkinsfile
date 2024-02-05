@@ -44,7 +44,7 @@ pipeline {
                     sh '''
                         ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
                             cd BC-pipelines/basecalling-pipeline/
-                            #python configuration.py
+                            python configuration.py
                         '
                     '''
                 }    
@@ -76,6 +76,7 @@ pipeline {
                                 sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                                 
                                 ls ~/BC-pipelines/basecalling-pipeline/
+                                
                                 ls /orfeo/LTS/LADE/LT_storage/tolloi/jenkins-jobs-logs
                             '    
                         '''
