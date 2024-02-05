@@ -28,7 +28,7 @@ pipeline {
                                 echo ""
                                 echo "${ANSI_RED}ls on my LTS dir${ANSI_RESET}"
                                 cd /orfeo/LTS/LADE/LT_storage/tolloi
-                                ll
+                                ls -l
                             '
                         '''
                     }
