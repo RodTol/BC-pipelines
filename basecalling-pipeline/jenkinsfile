@@ -46,6 +46,7 @@ pipeline {
                     */
                     sh '''
                         ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                            echo $PARAM_FILE
                             cd BC-pipelines/basecalling-pipeline/
                             python configuration.py $PARAM_FILE
                         '
@@ -65,9 +66,8 @@ pipeline {
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                                 
+                                echo "Pipeline dir ---"
                                 ls ~/BC-pipelines/basecalling-pipeline/
-
-                                ls /orfeo/LTS/LADE/LT_storage/tolloi/jenkins-jobs-logs
                             '    
                         '''
                 }
