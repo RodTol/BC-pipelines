@@ -8,7 +8,7 @@ pipeline {
         ansiColor('xterm')
     }*/
     parameters {
-        file(name: 'PARAM_FILE', description: '~/BC-pipelines/basecalling-pipeline/config.json')
+        file(name: 'PARAM_FILE', description: 'config.json')
     }
     environment {
         ANSI_RESET = '\u001B[0m'
