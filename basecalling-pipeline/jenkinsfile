@@ -43,11 +43,12 @@ pipeline {
                         Roba più banale, me le scrivo, altrimenti ci dovrebbe essere in modo
                         usando Jenkins
                     */
-                    sh """
+                    sh '''
                         ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                            python BC-pipelines/basecalling-pipeline/configuration.py
+                            cd BC-pipelines/basecalling-pipeline/
+                            python configuration.py
                         '
-                    """
+                    '''
                 }    
             }
         }
