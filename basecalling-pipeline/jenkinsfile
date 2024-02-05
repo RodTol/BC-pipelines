@@ -77,6 +77,7 @@ pipeline {
                                 sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                                 
                                 ls ~/BC-pipelines/basecalling-pipeline/
+                                ls /orfeo/LTS/LADE/LT_storage/tolloi
                             '    
                         '''
                 }
