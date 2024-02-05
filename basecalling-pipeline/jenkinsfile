@@ -62,7 +62,7 @@ pipeline {
                         sh '''
                             
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                                ls /orfeo/cephfs/home/area/jenkins_lage_test/
+                                ls -l /orfeo/cephfs/home/area/jenkins_lage_test/
                             '    
                         '''
                 }
