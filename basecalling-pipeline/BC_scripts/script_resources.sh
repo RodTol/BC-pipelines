@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=jk-try
-#SBATCH --time=00:01:00
+#SBATCH --time=00:10:00
 #SBATCH -p DGX --ntasks-per-node=1 --nodes=1 --cpus-per-task=1 --gpus=0 --nodelist=dgx002
 #SBATCH hetjob
 #SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --nodelist=gpu004

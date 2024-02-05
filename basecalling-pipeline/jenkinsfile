@@ -62,9 +62,11 @@ pipeline {
                         echo "Starting the basecalling"
                         sh '''
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                            sacctmgr list associations Users=$(whoami) format=Account,User,Partition
                             echo "Launching the basecalling"
                             ls ~/BC-pipelines/basecalling-pipeline/BC_scripts
                             sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
+                            ls ~/BC-pipelines/basecalling-pipeline/BC_scripts
                             '    
                         '''
                 }
