@@ -1,7 +1,13 @@
 import os
+import json
 
-input_dir = os.environ.get("INPUT_DIR")
+#Load in config the json file
+with open('config.json', 'r') as json_file:
+    config = json.load(json_file)
+
+run_name = config['General']['run_name']
+input_dir = config['Basecalling']['input_dir']
+output_dir = config['Basecalling']['output_dir']
+
 print(f"Value of INPUT_DIR: {input_dir}")
-
-output_dir = os.environ.get("OUTPUT_DIR")
 print(f"Value of OUTPUT_DIR: {output_dir}")

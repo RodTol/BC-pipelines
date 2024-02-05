@@ -1,0 +1,11 @@
+{
+    "General": {
+      "run_name": "ExampleRun",
+      "version": "1.0"
+    },
+    "Basecalling": {
+      "input_dir": "/orfeo/LTS/LADE/LT_storage/tolloi/",
+      "output_dir": "/orfeo/LTS/LADE/LT_storage/tolloi/"
+    }
+  }
+  
