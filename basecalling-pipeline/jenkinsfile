@@ -46,6 +46,7 @@ pipeline {
                     */
                     script {
                         /*I save the param file*/
+                        echo "PARAM_FILE: ${PARAM_FILE}"
                         def paramFile = sh(script: 'echo $PARAM_FILE', returnStdout: true).trim()
                         echo "Parameter File: ${paramFile}"
                         sh '''
