@@ -22,12 +22,13 @@ pipeline {
                         sh '''
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
                                 echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
-                                echo "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
+                                echo -n "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
                                 echo "Running ''git pull'' in BC-pipelines directory"
                                 cd BC-pipelines && git pull
                                 echo ""
                                 echo "${ANSI_RED}ls on my LTS dir${ANSI_RESET}"
                                 cd /orfeo/LTS/LADE/LT_storage/tolloi
+                                ll
                             '
                         '''
                     }
