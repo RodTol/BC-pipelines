@@ -47,23 +47,10 @@ pipeline {
                     sh '''
                         ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
                             cd BC-pipelines/basecalling-pipeline/
-                            python configuration.py
+                            python configuration.py $PARAM_FILE
                         '
                     '''
                 }    
-            }
-        }
-        stage('Slurm cleanup') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                        sh '''
-                            
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                                rm slurm-242*
-                                ls -l /orfeo/cephfs/home/area/jenkins_lage_test/
-                            '    
-                        '''
-                }
             }
         }
         stage('Start basecalling run') {
