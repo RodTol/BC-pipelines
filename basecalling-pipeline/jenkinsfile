@@ -5,7 +5,7 @@ pipeline {
             }
       }
     options {
-        ansiColor('xterm')
+        //ansiColor('xterm')
     }
     environment {
         ANSI_RESET = '\u001B[0m'
@@ -34,7 +34,7 @@ pipeline {
                 }    
             }
         }
-        stage('Create Initial file') {
+        stage('Read configuration file') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
                     /**
@@ -45,10 +45,6 @@ pipeline {
                     */
                     sh """
                         ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                            export INPUT_DIR='/u/dssc/tolloi/LTS'
-                            export OUTPUT_DIR='/orfeo/scratch/dssc/tolloi'
-
-                            echo "Running the python script"
                             python BC-pipelines/basecalling-pipeline/configuration.py
                         '
                     """
