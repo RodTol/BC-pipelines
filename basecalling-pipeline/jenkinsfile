@@ -44,32 +44,36 @@ pipeline {
                         Roba più banale, me le scrivo, altrimenti ci dovrebbe essere in modo
                         usando Jenkins
                     */
-                    sh '''
-                        ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                            echo $PARAM_FILE
-                            cd BC-pipelines/basecalling-pipeline/
-                            python configuration.py $PARAM_FILE
-                        '
-                    '''
+                    script {
+                        /*I save the param file*/
+                        def paramFile = sh(script: 'echo $PARAM_FILE', returnStdout: true).trim()
+                        echo "Parameter File: ${paramFile}"
+                        sh '''
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
+                                cd BC-pipelines/basecalling-pipeline/
+                                python configuration.py ${paramFile}
+                            '
+                        '''
+                    }
                 }    
             }
         }
         stage('Start basecalling run') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                        echo "Starting the basecalling"
-                        sh '''
+                    echo "Starting the basecalling"
+                    sh '''
+                        
+                        ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                            #sacctmgr list associations Users=$(whoami) format=Account,User,Partition
+                            echo "Launching the basecalling"
+                            cd ~/BC-pipelines/basecalling-pipeline
+                            sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                             
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                                #sacctmgr list associations Users=$(whoami) format=Account,User,Partition
-                                echo "Launching the basecalling"
-                                cd ~/BC-pipelines/basecalling-pipeline
-                                sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
-                                
-                                echo "Pipeline dir ---"
-                                ls ~/BC-pipelines/basecalling-pipeline/
-                            '    
-                        '''
+                            echo "Pipeline dir ---"
+                            ls ~/BC-pipelines/basecalling-pipeline/
+                        '    
+                    '''
                 }
             }
         }
