@@ -4,7 +4,7 @@
 #SBATCH -p DGX --ntasks-per-node=1 --nodes=1 --cpus-per-task=1 --gpus=0
 #SBATCH hetjob
 #SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
-#SBATCH --output=/orfeo/LTS/LADE/LT_storage/tolloi/jenkins-jobs-logs/slurm_output.log 
+#SBATCH --output=~/BC-pipelines/basecalling-pipeline/
 
 
 srun --het-group=0 ~/BC-pipelines/utility/prova_job.sh &
