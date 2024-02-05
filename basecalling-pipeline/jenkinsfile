@@ -63,7 +63,7 @@ pipeline {
                         sh '''
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
                             echo "Launching the basecalling"
-                            sbatch BC_scripts/script_resources.sh
+                            sbatch ~/basecalling-pipeline/BC_scripts/script_resources.sh
                             '    
                         '''
                 }
