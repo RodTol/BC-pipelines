@@ -7,6 +7,9 @@ pipeline {
     /*options {
         ansiColor('xterm')
     }*/
+    parameters {
+        file(name: 'PARAM_FILE', description: 'BC-pipelines/basecalling-pipeline/config.json')
+    }
     environment {
         ANSI_RESET = '\u001B[0m'
         ANSI_RED = '\u001B[31m'
@@ -76,7 +79,7 @@ pipeline {
                                 sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                                 
                                 ls ~/BC-pipelines/basecalling-pipeline/
-                                
+
                                 ls /orfeo/LTS/LADE/LT_storage/tolloi/jenkins-jobs-logs
                             '    
                         '''
