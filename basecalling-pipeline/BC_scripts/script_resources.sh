@@ -3,7 +3,7 @@
 #SBATCH --time=00:10:00
 #SBATCH -p DGX --ntasks-per-node=1 --nodes=1 --cpus-per-task=1 --gpus=0 --nodelist=dgx002
 #SBATCH hetjob
-#SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --nodelist=gpu004
+#SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
 
 ##SBATCH hetjob
 ##SBATCH -p DGX --ntasks-per-node=1 --nodes=1 --cpus-per-task=256 --gpus=8 --nodelist=dgx001
