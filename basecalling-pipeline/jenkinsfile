@@ -61,8 +61,9 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
                         echo "Starting the basecalling"
                         sh '''
-                            scancel 343859
+                            
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                            scancel 343859
                             sacctmgr list associations Users=$(whoami) format=Account,User,Partition
                             echo "Launching the basecalling"
                             sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
