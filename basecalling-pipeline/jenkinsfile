@@ -4,9 +4,9 @@ pipeline {
             label 'docker'
             }
       }
-    options {
-        //ansiColor('xterm')
-    }
+    /*options {
+        ansiColor('xterm')
+    }*/
     environment {
         ANSI_RESET = '\u001B[0m'
         ANSI_RED = '\u001B[31m'
