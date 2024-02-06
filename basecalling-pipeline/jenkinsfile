@@ -46,14 +46,13 @@
                             usando Jenkins
                         */
                         sh '''
-                            ls
                             echo ${jsonFilePath}
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
                                 
                                 cd BC-pipelines
                                 ls
-                                echo "${params.jsonFilePath}"
-                                def jsonData = readJSON file: "${params.jsonFilePath.replaceAll("'", "\\'")}"
+                                echo "${jsonFilePath}"
+                                def jsonData = readJSON file: "${jsonFilePath}"
                                 echo "Loaded JSON data: ${jsonData}"
 
                                 cd basecalling-pipeline
