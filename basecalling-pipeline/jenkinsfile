@@ -47,6 +47,9 @@
                             usando Jenkins
                         */
                         script {
+                            ls
+                            def jsonObj = readJSON text: "${params.JSON}"
+                            echo "$jsonObj"
                             sh '''
                                 ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
                                     
