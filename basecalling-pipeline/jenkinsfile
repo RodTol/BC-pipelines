@@ -49,11 +49,11 @@
                         sh '''
                             echo ${configFilePath}
                             
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 env configFilePath=${configFilePath}'                              
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80                               
                                 
                                 cd BC-pipelines
                                 #ls
-                                echo "${configFilePath}"
+                                echo "ON ORFEO" '${configFilePath}'
 
                                 cd basecalling-pipeline
                                 #python configuration.py "${jsonData}"
