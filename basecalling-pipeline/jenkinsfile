@@ -8,10 +8,9 @@ pipeline {
         ansiColor('xterm')
     }*/
     parameters {
-        /*Non riesco a fargli passare di cercare il config nei file del checkout, ma probabilmente ciò
-        non è possibile, perche questo deve essere disponibile già all'avvio, quindi va caricato ogni volta
-        Il che ha senso dato che la run comunque deve avere i parametri per partire e non cercarli in corsa*/
-        file(name: 'PARAM_FILE', description: 'load the run config.json file')
+        /*L'idea è quella di dare come parameter il path al JSON e non il JSON stesso.
+        Assumo che il punto di partenza è da dentro la directory del progetto*/
+        string(name: 'jsonFilePath', description: 'Path to the JSON file')
     }
     environment {
         ANSI_RESET = '\u001B[0m'
@@ -48,14 +47,15 @@ pipeline {
                         usando Jenkins
                     */
                     script {
-                        /*I save the param file*/
-                        echo "PARAM_FILE: ${PARAM_FILE}"
-                        def paramFile = sh(script: 'echo $PARAM_FILE', returnStdout: true).trim()
-                        echo "Parameter File: ${paramFile}"
                         sh '''
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
-                                cd BC-pipelines/basecalling-pipeline/
-                                python configuration.py ${paramFile}
+                                
+                                cd BC-pipelines
+                                def jsonData = readJSON file: "${params.jsonFilePath}"
+                                echo "Loaded JSON data: ${jsonData}"
+
+                                cd basecalling-pipeline
+                                python configuration.py '${jsonData}'
                             '
                         '''
                     }
