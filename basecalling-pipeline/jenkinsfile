@@ -52,7 +52,7 @@ pipeline {
                                 
                                 cd BC-pipelines
                                 ls
-                                echo ${params.jsonFilePath}
+                                echo "${params.jsonFilePath}"
                                 def jsonData = readJSON file: "${params.jsonFilePath}"
                                 echo "Loaded JSON data: ${jsonData}"
 
