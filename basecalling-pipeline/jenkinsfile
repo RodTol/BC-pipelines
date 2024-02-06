@@ -52,7 +52,7 @@
                                 echo "ON ORFEO" '${configFilePath}'
 
                                 cd basecalling-pipeline
-                                python configuration.py "${configFilePath}"
+                                python configuration.py '${configFilePath}'
                             '
                         '''
                     }    
