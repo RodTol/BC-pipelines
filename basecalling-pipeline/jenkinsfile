@@ -49,7 +49,7 @@
                         sh '''
                             echo ${configFilePath}
                             
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80                               
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                          
                                 
                                 cd BC-pipelines
                                 #ls
