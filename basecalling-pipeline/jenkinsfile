@@ -40,23 +40,19 @@
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
                         /**
-                            Ricorda che ogni sh è una shell a sè, con le sue env variables
-                            quindi se voglio averne di condivise, devo pensare a qualcosa.
-                            Roba più banale, me le scrivo, altrimenti ci dovrebbe essere in modo
-                            usando Jenkins
+                            Ricorda che ogni sh è una shell a sè, e anche ogni ssh.
+                            Per usare quella della sh invece di quella della ssh basta che le metto
+                            fra single quotes
                         */
                               
                         sh '''
-                            echo ${configFilePath}
-                            
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                          
-                                
                                 cd BC-pipelines
-                                #ls
+                                ls
                                 echo "ON ORFEO" '${configFilePath}'
 
                                 cd basecalling-pipeline
-                                #python configuration.py "${jsonData}"
+                                python configuration.py "${configFilePath}"
                             '
                         '''
                     }    
