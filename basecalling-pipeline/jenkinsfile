@@ -1,103 +1,103 @@
-pipeline {
-    agent { 
-        node {
-            label 'docker'
-            }
-      }
-    /*options {
-        ansiColor('xterm')
-    }*/
-    parameters {
-        /*L'idea è quella di dare come parameter il path al JSON e non il JSON stesso.
-        Assumo che il punto di partenza è da dentro la directory del progetto*/
-        string(name: 'jsonFilePath', description: 'Path to the JSON file')
-    }
-    environment {
-        ANSI_RESET = '\u001B[0m'
-        ANSI_RED = '\u001B[31m'
-    }
-    triggers {
-        pollSCM 'H * * * *'
-    }
-    stages {   
-        stage('Pull project repository') {
-            steps {
-                script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                        sh '''
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                                #echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
-                                #echo -n "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
-                                echo "Running ''git pull'' in BC-pipelines directory"
-                                cd BC-pipelines && git pull
-
-                            '
-                        '''
-                    }
-                }    
-            }
+    pipeline {
+        agent { 
+            node {
+                label 'docker'
+                }
         }
-        stage('Read configuration file') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                    /**
-                        Ricorda che ogni sh è una shell a sè, con le sue env variables
-                        quindi se voglio averne di condivise, devo pensare a qualcosa.
-                        Roba più banale, me le scrivo, altrimenti ci dovrebbe essere in modo
-                        usando Jenkins
-                    */
+        /*options {
+            ansiColor('xterm')
+        }*/
+        parameters {
+            /*L'idea è quella di dare come parameter il path al JSON e non il JSON stesso.
+            Assumo che il punto di partenza è da dentro la directory del progetto*/
+            string(name: 'jsonFilePath', description: 'Path to the JSON file')
+        }
+        environment {
+            ANSI_RESET = '\u001B[0m'
+            ANSI_RED = '\u001B[31m'
+        }
+        triggers {
+            pollSCM 'H * * * *'
+        }
+        stages {   
+            stage('Pull project repository') {
+                steps {
                     script {
-                        sh '''
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
-                                
-                                cd BC-pipelines
-                                ls
-                                echo "${params.jsonFilePath}"
-                                def jsonData = readJSON file: "${params.jsonFilePath}"
-                                echo "Loaded JSON data: ${jsonData}"
+                        withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                            sh '''
+                                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                                    #echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
+                                    #echo -n "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
+                                    echo "Running ''git pull'' in BC-pipelines directory"
+                                    cd BC-pipelines && git pull
 
-                                cd basecalling-pipeline
-                                python configuration.py '${jsonData}'
-                            '
+                                '
+                            '''
+                        }
+                    }    
+                }
+            }
+            stage('Read configuration file') {
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                        /**
+                            Ricorda che ogni sh è una shell a sè, con le sue env variables
+                            quindi se voglio averne di condivise, devo pensare a qualcosa.
+                            Roba più banale, me le scrivo, altrimenti ci dovrebbe essere in modo
+                            usando Jenkins
+                        */
+                        script {
+                            sh '''
+                                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
+                                    
+                                    cd BC-pipelines
+                                    ls
+                                    echo "${params.jsonFilePath}"
+                                    def jsonData = readJSON file: "${params.jsonFilePath.replaceAll("'", "\\'")}"
+                                    echo "Loaded JSON data: ${jsonData}"
+
+                                    cd basecalling-pipeline
+                                    python configuration.py "${jsonData}"
+                                '
+                            '''
+                        }
+                    }    
+                }
+            }
+            stage('Start basecalling run') {
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                        echo "Starting the basecalling"
+                        sh '''
+                            
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                                #sacctmgr list associations Users=$(whoami) format=Account,User,Partition
+                                echo "Launching the basecalling"
+                                cd ~/BC-pipelines/basecalling-pipeline
+                                sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
+                                
+                                echo "Pipeline dir ---"
+                                ls ~/BC-pipelines/basecalling-pipeline/
+                            '    
                         '''
                     }
-                }    
+                }
             }
-        }
-        stage('Start basecalling run') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                    echo "Starting the basecalling"
+            stage('Create Final file') {
+                steps {
                     sh '''
-                        
-                        ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                            #sacctmgr list associations Users=$(whoami) format=Account,User,Partition
-                            echo "Launching the basecalling"
-                            cd ~/BC-pipelines/basecalling-pipeline
-                            sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
-                            
-                            echo "Pipeline dir ---"
-                            ls ~/BC-pipelines/basecalling-pipeline/
-                        '    
+                    echo "python per creare il file di recap delle perfomance della run"
+                    '''
+                }
+            }
+            stage('Send Report to User') {
+                steps {
+                    sh '''
+                    echo "invio il report finale allo user"
+                    cd basecalling-pipeline
+                    #bash telegram_bot.sh
                     '''
                 }
             }
         }
-        stage('Create Final file') {
-            steps {
-                sh '''
-                echo "python per creare il file di recap delle perfomance della run"
-                '''
-            }
-        }
-        stage('Send Report to User') {
-            steps {
-                sh '''
-                echo "invio il report finale allo user"
-                cd basecalling-pipeline
-                #bash telegram_bot.sh
-                '''
-            }
-        }
     }
-}
