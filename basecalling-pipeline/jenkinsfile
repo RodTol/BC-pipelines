@@ -47,12 +47,12 @@
                         */
                               
                         sh '''
-                            echo ${params.configFilePath}
+                            echo ${configFilePath}
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
                                 
                                 cd BC-pipelines
                                 #ls
-                                echo "${params.configFilePath}"
+                                echo "${configFilePath}"
 
                                 cd basecalling-pipeline
                                 #python configuration.py "${jsonData}"
