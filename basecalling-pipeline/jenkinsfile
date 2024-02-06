@@ -47,9 +47,11 @@
                             usando Jenkins
                         */
                         script {
-                            ls
-                            def jsonObj = readJSON text: "${params.JSON}"
-                            echo "$jsonObj"
+                            sh  '''
+                                ls
+                                def jsonObj = readJSON text: "${params.JSON}"
+                                echo "$jsonObj"
+                            '''
                             sh '''
                                 ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
                                     
@@ -70,7 +72,6 @@
             stage('Start basecalling run') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_lage_test_ssh', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
-                        echo "Starting the basecalling"
                         sh '''
                             
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
