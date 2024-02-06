@@ -10,7 +10,7 @@
         parameters {
             /*L'idea è quella di dare come parameter il path al JSON e non il JSON stesso.
             Assumo che il punto di partenza è da dentro la directory del progetto*/
-            string(name: 'jsonFilePath', description: 'Path to the JSON file')
+            string(name: 'configFilePath', defaultValue: 'config.json', description: 'Path to the config JSON file')
         }
         environment {
             ANSI_RESET = '\u001B[0m'
@@ -46,20 +46,18 @@
                             usando Jenkins
                         */
                               
-                        sh '''
-                            echo "${jsonFilePath}"
+                        script {
+                            echo ${params.configFilePath}
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
                                 
                                 cd BC-pipelines
                                 #ls
-                                echo "${jsonFilePath}"
-
-                                echo "Loaded JSON data: ${jsonData}"
+                                echo ${params.configFilePath}
 
                                 cd basecalling-pipeline
-                                python configuration.py "${jsonData}"
+                                #python configuration.py "${jsonData}"
                             '
-                        '''
+                        }
                     }    
                 }
             }
