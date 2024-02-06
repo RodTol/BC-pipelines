@@ -8,7 +8,10 @@ pipeline {
         ansiColor('xterm')
     }*/
     parameters {
-        file(name: 'PARAM_FILE', description: 'config.json')
+        /*Non riesco a fargli passare di cercare il config nei file del checkout, ma probabilmente ciò
+        non è possibile, perche questo deve essere disponibile già all'avvio, quindi va caricato ogni volta
+        Il che ha senso dato che la run comunque deve avere i parametri per partire e non cercarli in corsa*/
+        file(name: 'PARAM_FILE', description: 'load the run config.json file')
     }
     environment {
         ANSI_RESET = '\u001B[0m'
