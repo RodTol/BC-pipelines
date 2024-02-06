@@ -30,7 +30,6 @@
                                     #echo -n "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
                                     echo "Running ''git pull'' in BC-pipelines directory"
                                     cd BC-pipelines && git pull
-
                                 '
                             '''
                         }
@@ -46,26 +45,21 @@
                             Roba più banale, me le scrivo, altrimenti ci dovrebbe essere in modo
                             usando Jenkins
                         */
-                        script {
-                            sh  '''
+                        sh '''
+                            ls
+                            echo ${jsonFilePath}
+                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
+                                
+                                cd BC-pipelines
                                 ls
-                                def jsonObj = readJSON text: "${params.JSON}"
-                                echo "$jsonObj"
-                            '''
-                            sh '''
-                                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
-                                    
-                                    cd BC-pipelines
-                                    ls
-                                    echo "${params.jsonFilePath}"
-                                    def jsonData = readJSON file: "${params.jsonFilePath.replaceAll("'", "\\'")}"
-                                    echo "Loaded JSON data: ${jsonData}"
+                                echo "${params.jsonFilePath}"
+                                def jsonData = readJSON file: "${params.jsonFilePath.replaceAll("'", "\\'")}"
+                                echo "Loaded JSON data: ${jsonData}"
 
-                                    cd basecalling-pipeline
-                                    python configuration.py "${jsonData}"
-                                '
-                            '''
-                        }
+                                cd basecalling-pipeline
+                                python configuration.py "${jsonData}"
+                            '
+                        '''
                     }    
                 }
             }
