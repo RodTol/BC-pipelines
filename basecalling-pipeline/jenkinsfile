@@ -47,11 +47,7 @@
                               
                         sh '''
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                          
-                                cd BC-pipelines
-                                ls
-                                echo "ON ORFEO" '${configFilePath}'
-
-                                cd basecalling-pipeline
+                                cd BC-pipelines/basecalling-pipeline
                                 python configuration.py '${configFilePath}'
                             '
                         '''
@@ -64,13 +60,11 @@
                         sh '''
                             
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
-                                #sacctmgr list associations Users=$(whoami) format=Account,User,Partition
-                                echo "Launching the basecalling"
+                                echo "------Launching the basecalling------"
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                                 
-                                echo "Pipeline dir ---"
-                                ls ~/BC-pipelines/basecalling-pipeline/
+                                id
                             '    
                         '''
                     }
