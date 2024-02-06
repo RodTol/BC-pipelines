@@ -45,14 +45,15 @@
                             Roba più banale, me le scrivo, altrimenti ci dovrebbe essere in modo
                             usando Jenkins
                         */
+                              
                         sh '''
-                            echo ${jsonFilePath}
+                            echo "${jsonFilePath}"
                             ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                              
                                 
                                 cd BC-pipelines
-                                ls
+                                #ls
                                 echo "${jsonFilePath}"
-                                def jsonData = readJSON file: "${jsonFilePath}"
+
                                 echo "Loaded JSON data: ${jsonData}"
 
                                 cd basecalling-pipeline
