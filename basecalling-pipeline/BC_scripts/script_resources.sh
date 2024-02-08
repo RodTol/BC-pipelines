@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=jk-try
-#SBATCH --time=00:10:00
-#SBATCH --output=/orfeo/LTS/LADE/LT_storage/tolloi
-#SBATCH -p DGX --ntasks-per-node=1 --nodes=1 --cpus-per-task=1 --gpus=0
+#SBATCH --time=00:05:00
+#SBATCH --output=/u/area/jenkins_onpexp/jenkins_logs
+#SBATCH -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gpus=1
 #SBATCH hetjob
-#SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
+#SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=24
 
 
 srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/prova.sh &
