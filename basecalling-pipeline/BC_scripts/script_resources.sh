@@ -7,8 +7,11 @@
 #SBATCH hetjob
 #SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=24
 
+echo "id"
+cd ~
+pwd
 
-srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/prova.sh &
+srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/instructions.sh &
 sleep 10
-srun --het-group=1 ~/BC-pipelines/basecalling-pipeline/BC_scripts/client/prova.sh &
+srun --het-group=1 ~/BC-pipelines/basecalling-pipeline/BC_scripts/client/instructions.sh &
 wait

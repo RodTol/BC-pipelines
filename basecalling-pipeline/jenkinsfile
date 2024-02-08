@@ -12,7 +12,19 @@
         triggers {
             pollSCM 'H * * * *'
         }
-        stages {   
+        stages {
+            stage('Slurm cleanup XD') {
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                        sh '''
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                cd /u/area/jenkins_onpexp/jenkins_logs
+                                rm jk-try-*
+                            '    
+                        '''
+                    }
+                }
+            }   
             stage('Pull project repository') {
                 steps {
                     script {
