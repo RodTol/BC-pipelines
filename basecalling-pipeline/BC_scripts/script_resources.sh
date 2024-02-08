@@ -1,18 +1,22 @@
 #!/bin/bash
 #SBATCH --job-name=jk-try
 #SBATCH --time=00:05:00
-#SBATCH --output=/u/area/jenkins_onpexp/jenkins_logs/tmp/%x-%j.out  # Use %x for job name and %j for job ID
-#SBATCH --error=/u/area/jenkins_onpexp/jenkins_logs/tmp/%x-%j.err   # Use %x for job name and %j for job ID
+#SBATCH --output=/u/area/jenkins_onpexp/jenkins_logs/tmp/%x-%j.out  
+#SBATCH --error=/u/area/jenkins_onpexp/jenkins_logs/tmp/%x-%j.err   
 #SBATCH -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gpus=1
 #SBATCH hetjob
 #SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=24
 
-echo "id"
-id
-cd ~
-pwd
+json_file=$1
 
-srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/instructions.sh &
+model=$(echo "$json_data" | jq -r '.Basecalling.model')
+logs_dir=$(echo "$json_data" | jq -r '.Basecalling.logs_dir')
+
+echo "Model: $model"
+echo "Logs Directory: $logs_dir"
+
+
+srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/instructions.sh $model $logs_dir &
 sleep 10
-srun --het-group=1 ~/BC-pipelines/basecalling-pipeline/BC_scripts/client/instructions.sh &
+srun --het-group=1 ~/BC-pipelines/basecalling-pipeline/BC_scripts/client/instructions.sh $model $logs_dir &
 wait
