@@ -8,6 +8,7 @@
 #SBATCH -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=24
 
 echo "id"
+id
 cd ~
 pwd
 
