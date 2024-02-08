@@ -23,9 +23,9 @@
             stage('Pull project repository') {
                 steps {
                     script {
-                        withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                             sh '''
-                                ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                                ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                     #echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
                                     #echo -n "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
                                     echo "Running ''git pull'' in BC-pipelines directory"
@@ -39,7 +39,7 @@
             }
             stage('Read configuration file') {
                 steps {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         /**
                             Ricorda che ogni sh è una shell a sè, e anche ogni ssh.
                             Per usare quella della sh invece di quella della ssh basta che le metto
@@ -47,7 +47,7 @@
                         */
                               
                         sh '''
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '                          
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '                          
                                 cd BC-pipelines/basecalling-pipeline
                                 python configuration.py '${configFilePath}'
                             '
@@ -57,10 +57,10 @@
             }
             stage('Start basecalling run') {
                 steps {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_LAGE_KEY', passphraseVariable: '', usernameVariable: 'SSH_LAGE_USER')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
                             
-                            ssh -i ${SSH_LAGE_KEY} ${SSH_LAGE_USER}@10.128.2.80 '
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 echo "------Launching the basecalling------"
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
