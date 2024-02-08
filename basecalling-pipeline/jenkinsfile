@@ -13,13 +13,14 @@
             pollSCM 'H * * * *'
         }
         stages {
-            stage('Slurm cleanup XD') {
+            stage('Slurm cleanup tmp dir') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd /u/area/jenkins_onpexp/jenkins_logs
-                                rm -f jk-try-*
+                                rm -r tmp
+                                mkdir tmp
                             '    
                         '''
                     }
