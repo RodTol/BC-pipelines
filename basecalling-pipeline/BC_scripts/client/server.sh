@@ -2,7 +2,7 @@
 
 # Check if at least one argument is provided
 if [ "$#" -eq 0 ]; then
-    echo "Missing at least one argument"
+    echo "SERVER SCRIPT: Missing at least one argument"
     exit 1
 fi
 

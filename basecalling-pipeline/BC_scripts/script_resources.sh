@@ -9,8 +9,8 @@
 
 json_file=$1
 
-model=$(echo "$json_data" | jq -r '.Basecalling.model')
-logs_dir=$(echo "$json_data" | jq -r '.Basecalling.logs_dir')
+model=$(jq -r '.Basecalling.model' "$json_file")
+logs_dir=$(jq -r '.Basecalling.logs_dir' "$json_file")
 
 echo "Model: $model"
 echo "Logs Directory: $logs_dir"
