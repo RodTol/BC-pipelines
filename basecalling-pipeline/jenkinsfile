@@ -29,8 +29,14 @@
                                     #echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
                                     #echo -n "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
                                     echo "Running ''git pull'' in BC-pipelines directory"
-                                    git clone https://github.com/RodTol/BC-pipelines
                                     cd BC-pipelines && git pull
+                                '
+                            '''
+                            /*New user exploration*/
+                            sh '''
+                                ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                    ls 
+                                    ls /
                                 '
                             '''
                         }
@@ -63,7 +69,7 @@
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 echo "------Launching the basecalling------"
                                 cd ~/BC-pipelines/basecalling-pipeline
-                                sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
+                                #sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
                                 
                                 id
                             '    
