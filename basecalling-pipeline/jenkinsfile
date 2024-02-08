@@ -4,17 +4,10 @@
                 label 'docker'
                 }
         }
-        /*options {
-            ansiColor('xterm')
-        }*/
         parameters {
             /*L'idea è quella di dare come parameter il path al JSON e non il JSON stesso.
             Assumo che il punto di partenza è da dentro la directory del progetto*/
             string(name: 'configFilePath', defaultValue: 'config.json', description: 'Path to the config JSON file')
-        }
-        environment {
-            ANSI_RESET = '\u001B[0m'
-            ANSI_RED = '\u001B[31m'
         }
         triggers {
             pollSCM 'H * * * *'
@@ -26,17 +19,8 @@
                         withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                             sh '''
                                 ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                    #echo '\033[34mHello\033[0m \033[33mcolorful\033[0m \033[35mworld!\033[0m'
-                                    #echo -n "${ANSI_RED}Current directory: ${ANSI_RESET}" && pwd
-                                    echo "Running ''git pull'' in BC-pipelines directory"
+                                    echo "**********Running ''git pull'' in BC-pipelines directory**********"
                                     cd BC-pipelines && git pull
-                                '
-                            '''
-                            /*New user exploration*/
-                            sh '''
-                                ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                    ls 
-                                    ls /
                                 '
                             '''
                         }
@@ -55,6 +39,7 @@
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '                          
                                 cd BC-pipelines/basecalling-pipeline
+                                echo "-------Basecalling parameters------"
                                 python configuration.py '${configFilePath}'
                             '
                         '''
@@ -65,13 +50,10 @@
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
-                            
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                echo "------Launching the basecalling------"
+                                echo "**********Launching the basecalling**********"
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 #sbatch ~/BC-pipelines/basecalling-pipeline/BC_scripts/script_resources.sh 
-                                
-                                id
                             '    
                         '''
                     }

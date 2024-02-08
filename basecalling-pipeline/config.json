@@ -4,8 +4,9 @@
       "version": "1.0"
     },
     "Basecalling": {
-      "input_dir": "/orfeo/LTS/LADE/LT_storage/tolloi/",
-      "output_dir": "/orfeo/LTS/LADE/LT_storage/tolloi/"
+      "input_dir": "/u/area/jenkins_onpexp/scratch/10G_dataset_POD5",
+      "output_dir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test",
+      "logs_dir": "/u/area/jenkins_onpexp/jenkins_logs"
     }
   }
   
