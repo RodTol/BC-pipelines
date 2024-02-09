@@ -10,9 +10,11 @@
       "logs_dir": "/u/area/jenkins_onpexp/jenkins_logs"
     },
     "Resources": {
-      "node_list" : ["dgx002", "dgx001"],
       "index_host" : "0",
-      "batch_size_list" : ["80", "80"]
+      "nodes_list" : ["dgx002", "dgx001"],
+      "nodes_ip" : ["10.128.2.162", "10.128.2.161"],
+      "batch_size_list" : ["80", "80"],
+      "supervisor_script_path" : ""
     }
   }
   

@@ -1,11 +1,13 @@
 import json
 import os
+import sys
 import shutil
 import threading
 import time
 import uuid
 from flask import Flask, request
 from collections import namedtuple
+from BCConfiguration import Conf
 
 BCStatus = namedtuple("BCStatus", ["ASSIGNED", "STARTED", "PROCESSING", "STOPPED", "DONE", "FAILED"])
 bc_status = BCStatus("ASSIGNED", "STARTED", "PROCESSING", "STOPPED", "DONE", "FAILED")
@@ -79,15 +81,13 @@ class BCWorkloadState:
             |- file3.fast5   (ATTENTION! IT WILL BE A SYMLINK!)
     """
 
-    def __init__(self):
-        conf_file_path = "BCConfiguration.json"
-        with open(conf_file_path, 'r') as file:
-            Conf = json.load(file)
+    def __init__(self, json_file_path, node_index):
+        conf = Conf.from_json(json_file_path, node_index)
 
-        self.INPUTDIR = Conf["BCManagement"]["mngt_inputdir"]
-        self.OUTPUTDIR = Conf["BCManagement"]["mngt_outputdir"]
+        self.INPUTDIR = conf.mngt_inputdir
+        self.OUTPUTDIR = conf.mngt_outputdir
         self.unassigned_bc = []
-        self.default_batch_size = Conf["BCManagement"]["mngt_batch_size"]
+        self.default_batch_size = conf.mngt_batch_size
         self.assigned_batches = {}
 
     def update(self):
@@ -237,10 +237,10 @@ class BCController:
     Class that represents a RESTful Service listening for Basecalling work requests from Basecalling Engines.
     """
 
-    def __init__(self):
+    def __init__(self,json_file_path, node_index):
         self.lock = threading.Lock()
         self.tracker = {} # dict of job_id -> [last_ack_time, state, report_back_period]
-        self.bc_state = BCWorkloadState()
+        self.bc_state = BCWorkloadState(json_file_path, node_index)
         self.bc_state.update()
         self.app = Flask(__name__)
         a = self.app
@@ -287,7 +287,9 @@ class BCController:
 #Launching the flask server
 #app.run decide on which host (0.0.0.0 means all) and port to listen
 if __name__ == '__main__':
-    RESTFulAPI = BCController()
+    json_file_path = sys.argv[1]
+    node_index = int(sys.argv[2])
+    RESTFulAPI = BCController(json_file_path, node_index)
     RESTFulAPI.app.run(host='0.0.0.0', port=40765)
 
 
