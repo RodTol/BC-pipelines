@@ -22,5 +22,5 @@ echo $log_path
 dorado_basecall_server \
 --config $model \
 --log_path $log_path \
---device cuda:0 \
+--device cuda:0,1 \
 --port 40765 \
