@@ -14,7 +14,7 @@
       "nodes_list" : ["dgx002"],
       "nodes_ip" : ["10.128.2.162"],
       "batch_size_list" : ["80"],
-      "supervisor_script_path" : "~/BC-pipelines/basecalling-pipeline/BC_scripts/host/supervisor.sh"
+      "supervisor_script_path" : "/u/dssc/tolloi//BC-pipelines/basecalling-pipeline/BC_scripts/host/supervisor.sh"
     }
   }
   
