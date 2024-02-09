@@ -12,10 +12,10 @@ echo -e "${RED}Save path${RESET}"
 echo $save_path
 
 dorado_server_path=/u/dssc/tolloi/ont-dorado-server/bin/
-num_clients=4z
+num_clients=4
 
 $dorado_server_path/ont_basecaller_supervisor --num_clients $num_clients \
 --input_path $1 \
 --save_path $save_path \
 --config dna_r10.4.1_e8.2_400bps_hac.cfg \
---port 40765 
+--port 46855 
