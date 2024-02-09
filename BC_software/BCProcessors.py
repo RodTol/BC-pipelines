@@ -56,6 +56,7 @@ class BCKeepAlive(threading.Thread):
         :param starting_state string representing the current starting processing state
         """
 
+        #Qua forse devo invocare il costruttore coi parametri giusti
         super().__init__()
         self.report_back_interval = report_back_interval
         self.job_id = job_id
@@ -63,6 +64,8 @@ class BCKeepAlive(threading.Thread):
         self.final_state = ''  # volatile variable to indicate to this Thread, what is the final state reached by the processing main thread: once it's set, it implies immediate communication back to server  and shutdown.
         
         # Qua devo mettere il creatore con il json per le cose giuste ??
+
+        #----------
         self.keep_alive_url = Conf.keep_alive_url # "http://127.0.0.1:5000/keepalive"
         self.keep_alive_terminate_url = Conf.keep_alive_terminate_url # "http://127.0.0.1:5000/completed"
         
@@ -144,20 +147,20 @@ class BCEngine:
         print("*************BCP READ FROM JSON*************")
         conf = Conf.from_json(json_file_path, node_index)
         # ideal number of fast5 files to process per request
-        self.optimal_request_size = Conf.engine_optimal_request_size #2
+        self.optimal_request_size = conf.engine_optimal_request_size #2
         # unique ID of engine
-        self.engine_id = Conf.engine_id #"TEST-ENGINE"
+        self.engine_id = conf.engine_id #"TEST-ENGINE"
         # minimum time in minutes between successive requests
-        self.polling_interval = Conf.engine_polling_interval # 1
+        self.polling_interval = conf.engine_polling_interval # 1
         # ROOT of the inputdir where fast5 files are stored
-        self.INPUTDIR = Conf.engine_inputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/inputdir"
-        self.OUTPUTDIR = Conf.engine_outputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir"
+        self.INPUTDIR = conf.engine_inputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/inputdir"
+        self.OUTPUTDIR = conf.engine_outputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir"
         # local script to execute for BC processing
-        self.bc_script = Conf.engine_external_script #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/script.sh'
+        self.bc_script = conf.engine_external_script #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/script.sh'
         # internal state of processing
         self.PROCESSING_STATE = 'STOPPED'
         # API URL
-        self.api_url = Conf.request_work_url #"http://127.0.0.1:5000/assignwork"
+        self.api_url = conf.request_work_url #"http://127.0.0.1:5000/assignwork"
         # shutdown
         self.shutdown = False
         # work until none is left
