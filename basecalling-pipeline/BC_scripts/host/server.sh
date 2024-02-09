@@ -23,4 +23,4 @@ dorado_basecall_server \
 --config dna_r10.4.1_e8.2_400bps_sup.cfg \
 --log_path $log_path \
 --device cuda:0,1 \
---port 46855 \
+--port 41757 \
