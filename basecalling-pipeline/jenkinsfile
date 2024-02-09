@@ -40,7 +40,7 @@
                     }    
                 }
             }
-            stage('Read configuration file') {
+            stage('Generate setup based on configuration file') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         /**
@@ -48,7 +48,10 @@
                             Per usare quella della sh invece di quella della ssh basta che le metto
                             fra single quotes
                         */
-                              
+
+                        /* The idea is that by reading the json, I will create a dir with the 3
+                        python packages with all the information needed. For BCManager and BCProcessor
+                        we can just make a copy, but for the BCConfiguration, I need it to write it down*/      
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '                          
                                 cd BC-pipelines/basecalling-pipeline
@@ -58,7 +61,7 @@
                         '''
                     }    
                 }
-            }
+            } 
             stage('Start basecalling run') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {

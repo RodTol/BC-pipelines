@@ -6,7 +6,6 @@ import time
 import uuid
 from flask import Flask, request
 from collections import namedtuple
-from BCConfiguration import Conf
 
 BCStatus = namedtuple("BCStatus", ["ASSIGNED", "STARTED", "PROCESSING", "STOPPED", "DONE", "FAILED"])
 bc_status = BCStatus("ASSIGNED", "STARTED", "PROCESSING", "STOPPED", "DONE", "FAILED")
@@ -81,10 +80,14 @@ class BCWorkloadState:
     """
 
     def __init__(self):
-        self.INPUTDIR = Conf.mngt_inputdir #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/inputdir'
-        self.OUTPUTDIR = Conf.mngt_outputdir #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir'
+        conf_file_path = "BCConfiguration.json"
+        with open(conf_file_path, 'r') as file:
+            Conf = json.load(file)
+
+        self.INPUTDIR = Conf["BCManagement"]["mngt_inputdir"]
+        self.OUTPUTDIR = Conf["BCManagement"]["mngt_outputdir"]
         self.unassigned_bc = []
-        self.default_batch_size = Conf.mngt_batch_size # 3
+        self.default_batch_size = Conf["BCManagement"]["mngt_batch_size"]
         self.assigned_batches = {}
 
     def update(self):

@@ -1,0 +1,21 @@
+{
+    "BCManagement" : {
+        "mngt_batch_size": 3,
+        "mngt_outputdir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test",
+        "mngt_inputdir": "/u/area/jenkins_onpexp/scratch/10G_dataset_POD5"    
+    },
+    
+    "BCProcessor" : {
+        "request_work_url": "http://127.0.0.1:40765/assignwork",
+        "engine_external_script": "/u/dssc/tolloi/Cluster_Basecalling_Manager/BC_software/orfeo_executable/executable_dgx002/launch_supervisor.sh",
+        
+        "engine_outputdir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test",
+        "engine_inputdir": "/u/area/jenkins_onpexp/scratch/10G_dataset_POD5",
+        
+        "engine_polling_interval": 1,
+        "engine_id": "dgx002_engine",
+        "engine_optimal_request_size": 20,
+        "keep_alive_terminate_url": "http://127.0.0.1:40765/completed",
+        "keep_alive_url": "http://127.0.0.1:40765/keepalive"
+    }
+}

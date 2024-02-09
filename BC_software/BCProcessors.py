@@ -4,8 +4,8 @@ import requests
 import os
 import subprocess
 import threading
+import json
 from BCManagement import bc_status
-from BCConfiguration import Conf
 
 
 class BCKeepAlive(threading.Thread):
@@ -56,14 +56,17 @@ class BCKeepAlive(threading.Thread):
         :param job_id: string representing the batch being processed
         :param starting_state string representing the current starting processing state
         """
+        conf_file_path = "BCConfiguration.json"
+        with open(conf_file_path, 'r') as file:
+            Conf = json.load(file)
 
         super().__init__()
         self.report_back_interval = report_back_interval
         self.job_id = job_id
         self.starting_state = starting_state
         self.final_state = ''  # volatile variable to indicate to this Thread, what is the final state reached by the processing main thread: once it's set, it implies immediate communication back to server  and shutdown.
-        self.keep_alive_url = Conf.keep_alive_url # "http://127.0.0.1:5000/keepalive"
-        self.keep_alive_terminate_url = Conf.keep_alive_terminate_url # "http://127.0.0.1:5000/completed"
+        self.keep_alive_url = Conf["BCProcessor"]["keep_alive_url"] # "http://127.0.0.1:5000/keepalive"
+        self.keep_alive_terminate_url = Conf["BCProcessor"]["keep_alive_terminate_url"] # "http://127.0.0.1:5000/completed"
         self.BCCONTROLLER_PB = False  # volatile variable to indicate to the main thread it should stop and shutdown: the bccontroller seems to have crashed!
 
     def run(self):
@@ -138,22 +141,26 @@ class BCEngine:
     """
 
     def __init__(self):
+        conf_file_path = "BCConfiguration.json"
+        with open(conf_file_path, 'r') as file:
+            Conf = json.load(file)
+
         # READ ALL THE FOLLOWING PARAMS FROM A CONFIG FILE
         # ideal number of fast5 files to process per request
-        self.optimal_request_size = Conf.engine_optimal_request_size #2
+        self.optimal_request_size = Conf["BCProcessor"]["engine_optimal_request_size"]
         # unique ID of engine
-        self.engine_id = Conf.engine_id #"TEST-ENGINE"
+        self.engine_id = Conf["BCProcessor"]["engine_id"] #"TEST-ENGINE"
         # minimum time in minutes between successive requests
-        self.polling_interval = Conf.engine_polling_interval # 1
+        self.polling_interval = Conf["BCProcessor"]["engine_polling_interval"] # 1
         # ROOT of the inputdir where fast5 files are stored
-        self.INPUTDIR = Conf.engine_inputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/inputdir"
-        self.OUTPUTDIR = Conf.engine_outputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir"
+        self.INPUTDIR = Conf["BCProcessor"]["engine_inputdir"] #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/inputdir"
+        self.OUTPUTDIR = Conf["BCProcessor"]["engine_outputdir"] #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir"
         # local script to execute for BC processing
-        self.bc_script = Conf.engine_external_script #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/script.sh'
+        self.bc_script = Conf["BCProcessor"]["engine_external_script"] #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/script.sh'
         # internal state of processing
         self.PROCESSING_STATE = 'STOPPED'
         # API URL
-        self.api_url = Conf.request_work_url #"http://127.0.0.1:5000/assignwork"
+        self.api_url = Conf["BCProcessor"]["request_work_url"] #"http://127.0.0.1:5000/assignwork"
         # shutdown
         self.shutdown = False
         # work until none is left

@@ -9,4 +9,6 @@ logs_dir=$2
 echo "Launching the server"
 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/server.sh $model $logs_dir
 
+#Start BCM
 
+#Start BCP

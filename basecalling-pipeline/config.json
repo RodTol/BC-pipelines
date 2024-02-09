@@ -8,6 +8,11 @@
       "input_dir": "/u/area/jenkins_onpexp/scratch/10G_dataset_POD5",
       "output_dir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test",
       "logs_dir": "/u/area/jenkins_onpexp/jenkins_logs"
+    },
+    "Resources": {
+      "node_list" : ["dgx002", "dgx001"],
+      "index_host" : "0",
+      "batch_size_list" : ["80", "80"]
     }
   }
   

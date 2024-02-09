@@ -23,4 +23,4 @@ dorado_basecall_server \
 --config $model \
 --log_path $log_path \
 --device cuda:0 \
---port 42837 \
+--port 40765 \
