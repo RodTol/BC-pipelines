@@ -12,6 +12,7 @@ echo -e "${RED}Save path${RESET}"
 echo $save_path
 
 dorado_server_path=/u/dssc/tolloi/ont-dorado-server/bin/
+num_clients=20
 
 $dorado_server_path/ont_basecaller_supervisor --num_clients $num_clients \
 --input_path $1 \

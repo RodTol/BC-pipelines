@@ -157,7 +157,6 @@ class BCEngine:
         self.OUTPUTDIR = conf.engine_outputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir"
         # local script to execute for BC processing
         self.bc_script = conf.engine_external_script #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/script.sh'
-        print("Debug::::: ", self.bc_script)
         # internal state of processing
         self.PROCESSING_STATE = 'STOPPED'
         # API URL
