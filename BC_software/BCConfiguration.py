@@ -32,7 +32,6 @@ class Conf:
         Returns:
             Conf: An instance of Conf with settings loaded from the JSON file.
         """
-        print("*************READ FROM JSON*************")
         with open(file_path, 'r') as json_file:
             config = json.load(json_file)
         

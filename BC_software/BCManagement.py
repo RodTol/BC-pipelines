@@ -82,6 +82,7 @@ class BCWorkloadState:
     """
 
     def __init__(self, json_file_path, node_index):
+        print("*************BCM READ FROM JSON*************")
         conf = Conf.from_json(json_file_path, node_index)
 
         self.INPUTDIR = conf.mngt_inputdir
