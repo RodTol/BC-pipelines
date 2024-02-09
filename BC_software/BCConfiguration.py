@@ -35,7 +35,6 @@ class Conf:
         with open(file_path, 'r') as json_file:
             config = json.load(json_file)
         
-        "My instance"
         conf_instance = cls()
         
         conf_instance.mngt_outputdir = config["Basecalling"]["output_dir"]
