@@ -269,8 +269,9 @@ class BCEngine:
         :return:
         """
         try:
-            print("MODEL", model)
-            completed_process = subprocess.run([self.bc_script, input_dir, output_dir, model])
+            cmd = [self.bc_script, input_dir, output_dir, model]
+            print(f"Executing command: {' '.join(cmd)}")
+            completed_process = subprocess.run(cmd)
             return_code = completed_process.returncode
             if return_code == 0:
                 self.PROCESSING_STATE = bc_status.DONE #'DONE'
