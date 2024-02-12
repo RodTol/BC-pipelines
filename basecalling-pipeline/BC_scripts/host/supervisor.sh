@@ -13,11 +13,11 @@ echo -e "${RED}Output path${RESET}"
 echo $output_dir
 
 model=$3
-echo -e "${RED}Model{RESET}"
+echo -e "${RED}Model${RESET}"
 echo $model
 
 port=42837
-echo -e "${RED}Port{RESET}"
+echo -e "${RED}Port${RESET}"
 echo $port
 
 #Added to PATH

@@ -9,15 +9,13 @@ fi
 echo "HOST SCRIPT"
 
 model="$1"
-echo "model"
-echo $model
+echo "model $model"
 
 log_path="$2"
-echo "Log files path"
-echo $log_path
+echo "Log files path $log_path"
 
 port=42837
-echo -e "${RED}Port{RESET}"
+echo -e "${RED}Port${RESET}"
 echo $port
 
 #Already added to path
