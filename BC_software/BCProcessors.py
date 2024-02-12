@@ -201,12 +201,13 @@ class BCEngine:
                 # Prepare inputdir and outputdir for processing
                 input_dir = os.path.join(self.INPUTDIR, answer['job_input_dir'])
                 output_dir = os.path.join(self.OUTPUTDIR, answer['job_output_dir'])
+                model = self.bc_model
                 # Check how the BCController is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
                 # -------------------------------------------------------------
                 # invoke the external script passing the input dir as parameter
                 # it will block until complete
-                self._basecalling_work(input_dir, output_dir, self.bc_model)
+                self._basecalling_work(input_dir, output_dir, model)
                 # -------------------------------------------------------------
                 # Check how the BCController is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
@@ -264,9 +265,11 @@ class BCEngine:
 
         :param input_dir:
         :param output_dir:
+        :param model:
         :return:
         """
         try:
+            print("MODEL", model)
             completed_process = subprocess.run([self.bc_script, input_dir, output_dir, model])
             return_code = completed_process.returncode
             if return_code == 0:
