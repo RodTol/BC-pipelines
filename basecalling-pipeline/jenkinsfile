@@ -5,24 +5,35 @@
                 }
         }
         parameters {
-            /*L'idea è quella di dare come parameter il path al JSON e non il JSON stesso.
-            Assumo che il punto di partenza è da dentro la directory del progetto*/
+            /*The idea is to set as parameter the path to the JSON and not the actual JSON. 
+            I assumed that the starting directory is the pipeline one*/
             string(name: 'configFilePath', defaultValue: 'config.json', description: 'Path to the config JSON file')
         }
         triggers {
             pollSCM 'H * * * *'
         }
         stages {
-            stage('Slurm cleanup tmp dir') {
+            stage('Cleanup tmp dir') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                cd /u/area/jenkins_onpexp/jenkins_logs
-                                rm -r tmp
+                                cd /u/area/jenkins_onpexp/scratch/jenkins_logs
+                                rm -rf tmp
                                 mkdir tmp
                             '    
                         '''
+                        sh '''
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                cd /u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/
+                                rm -rf tmp
+                                mkdir tmp
+                                mkdir tmp/pass
+                                mkdir tmp/fail
+                            '    
+                        '''
+
+                        /*Maybe add input dir cleanup*/
                     }
                 }
             }   
