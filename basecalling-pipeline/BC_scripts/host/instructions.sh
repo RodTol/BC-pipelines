@@ -36,3 +36,5 @@ python3 ~/BC-pipelines/BC_software/BCManagement.py $json_file 0 > $BC_manager_lo
 
 #Start BCP
 python3 ~/BC-pipelines/BC_software/BCProcessors.py $json_file 0
+
+wait
