@@ -157,6 +157,7 @@ class BCEngine:
         self.OUTPUTDIR = conf.engine_outputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir"
         # local script to execute for BC processing
         self.bc_script = conf.engine_external_script #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/script.sh'
+        self.bc_model = conf.engine_model
         # internal state of processing
         self.PROCESSING_STATE = 'STOPPED'
         # API URL
@@ -205,7 +206,7 @@ class BCEngine:
                 # -------------------------------------------------------------
                 # invoke the external script passing the input dir as parameter
                 # it will block until complete
-                self._basecalling_work(input_dir, output_dir)
+                self._basecalling_work(input_dir, output_dir, self.model)
                 # -------------------------------------------------------------
                 # Check how the BCController is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
@@ -249,7 +250,7 @@ class BCEngine:
             print("BC CONTROLLER PROBLEM! AS PER PROTOCOL, ABORTING PROCESSING AND SHUTTING DOWN! " + str(e))
             sys.exit(1)
 
-    def _basecalling_work(self, input_dir, output_dir):
+    def _basecalling_work(self, input_dir, output_dir, model):
         """
         Private method that handles the actual Basecall processing. This implementation will invoke an
         external script that interacts with guppy_server.
@@ -266,7 +267,7 @@ class BCEngine:
         :return:
         """
         try:
-            completed_process = subprocess.run([self.bc_script, input_dir, output_dir])
+            completed_process = subprocess.run([self.bc_script, input_dir, output_dir, model])
             return_code = completed_process.returncode
             if return_code == 0:
                 self.PROCESSING_STATE = bc_status.DONE #'DONE'
