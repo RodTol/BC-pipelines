@@ -9,7 +9,7 @@ class Conf:
     mngt_outputdir = ''
     mngt_inputdir = ''
 
-    request_work_url = 'http://127.0.0.1:46855/assignwork'
+    request_work_url = 'http://127.0.0.1:40765/assignwork'
     
     engine_external_script = ''
     engine_outputdir = ''
@@ -18,8 +18,8 @@ class Conf:
     engine_id = ''
     engine_optimal_request_size = 100
     
-    keep_alive_terminate_url = "http://127.0.0.1:46855/completed"
-    keep_alive_url = "http://127.0.0.1:46855/keepalive"
+    keep_alive_terminate_url = "http://127.0.0.1:40765/completed"
+    keep_alive_url = "http://127.0.0.1:40765/keepalive"
 
     @classmethod
     def from_json(cls, file_path, node_index):
@@ -40,7 +40,7 @@ class Conf:
         conf_instance.mngt_outputdir = config["Basecalling"]["output_dir"]
         conf_instance.mngt_inputdir = config["Basecalling"]["input_dir"]
 
-        conf_instance.request_work_url = 'http://127.0.0.1:46855/assignwork'
+        conf_instance.request_work_url = 'http://127.0.0.1:40765/assignwork'
         
         conf_instance.engine_external_script = config["Resources"]["supervisor_script_path"]
         conf_instance.engine_outputdir = config["Basecalling"]["output_dir"]
@@ -49,7 +49,7 @@ class Conf:
         conf_instance.engine_id = config["Resources"]["nodes_list"][node_index]
         conf_instance.engine_optimal_request_size = 100
         
-        conf_instance.keep_alive_terminate_url = "http://127.0.0.1:46855/completed"
-        conf_instance.keep_alive_url = "http://127.0.0.1:46855/keepalive"
+        conf_instance.keep_alive_terminate_url = "http://127.0.0.1:40765/completed"
+        conf_instance.keep_alive_url = "http://127.0.0.1:40765/keepalive"
 
         return conf_instance
