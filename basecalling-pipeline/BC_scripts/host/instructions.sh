@@ -17,7 +17,7 @@ echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
 
 echo "Launching the server"
-~/BC-pipelines/basecalling-pipeline/BC_scripts/host/server.sh $model $logs_dir
+~/BC-pipelines/basecalling-pipeline/BC_scripts/host/server.sh $model $logs_dir &
 sleep 10
 echo "Launching the supervisor"
 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/supervisor.sh $input_dir $output_dir $model
