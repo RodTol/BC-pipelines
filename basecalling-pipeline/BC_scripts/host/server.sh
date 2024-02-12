@@ -10,7 +10,7 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
-echo "${GREEN}HOST SCRIPT${GREEN}"
+echo "${GREEN}HOST SERVER SCRIPT${RESET}"
 
 model="$1"
 echo "${GREEN}model $model${RESET}"
@@ -19,8 +19,7 @@ log_path="$2"
 echo -e "${GREEN}Log files path: ${log_path} ${RESET}"
 
 port=42837
-echo -e "${GREEN}Port${RESET}"
-echo $port
+echo -e "${GREEN}Port${RESET} $port "
 
 #Already added to path
 #dorado_server_path=
