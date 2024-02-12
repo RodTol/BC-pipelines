@@ -206,7 +206,7 @@ class BCEngine:
                 # -------------------------------------------------------------
                 # invoke the external script passing the input dir as parameter
                 # it will block until complete
-                self._basecalling_work(input_dir, output_dir, self.model)
+                self._basecalling_work(input_dir, output_dir, self.bc_model)
                 # -------------------------------------------------------------
                 # Check how the BCController is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
