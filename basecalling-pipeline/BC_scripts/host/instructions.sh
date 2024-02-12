@@ -29,6 +29,6 @@ echo ""
 
 #Start BCM on host node
 BC_manager_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCManager_log.txt
-python3 ~/BC-pipelines/BC_software/BCManagement.py $json_file 0 > $BC_manager_log_path 2>&1 &
+python3 ~/BC-pipelines/BC_software/BCManagement.py $json_file 0 > $BC_manager_log_path 2>&1
 
 #Start BCP
