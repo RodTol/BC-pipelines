@@ -10,7 +10,10 @@
 
 json_file=$1
 
-srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/instructions.sh $json_file &
+#only one node
+srun ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/instructions.sh $json_file &
+
+#srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/host/instructions.sh $json_file &
 sleep 10
 #run --het-group=1 ~/BC-pipelines/basecalling-pipeline/BC_scripts/client/instructions.sh $model $logs_dir &
 wait
