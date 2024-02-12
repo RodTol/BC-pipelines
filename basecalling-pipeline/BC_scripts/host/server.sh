@@ -10,10 +10,10 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
-echo "${GREEN}HOST SERVER SCRIPT${RESET}"
+echo -e "${GREEN}HOST SERVER SCRIPT${RESET}"
 
 model="$1"
-echo "${GREEN}model $model${RESET}"
+echo -e "${GREEN}model $model${RESET}"
 
 log_path="$2"
 echo -e "${GREEN}Log files path: ${log_path} ${RESET}"
