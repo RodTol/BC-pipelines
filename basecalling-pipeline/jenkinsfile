@@ -89,9 +89,23 @@
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 echo "**********Launching the basecalling**********"
                                 cd ~/BC-pipelines/basecalling-pipeline
-                                sbatch ~/BC-pipelines/BC_scripts/script_resources.sh '${configFilePath}'> jobid.txt --wait
+                                sbatch ~/BC-pipelines/BC_scripts/script_resources.sh '${configFilePath}'> jobid.txt
                                 job_id=$(grep -oE '[0-9]+' jobid.txt)
                                 echo "Job ID: $job_id"
+                            '    
+                        '''
+                    }
+                }
+            }
+            stage('Wait for Slurm job to end') {
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                        sh '''
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                cd ~/BC-pipelines/basecalling-pipeline
+                                job_id=$(grep -oE '[0-9]+' jobid.txt)
+                                echo "Job ID: $job_id"
+                                ~/BC-pipelines/BC_scripts/wait.sh $job_id
                             '    
                         '''
                     }
