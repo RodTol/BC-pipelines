@@ -16,6 +16,7 @@
             stage('Cleanup tmp dir') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                        /*Logs dir cleanup*/
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd /u/area/jenkins_onpexp/scratch/jenkins_logs
@@ -23,6 +24,7 @@
                                 mkdir tmp
                             '    
                         '''
+                        /*Output dir cleanup*/
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd /u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/
@@ -33,7 +35,7 @@
                             '    
                         '''
                         
-                        /*Maybe add input dir cleanup*/
+                        /*Input dir cleanup*/
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd /u/area/jenkins_onpexp/scratch/10G_dataset_POD5

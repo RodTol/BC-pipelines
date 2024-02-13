@@ -3,15 +3,17 @@ current_time=$(date +"%Y-%m-%d %H:%M:%S")
 echo "Current time: $current_time"
 echo "hello from ${SLURM_JOB_NODELIST}"
 
+#Input parameters are the json and what node I am on the list 
 json_file=$1
+my_index=$2
 
 #Read from config.json file
 model=$(jq -r '.Basecalling.model' "$json_file")
 logs_dir=$(jq -r '.Basecalling.logs_dir' "$json_file")
 input_dir=$(jq -r '.Basecalling.input_dir' "$json_file")
 output_dir=$(jq -r '.Basecalling.output_dir' "$json_file")
+gpus_settings=$(jq -r '.Resources.gpus[0]' "$json_file")
 
-index_host=$(jq -r '.Resources.index_host' "$json_file")
 
 echo "Model: $model"
 echo "Logs Directory: $logs_dir"
@@ -19,7 +21,7 @@ echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
 
 echo "Launching the server"
-~/BC-pipelines/basecalling-pipeline/BC_scripts/host/server.sh $model $logs_dir &
+~/BC-pipelines/basecalling-pipeline/BC_scripts/host/server.sh $model $logs_dir $gpus_settings &
 sleep 10
 
 echo ""
