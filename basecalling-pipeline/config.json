@@ -15,7 +15,7 @@
       "nodes_ip" : ["10.128.2.161"],
       "gpus" : ["cuda:0,1"],
       "batch_size_list" : ["5"],
-      "supervisor_script_path" : ["/u/area/jenkins_onpexp/BC-pipelines/basecalling-pipeline/BC_scripts/supervisor.sh"]
+      "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/basecalling-pipeline/BC_scripts/supervisor.sh"
     }
   }
   

@@ -48,7 +48,7 @@ class Conf:
         conf_instance.engine_inputdir = config["Basecalling"]["input_dir"]
         conf_instance.engine_polling_interval = 1
         conf_instance.engine_id = config["Resources"]["nodes_list"][node_index]
-        conf_instance.engine_optimal_request_size = config["Resources"]["batch_size_list"]
+        conf_instance.engine_optimal_request_size = config["Resources"]["batch_size_list"][node_index]
         conf_instance.engine_model = config["Basecalling"]["model"]
         
         conf_instance.keep_alive_terminate_url = "http://127.0.0.1:40765/completed"
