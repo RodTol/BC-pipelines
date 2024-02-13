@@ -98,8 +98,12 @@
             }
             stage('Create Final file') {
                 steps {
+                    /*Cancella il job!!*/
                     sh '''
-                    echo "python per creare il file di recap delle perfomance della run"
+                        sleep 60
+                        ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                            scancel -u jenkins_onpexp
+                        '    
                     '''
                 }
             }
