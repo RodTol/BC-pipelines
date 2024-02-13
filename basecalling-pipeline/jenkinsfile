@@ -108,10 +108,11 @@
 
                                 status=scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}'
                                 
-                                while (status != "COMPLETED" && status != "FAILED" && status != "CANCELLED") {
-                                    sleep(30) // Adjust the polling interval as needed
-                                    status=scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}'
-                                }                                
+                                while [[ "$status" != "COMPLETED" && "$status" != "FAILED" && "$status" != "CANCELLED" ]]; do
+                                    sleep 30  # Adjust the polling interval as needed
+                                    status=$(scontrol show job ${job_id} | grep "JobState=" | awk -F"JobState=| Reason=" "{print $2}")
+                                done
+                              
                                 
                                 echo "Slurm Job ${job_id} completed with status: ${status}"
                             '
