@@ -90,7 +90,7 @@
                                 echo "**********Launching the basecalling**********"
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 sbatch ~/BC-pipelines/BC_scripts/script_resources.sh '${configFilePath}'
-                                echo "JOB RUNNED WITH ID: $JOB_ID"
+                                echo "JOB RUNNED WITH ID: ${JOB_ID}"
                             '    
                         '''
                     }
