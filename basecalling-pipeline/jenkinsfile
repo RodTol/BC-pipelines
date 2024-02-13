@@ -104,7 +104,9 @@
                         sh '''
                             sleep 60
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                scancel -u jenkins_onpexp
+                                cd ~/BC-pipelines/basecalling-pipeline
+                                job_id=$(grep -oE '[0-9]+' jobid.txt)
+                                scancel -j $job_id
                             '    
                         '''
                     }
