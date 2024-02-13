@@ -25,6 +25,8 @@ echo "Output Directory: $output_dir"
 echo "I am this node: $node"
 echo "GPUs selected: $gpus_settings"
 
+cd ~/BC-pipelines/BC_software
+
 echo "Launching the server"
 ~/BC-pipelines/basecalling-pipeline/BC_scripts/server.sh $model $logs_dir $gpus_settings &
 sleep 10
@@ -33,8 +35,6 @@ echo ""
 
 #Load virtualenv for python
 source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
-
-cd ~/BC-pipelines/BC_software
 
 #Start BCM on host node
 if [ "$my_index" -eq 0 ]; then
