@@ -244,7 +244,7 @@ class BCController:
         self.bc_state = BCWorkloadState(json_file_path, node_index)
         self.bc_state.update()
         self.app = Flask(__name__)
-        self.app.config['bc_controller'] = self
+        #self.app.config['bc_controller'] = self
         a = self.app
 
         self.shutdown_interval = shutdown_interval
@@ -304,10 +304,10 @@ class BCController:
 
             if inactivity_interval >= self.shutdown_interval:
                 print("No activity for {} seconds. Shutting down.".format(inactivity_interval))
-                func = self.app.environ.get('werkzeug.server.shutdown')
-                if func:
-                    func()
-                break
+                func = self.app.request.environ.get('werkzeug.server.shutdown')
+                if func is None:
+                    raise RuntimeError('Not running with the Werkzeug Server')
+                func()
             time.sleep(60)
     
     # Update last activity time on every route request
