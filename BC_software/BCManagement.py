@@ -246,7 +246,7 @@ class BCController:
         self.app = Flask(__name__)
         a = self.app
 
-        self.shutdown_timeout = shutdown_interval
+        self.shutdown_interval = shutdown_interval
         self.last_activity_time = time.time()
         self.shutdown_thread = threading.Thread(target=self.inactivity)
         self.shutdown_thread.daemon = True
