@@ -13,9 +13,9 @@ while check_job_status; do
     JOB_STATUS=$(scontrol show job $JOB_ID | awk '/JobState=/{print $1}')
     echo "Slurm job $JOB_ID status: $JOB_STATUS"
 
-    if [[ "$JOB_STATUS" == "FAILED" || "$JOB_STATUS" == "CANCELLED" || "$JOB_STATUS" == "COMPLETED" ]]; then
+    if [[ "$JOB_STATUS" == "JobState=FAILED" || "$JOB_STATUS" == "JobState=CANCELLED" || "$JOB_STATUS" == "JobState=COMPLETED" ]]; then
         echo "Slurm job $JOB_ID has finished with status: $JOB_STATUS"
-        exit 0 # Exit the while loop
+        exit 0 
     fi
 
     sleep 30
