@@ -89,7 +89,7 @@
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 echo "**********Launching the basecalling**********"
                                 cd ~/BC-pipelines/basecalling-pipeline
-                                job_id=$(sbatch ~/BC-pipelines/BC_scripts/script_resources.sh '${configFilePath}' | awk "(print \$4)")
+                                job_id=$(sbatch ~/BC-pipelines/BC_scripts/script_resources.sh '${configFilePath}' | awk "(print $4)")
                                 echo "JOB RUNNED WITH ID: $job_id"
                             '    
                         '''
