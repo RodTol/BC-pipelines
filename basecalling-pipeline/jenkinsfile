@@ -7,7 +7,7 @@
         parameters {
             /*The idea is to set as parameter the path to the JSON and not the actual JSON. 
             I assumed that the starting directory is the pipeline one*/
-            string(name: 'configFilePath', defaultValue: 'config.json', description: 'Path to the config JSON file')
+            string(name: 'configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/basecalling-pipeline/config.json', description: 'Path to the config JSON file')
         }
         triggers {
             pollSCM 'H * * * *'

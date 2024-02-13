@@ -39,7 +39,7 @@ cd ~/BC-pipelines/BC_software
 #Start BCM on host node
 if [ "$my_index" -eq 0 ]; then
   BC_manager_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCManager_log.txt
-  python3 BCManagement.py "$json_file" $my_index >> "$BC_manager_log_path" 2>&1 &
+  python3 BCManagement.py $json_file $my_index >> "$BC_manager_log_path" 2>&1 &
 fi
 
 #Start BCP
