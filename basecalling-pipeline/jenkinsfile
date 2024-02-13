@@ -97,6 +97,28 @@
                     }
                 }
             }
+            stage('Wait for Slurm Job to Complete') {
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                        sh '''
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                cd ~/BC-pipelines/basecalling-pipeline
+                                job_id=$(grep -oE '[0-9]+' jobid.txt)
+                                echo "Waiting for Slurm Job ${job_id} to complete..."
+
+                                status=scontrol show job ${jobID} | grep 'JobState=' | cut -d'=' -f2", returnStatus: true).trim()
+                                
+                                while (status != "COMPLETED" && status != "FAILED") {
+                                    sleep(30) // Adjust the polling interval as needed
+                                    status=scontrol show job ${jobID} | grep 'JobState=' | cut -d'=' -f2", returnStatus: true).trim()
+                                }                                
+                                
+                                echo "Slurm Job ${jobID} completed with status: ${status}"
+                            '
+                        '''    
+                    }
+                }
+            }
             stage('Create Final file') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
