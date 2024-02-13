@@ -90,6 +90,7 @@
                                 echo "**********Launching the basecalling**********"
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 sbatch ~/BC-pipelines/BC_scripts/script_resources.sh '${configFilePath}'
+                                export JOB_ID=$SLURM_JOB_ID
                                 echo "JOB RUNNED WITH ID: ${JOB_ID}"
                             '    
                         '''
