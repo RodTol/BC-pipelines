@@ -16,7 +16,7 @@ gpus_settings="$3"
 echo -e "${GREEN}GPUs selected: ${gpus_settings} ${RESET}"
 
 port=42837
-echo -e "${GREEN}Port${RESET} $port "
+echo -e "${GREEN}Port: $port ${RESET}  "
 
 #Already added to path
 #dorado_server_path=

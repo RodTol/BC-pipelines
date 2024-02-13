@@ -29,6 +29,7 @@ class Conf:
 
         Args:
             file_path (str): Path to the JSON file.
+            node_index (int): index for the node in the config.json list.
 
         Returns:
             Conf: An instance of Conf with settings loaded from the JSON file.
