@@ -302,7 +302,10 @@ class BCController:
 
             if inactivity_interval >= self.shutdown_interval:
                 print("No activity for {} seconds. Shutting down.".format(inactivity_interval))
-                self.app.shutdown()
+                #Very rough due to Flask server being not fully designed
+                func = request.environ.get('werkzeug.server.shutdown') 
+                if func:
+                    func()
                 break
             time.sleep(60)
     
