@@ -25,10 +25,12 @@ echo "Output Directory: $output_dir"
 echo "I am this node: $node"
 echo "GPUs selected: $gpus_settings"
 
+#I need launch the server, BCM and BCP on the same dir in order to have
+#the supervisor being able to find the connection file 
 cd ~/BC-pipelines/BC_software
 
 echo "Launching the server"
-~/BC-pipelines/basecalling-pipeline/BC_scripts/server.sh $model $logs_dir $gpus_settings &
+~/BC-pipelines/BC_scripts/server.sh $model $logs_dir $gpus_settings &
 sleep 10
 
 echo ""

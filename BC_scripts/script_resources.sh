@@ -12,7 +12,7 @@ json_file=$1
 index_host=$(jq -r '.Resources.index_host' "$json_file")
 
 #Only one node, launched with index for host node
-srun ~/BC-pipelines/basecalling-pipeline/BC_scripts/instructions.sh $json_file $index_host
+srun ~/BC-pipelines/BC_scripts/instructions.sh $json_file $index_host
 
 #srun --het-group=0 ~/BC-pipelines/basecalling-pipeline/BC_scripts/instructions.sh $json_file &
 sleep 10
