@@ -105,17 +105,17 @@
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 job_id=$(grep -oE '[0-9]+' jobid.txt)
                                 echo "Waiting for Slurm Job ${job_id} to complete..."
-
-                                status=$(scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}')
+                                scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}'
+                                #status=$(scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}')
                                 
-                                while [[ "$status" != "COMPLETED" && "$status" != "FAILED" && "$status" != "CANCELLED" ]]; do
-                                    sleep 30  # Adjust the polling interval as needed
-                                    status=$(scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}')
-                                    echo "STATUS: $status"
-                                done
-                              
-                                
-                                echo "Slurm Job ${job_id} completed with status: ${status}"
+                                #while [[ "$status" != "COMPLETED" && "$status" != "FAILED" && "$status" != "CANCELLED" ]]; do
+                                #    sleep 30  # Adjust the polling interval as needed
+                                #    status=$(scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}')
+                                #    echo "STATUS: $status"
+                                #done
+                                #                              
+                                #
+                                #echo "Slurm Job ${job_id} completed with status: ${status}"
                             '
                         '''    
                     }
