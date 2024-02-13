@@ -106,7 +106,7 @@
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 job_id=$(grep -oE '[0-9]+' jobid.txt)
-                                scancel -j $job_id
+                                scancel $job_id
                             '    
                         '''
                     }
