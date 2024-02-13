@@ -244,10 +244,12 @@ class BCController:
         self.bc_state = BCWorkloadState(json_file_path, node_index)
         self.bc_state.update()
         self.app = Flask(__name__)
+        self.app.config['bc_controller'] = self
         a = self.app
 
         self.shutdown_interval = shutdown_interval
         self.last_activity_time = time.time()
+        
         self.shutdown_thread = threading.Thread(target=self.inactivity)
         self.shutdown_thread.daemon = True
         self.shutdown_thread.start()
@@ -302,8 +304,7 @@ class BCController:
 
             if inactivity_interval >= self.shutdown_interval:
                 print("No activity for {} seconds. Shutting down.".format(inactivity_interval))
-                #Very rough due to Flask server being not fully designed
-                func = request.environ.get('werkzeug.server.shutdown') 
+                func = self.app.environ.get('werkzeug.server.shutdown')
                 if func:
                     func()
                 break
