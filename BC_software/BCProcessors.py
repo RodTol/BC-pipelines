@@ -225,7 +225,7 @@ class BCEngine:
             end_time = time.time()
             if not self.shutdown: #basecalling work may have failed unexpectedly and signaled to shutdown! There is no point in sleeping!
                 self._sleep_before_next_batch(start_time, end_time)
-        # exiting while loop: log it somehow
+        # exiting while loop (due to shutdown var being True): log it somehow
         self.PROCESSING_STATE = bc_status.STOPPED # 'STOPPED'
         print("STOPPING BATCH REQUEST LOOP: ENGINE " + str(self.engine_id) + " WILL NO LONGER ASK FOR NEW BATCHES OF WORK.")
 
