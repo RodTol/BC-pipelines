@@ -110,7 +110,7 @@
                                 
                                 while [[ "$status" != "COMPLETED" && "$status" != "FAILED" && "$status" != "CANCELLED" ]]; do
                                     sleep 30  # Adjust the polling interval as needed
-                                    status=$(scontrol show job ${job_id} | grep "JobState=" | awk -F"JobState=| Reason=" "{print $2}")
+                                    status=scontrol show job ${job_id} | grep 'JobState=' | awk -F'JobState=| Reason=' '{print $2}'
                                 done
                               
                                 
