@@ -10,6 +10,7 @@
 
 json_file=$1
 index_host=$(jq -r '.Resources.index_host' "$json_file")
+export JOB_ID=$SLURM_JOB_ID
 
 #Only one node, launched with index for host node
 srun ~/BC-pipelines/BC_scripts/instructions.sh $json_file $index_host
