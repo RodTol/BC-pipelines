@@ -307,7 +307,7 @@ class BCController:
         while True:
             current_time = time.time()
             inactivity_interval =  current_time - self.last_activity_time
-
+            print("Checking inactivity")
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
                 os.kill(os.getpid(), signal.SIGINT)
