@@ -10,17 +10,20 @@ def create_sbatch_file(config):
     run_name = config['General']['run_name']
     nodes_list = config['Resources']['nodes_list']
     # Define the content of the sbatch script
-    sbatch_content = f'''**********PYTHON SCRIPT**********
+    sbatch_content_1 = f'''#**********WRITTEN BY CONFIGURATION.PY**********
 #!/bin/bash
 #SBATCH --job-name={run_name}
 #SBATCH --time=00:20:00
 #SBATCH --output=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out  
 #SBATCH --error=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.err  
-
+'''
+    
+    sbatch_content_2 = f'''    
 #SBATCH -A lage -p DGX --nodelist={nodes_list[0]} --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=2
 #SBATCH hetjob
-#SBATCH -A lage -p DGX --nodelist={nodes_list[0]} --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
-
+#SBATCH -A lage -p DGX --nodelist={nodes_list[1]} --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
+'''
+    sbatch_content_3 = f'''
 json_file=$1
 index_host=$(jq -r '.Resources.index_host' "$json_file")
 
@@ -33,7 +36,9 @@ srun --het-group=1 ~/BC-pipelines/utility/prova.sh
 '''
     # Write the content to the sbatch script file
     with open("script_resources.sh", "w") as sbatch_file:
-        sbatch_file.write(sbatch_content)
+        sbatch_file.write(sbatch_content_1)
+        sbatch_file.write(sbatch_content_2)
+        sbatch_file.write(sbatch_content_3)
 
 
 if __name__ == "__main__":
