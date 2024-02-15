@@ -6,6 +6,7 @@ import threading
 import time
 import uuid
 from flask import Flask, request
+from werkzeug.serving import shutdown as werkzeug_shutdown
 from collections import namedtuple
 from BCConfiguration import Conf
 
@@ -244,7 +245,6 @@ class BCController:
         self.bc_state = BCWorkloadState(json_file_path, node_index)
         self.bc_state.update()
         self.app = Flask(__name__)
-        #self.app.config['bc_controller'] = self
         a = self.app
 
         self.shutdown_interval = shutdown_interval
@@ -296,22 +296,11 @@ class BCController:
             self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})
         
-        # @a.route('/shutdown', methods=['GET'])
-        # def shutdown():
-        #     shutdown_server()
-        #     return 'Server shutting down...'
-        
 
     # Update last activity time on every route request
     def update_last_activity_time(self):
         with self.lock:
             self.last_activity_time = time.time()   
-                
-    def shutdown_server():
-        func = request.environ.get('werkzeug.server.shutdown')
-        if func is None:
-            raise RuntimeError('Not running with the Werkzeug Server')
-        func()
     
     # monitoring to shutdown
     def inactivity(self):
@@ -321,7 +310,8 @@ class BCController:
 
             if inactivity_interval >= self.shutdown_interval:
                 print("No activity for {} seconds. Shutting down.".format(inactivity_interval))
-                self.shutdown_server()
+                #killing the Flask server
+                werkzeug_shutdown(request.environ.get('werkzeug.server.shutdown'))
             #polling time
             time.sleep(60)
 
