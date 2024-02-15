@@ -250,7 +250,7 @@ class BCController:
         self.last_activity_time = time.time()
         
         self.shutdown_thread = threading.Thread(target=self.inactivity)
-        self.shutdown_thread.daemon = True
+        self.shutdown_thread.daemon = False #To run in background set True 
         self.shutdown_thread.start()
 
 
@@ -296,6 +296,7 @@ class BCController:
             self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})
 
+        # /shutdown
         @a.route('/shutdown', methods=['GET'])
         def shutdown(self):
             self.shutdown_server()
@@ -305,7 +306,7 @@ class BCController:
             func = request.environ.get('werkzeug.server.shutdown')
             if func is None:
                 raise RuntimeError('Not running with the Werkzeug Server')
-                func()                
+            func()                
 
     def inactivity(self):
         while True:
@@ -314,7 +315,9 @@ class BCController:
             print("[Inactivity clock]: ", inactivity_interval)
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
-                self.app.shutdown()  # Call the shutdown function when inactivity exceeds the threshold
+                # Use Flask's test_client to make a request to the /shutdown route
+                with self.app.test_client() as client:
+                    client.get('/shutdown')
                 break  # Exit the loop to stop the thread
             time.sleep(60)
 
