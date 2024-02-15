@@ -5,6 +5,7 @@ import shutil
 import threading
 import time
 import uuid
+import subprocess
 from flask import Flask, request
 from collections import namedtuple
 from BCConfiguration import Conf
@@ -247,12 +248,6 @@ class BCController:
         a = self.app
 
         self.shutdown_interval = shutdown_interval
-        self.last_activity_time = time.time()
-        
-        self.shutdown_thread = threading.Thread(target=self.inactivity)
-        self.shutdown_thread.daemon = True
-        self.shutdown_thread.start()
-
 
         # /assignwork
         @a.route("/assignwork", methods=["GET"])
@@ -294,36 +289,28 @@ class BCController:
                 self.bc_state.completed_work(req_job_id, req_job_state)
             # NOTHING TO RETURN
             self.update_last_activity_time()    #update activy time 
-            return json.dumps({"ok": True})
+            return json.dumps({"ok": True})    
+        
+    def update_last_activity_time(self):
+        with self.lock:
+            self.last_activity_time = time.time()   
 
-    #     # /shutdown
-    #     @a.route('/shutdown', methods=['POST'])
-    #     def shutdown():
-    #         self.shutdown_server()
-    #         return 'Server shutting down...'
+    def shutdown_condition(self):
+        current_time = time.time()
+        inactivity_interval = current_time - self.last_activity_time
+        print("[Inactivity clock]: ", inactivity_interval)
+        return inactivity_interval >= self.shutdown_interval
 
-    # def shutdown_server(self):
-    #     func = request.environ.get('werkzeug.server.shutdown')
-    #     if func is None:
-    #         raise RuntimeError('Not running with the Werkzeug Server')
-    #     func()                
+    def shutdown(self):
+        print("Shutting down server...")
+        sys.exit()
 
-    # def inactivity(self):
-    #     while True:
-    #         current_time = time.time()
-    #         inactivity_interval = current_time - self.last_activity_time
-    #         print("[Inactivity clock]: ", inactivity_interval)
-    #         if inactivity_interval >= self.shutdown_interval:
-    #             print("Shutting down gracefully...")
-    #             # Use Flask's test_client to make a request to the /shutdown route
-    #             with self.app.test_client() as client:
-    #                 client.get('/shutdown')
-    #             break  # Exit the loop to stop the thread
-    #         time.sleep(60)
+    def run(self):
+        while True:
+            if self.shutdown_condition():
+                self.shutdown()
+            time.sleep(10)  # Adjust the sleep interval as needed to avoid unnecessary CPU usage
 
-    # def update_last_activity_time(self):
-    #     with self.lock:
-    #         self.last_activity_time = time.time()            
 
 
             
