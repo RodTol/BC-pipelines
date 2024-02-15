@@ -256,7 +256,6 @@ class BCController:
                 assignment_reply = self.bc_state.assign_work_to(req_engineid, req_batchsize)
                 assignment_reply.report_back_interval = 90 # maximum seconds that will be waited for keep alive from client
                 self.tracker[assignment_reply.jobid] = [time.time(), bc_status.ASSIGNED, 90]
-            self.update_last_activity_time()    #update activy time         
             return json.dumps(assignment_reply.__dict__)
 
         # /keepalive
@@ -271,7 +270,6 @@ class BCController:
                 entry[1] = req_job_state
                 # entry[2] stays the same
                 self.tracker[req_job_id] = entry
-            self.update_last_activity_time()    #update activy time                            
             return json.dumps({"late": False})
 
         # /completed
@@ -286,7 +284,6 @@ class BCController:
                 del self.tracker[req_job_id]
                 self.bc_state.completed_work(req_job_id, req_job_state)
             # NOTHING TO RETURN
-            self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})    
 
 
