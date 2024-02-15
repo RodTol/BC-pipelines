@@ -8,7 +8,7 @@ def load_json(json_file):
     
 def create_sbatch_file(config):
     run_name = config['General']['run_name']
-    nodes_list = config['Resources'][nodes_list]
+    nodes_list = config['Resources']['nodes_list']
     # Define the content of the sbatch script
     sbatch_content = f'''**********PYTHON SCRIPT**********
 #!/bin/bash
