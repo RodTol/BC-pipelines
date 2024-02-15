@@ -44,6 +44,8 @@ if [ "$my_index" -eq 0 ]; then
   python3 BCManagement.py $json_file $my_index >> "$BC_manager_log_path" 2>&1 &
 fi
 
+sleep 5
+
 #Start BCP
 BC_processor_log_path="/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCProcessor_log_$node.txt"
 python3 BCProcessors.py $json_file $my_index >> $BC_processor_log_path 2>&1 
