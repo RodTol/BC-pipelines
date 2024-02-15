@@ -301,6 +301,10 @@ class BCController:
             self.shutdown_server()
             return 'Server shutting down...'
 
+    def update_last_activity_time(self):
+        with self.lock:
+            self.last_activity_time = time.time()
+
     def inactivity(self):
         while True:
             current_time = time.time()
@@ -316,10 +320,6 @@ class BCController:
         if func is None:
             raise RuntimeError('Not running with the Werkzeug Server')
             func()
-
-    def update_last_activity_time(self):
-        with self.lock:
-            self.last_activity_time = time.time()
             
 #Launching the flask server
 #app.run decide on which host (0.0.0.0 means all) and port to listen

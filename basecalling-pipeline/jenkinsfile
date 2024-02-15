@@ -78,8 +78,8 @@
                                 cd BC-pipelines/basecalling-pipeline
                                 echo "-------Basecalling parameters------"
                                 python configuration.py '${configFilePath}'
-                                echo "------File list------"
-                                ls -lrt
+                                echo "------File configuration------"
+                                cat script_resources.sh
                             '
                         '''
                     }    

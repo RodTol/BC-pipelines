@@ -8,17 +8,18 @@ def load_json(json_file):
     
 def create_sbatch_file(config):
     run_name = config['General']['run_name']
-
+    nodes_list = config['Resources'][nodes_list]
     # Define the content of the sbatch script
-    sbatch_content = f'''#!/bin/bash
+    sbatch_content = f'''**********PYTHON SCRIPT**********
+#!/bin/bash
 #SBATCH --job-name={run_name}
 #SBATCH --time=00:20:00
 #SBATCH --output=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out  
 #SBATCH --error=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.err  
 
-#SBATCH -A lage -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=2
+#SBATCH -A lage -p DGX --nodelist={nodes_list[0]} --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=2
 #SBATCH hetjob
-#SBATCH -A lage -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
+#SBATCH -A lage -p DGX --nodelist={nodes_list[0]} --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
 
 json_file=$1
 index_host=$(jq -r '.Resources.index_host' "$json_file")

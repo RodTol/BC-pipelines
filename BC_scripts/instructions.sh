@@ -1,8 +1,4 @@
 #!/bin/bash
-current_time=$(date +"%Y-%m-%d %H:%M:%S")
-echo "Current time: $current_time"
-echo "Hello from ${SLURM_JOB_NODELIST}"
-
 #Input parameters are the json and what node I am on the list 
 json_file=$1
 my_index=$2
