@@ -250,7 +250,7 @@ class BCController:
         self.last_activity_time = time.time()
         
         self.shutdown_thread = threading.Thread(target=self.inactivity)
-        self.shutdown_thread.daemon = False #To run in background set True 
+        self.shutdown_thread.daemon = False #To run in abckground set True 
         self.shutdown_thread.start()
 
 
@@ -298,11 +298,11 @@ class BCController:
 
         # /shutdown
         @a.route('/shutdown', methods=['GET'])
-        def shutdown(self):
+        def shutdown():
             self.shutdown_server()
             return 'Server shutting down...'
 
-        def shutdown_server(self):
+        def shutdown_server():
             func = request.environ.get('werkzeug.server.shutdown')
             if func is None:
                 raise RuntimeError('Not running with the Werkzeug Server')
