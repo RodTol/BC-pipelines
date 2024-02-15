@@ -6,7 +6,6 @@ import threading
 import time
 import uuid
 from flask import Flask, request
-from werkzeug.serving import shutdown as werkzeug_shutdown
 from collections import namedtuple
 from BCConfiguration import Conf
 
@@ -311,9 +310,18 @@ class BCController:
             if inactivity_interval >= self.shutdown_interval:
                 print("No activity for {} seconds. Shutting down.".format(inactivity_interval))
                 #killing the Flask server
-                werkzeug_shutdown(request.environ.get('werkzeug.server.shutdown'))
+                self.shutdown_server()
             #polling time
             time.sleep(60)
+            
+    def shutdown_server(self):
+        try:
+            func = request.environ.get('werkzeug.server.shutdown')
+            if func is None:
+                raise RuntimeError('Not running with the Werkzeug Server')
+            func()
+        except Exception as e:
+            print(f"Error shutting down server: {e}")            
 
             
 #Launching the flask server
