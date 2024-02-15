@@ -296,6 +296,23 @@ class BCController:
             self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})
         
+        @a.route('/shutdown', methods=['GET'])
+        def shutdown():
+            shutdown_server()
+            return 'Server shutting down...'
+        
+        def shutdown_server():
+            func = request.environ.get('werkzeug.server.shutdown')
+            if func is None:
+                raise RuntimeError('Not running with the Werkzeug Server')
+            func()
+        
+
+    # Update last activity time on every route request
+    def update_last_activity_time(self):
+        with self.lock:
+            self.last_activity_time = time.time()        
+    
     # monitoring to shutdown
     def inactivity(self):
         while True:
@@ -304,16 +321,9 @@ class BCController:
 
             if inactivity_interval >= self.shutdown_interval:
                 print("No activity for {} seconds. Shutting down.".format(inactivity_interval))
-                func = self.app.request.environ.get('werkzeug.server.shutdown')
-                if func is None:
-                    raise RuntimeError('Not running with the Werkzeug Server')
-                func()
+                self.shutdown()
+            #polling time
             time.sleep(60)
-    
-    # Update last activity time on every route request
-    def update_last_activity_time(self):
-        with self.lock:
-            self.last_activity_time = time.time()
 
             
 #Launching the flask server
