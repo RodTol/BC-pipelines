@@ -298,7 +298,7 @@ class BCController:
         
         @a.route('/shutdown', methods=['POST'])
         def shutdown():
-            shutdown_server()
+            self.shutdown_server()
             return 'Server shutting down...'
 
     def shutdown_server():
@@ -314,7 +314,7 @@ class BCController:
             print("Checking inactivity")
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
-                shutdown()  # Call the shutdown function when inactivity exceeds the threshold
+                self.shutdown()  # Call the shutdown function when inactivity exceeds the threshold
                 break  # Exit the loop to stop the thread
             time.sleep(60)
 
