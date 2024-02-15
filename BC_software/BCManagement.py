@@ -245,6 +245,7 @@ class BCController:
         self.bc_state = BCWorkloadState(json_file_path, node_index)
         self.bc_state.update()
         self.app = Flask(__name__)
+        self.app.config['bc_controller'] = self 
         a = self.app
 
         self.shutdown_interval = shutdown_interval
