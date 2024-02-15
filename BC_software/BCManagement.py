@@ -245,7 +245,6 @@ class BCController:
         self.bc_state = BCWorkloadState(json_file_path, node_index)
         self.bc_state.update()
         self.app = Flask(__name__)
-        self.app.config['bc_controller'] = self 
         a = self.app
 
         self.shutdown_interval = shutdown_interval
@@ -303,16 +302,16 @@ class BCController:
         with self.lock:
             self.last_activity_time = time.time()   
     
-    # monitoring to shutdown
     def inactivity(self):
-        while True:
+        while not self.shutdown_event.is_set():
             current_time = time.time()
-            inactivity_interval =  current_time - self.last_activity_time
+            inactivity_interval = current_time - self.last_activity_time
             print("Checking inactivity")
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
-                os.kill(os.getpid(), signal.SIGINT)
-            #polling time
+                # Set the shutdown event to signal all threads to exit
+                self.shutdown_event.set()
+            # polling time
             time.sleep(60)
             
 #Launching the flask server
@@ -322,6 +321,8 @@ if __name__ == '__main__':
     node_index = int(sys.argv[2])
     RESTFulAPI = BCController(json_file_path, node_index)
     RESTFulAPI.app.run(host='0.0.0.0', port=40765)
+    RESTFulAPI.shutdown_thread.join()
+
 
 
 ### NOTES:
