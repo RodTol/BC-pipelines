@@ -5,7 +5,6 @@ import shutil
 import threading
 import time
 import uuid
-from werkzeug.serving import ThreadedServer
 from flask import Flask, request
 from collections import namedtuple
 from BCConfiguration import Conf
@@ -253,7 +252,6 @@ class BCController:
         self.shutdown_thread = threading.Thread(target=self.inactivity)
         self.shutdown_thread.daemon = True
         self.shutdown_thread.start()
-        self.server = ThreadedServer(self.app, host='0.0.0.0', port=40765)
 
 
         # /assignwork
@@ -298,6 +296,16 @@ class BCController:
             self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})
         
+        @a.route('/shutdown', methods=['POST'])
+        def shutdown():
+            shutdown_server()
+            return 'Server shutting down...'
+
+    def shutdown_server():
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        func()
 
     def inactivity(self):
         while True:
@@ -306,7 +314,8 @@ class BCController:
             print("Checking inactivity")
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
-                self.server.shutdown()  # Use ThreadedServer's shutdown method
+                shutdown()  # Call the shutdown function when inactivity exceeds the threshold
+                break  # Exit the loop to stop the thread
             time.sleep(60)
 
     def update_last_activity_time(self):
