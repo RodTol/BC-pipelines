@@ -301,10 +301,6 @@ class BCController:
             self.shutdown_server()
             return 'Server shutting down...'
 
-        def update_last_activity_time(self):
-            with self.lock:
-                self.last_activity_time = time.time()
-        
         def shutdown_server(self):
             func = request.environ.get('werkzeug.server.shutdown')
             if func is None:
@@ -315,11 +311,16 @@ class BCController:
         while True:
             current_time = time.time()
             inactivity_interval = current_time - self.last_activity_time
+            print("[Inactivity clock]: ", inactivity_interval)
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
                 self.app.shutdown()  # Call the shutdown function when inactivity exceeds the threshold
                 break  # Exit the loop to stop the thread
             time.sleep(60)
+
+    def update_last_activity_time(self):
+        with self.lock:
+            self.last_activity_time = time.time()            
 
 
             
