@@ -295,33 +295,32 @@ class BCController:
             # NOTHING TO RETURN
             self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})
-        
-
-        def shutdown_server(self):
-            func = request.environ.get('werkzeug.server.shutdown')
-            if func is None:
-                raise RuntimeError('Not running with the Werkzeug Server')
-            func()
 
         @a.route('/shutdown', methods=['GET'])
         def shutdown(self):
             self.shutdown_server()
             return 'Server shutting down...'
 
-        def inactivity(self):
-            while True:
-                current_time = time.time()
-                inactivity_interval = current_time - self.last_activity_time
-                print("Checking inactivity")
-                if inactivity_interval >= self.shutdown_interval:
-                    print("Shutting down gracefully...")
-                    self.shutdown_server()  # Call the shutdown function when inactivity exceeds the threshold
-                    break  # Exit the loop to stop the thread
-                time.sleep(60)
+    def shutdown_server(self):
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+            func()
 
-        def update_last_activity_time(self):
-            with self.lock:
-                self.last_activity_time = time.time()
+    def inactivity(self):
+        while True:
+            current_time = time.time()
+            inactivity_interval = current_time - self.last_activity_time
+            print("Checking inactivity")
+            if inactivity_interval >= self.shutdown_interval:
+                print("Shutting down gracefully...")
+                self.shutdown_server()  # Call the shutdown function when inactivity exceeds the threshold
+                break  # Exit the loop to stop the thread
+            time.sleep(60)
+
+    def update_last_activity_time(self):
+        with self.lock:
+            self.last_activity_time = time.time()
             
 #Launching the flask server
 #app.run decide on which host (0.0.0.0 means all) and port to listen
