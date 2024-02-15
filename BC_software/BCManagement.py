@@ -296,10 +296,10 @@ class BCController:
             self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})
         
-        @a.route('/shutdown', methods=['POST'])
-        def shutdown():
-            self.shutdown_server()
-            return 'Server shutting down...'
+        # @a.route('/shutdown', methods=['POST'])
+        # def shutdown():
+        #     self.shutdown_server()
+        #     return 'Server shutting down...'
 
     def shutdown_server():
         func = request.environ.get('werkzeug.server.shutdown')
@@ -314,7 +314,7 @@ class BCController:
             print("Checking inactivity")
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
-                self.shutdown()  # Call the shutdown function when inactivity exceeds the threshold
+                self.shutdown_server()  # Call the shutdown function when inactivity exceeds the threshold
                 break  # Exit the loop to stop the thread
             time.sleep(60)
 
