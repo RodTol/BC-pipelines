@@ -5,7 +5,7 @@ import shutil
 import threading
 import time
 import uuid
-import signal
+from werkzeug.serving import ThreadedServer
 from flask import Flask, request
 from collections import namedtuple
 from BCConfiguration import Conf
@@ -247,13 +247,14 @@ class BCController:
         self.app = Flask(__name__)
         a = self.app
 
-        self.shutdown_event = threading.Event()
         self.shutdown_interval = shutdown_interval
         self.last_activity_time = time.time()
         
         self.shutdown_thread = threading.Thread(target=self.inactivity)
         self.shutdown_thread.daemon = True
         self.shutdown_thread.start()
+        self.server = ThreadedServer(self.app, host='0.0.0.0', port=40765)
+
 
         # /assignwork
         @a.route("/assignwork", methods=["GET"])
@@ -298,22 +299,19 @@ class BCController:
             return json.dumps({"ok": True})
         
 
-    # Update last activity time on every route request
-    def update_last_activity_time(self):
-        with self.lock:
-            self.last_activity_time = time.time()   
-    
     def inactivity(self):
-        while not self.shutdown_event.is_set():
+        while True:
             current_time = time.time()
             inactivity_interval = current_time - self.last_activity_time
             print("Checking inactivity")
             if inactivity_interval >= self.shutdown_interval:
                 print("Shutting down gracefully...")
-                # Set the shutdown event to signal all threads to exit
-                self.shutdown_event.set()
-            # polling time
+                self.server.shutdown()  # Use ThreadedServer's shutdown method
             time.sleep(60)
+
+    def update_last_activity_time(self):
+        with self.lock:
+            self.last_activity_time = time.time()
             
 #Launching the flask server
 #app.run decide on which host (0.0.0.0 means all) and port to listen
@@ -322,7 +320,6 @@ if __name__ == '__main__':
     node_index = int(sys.argv[2])
     RESTFulAPI = BCController(json_file_path, node_index)
     RESTFulAPI.app.run(host='0.0.0.0', port=40765)
-    RESTFulAPI.shutdown_thread.join()
 
 
 
