@@ -302,11 +302,11 @@ class BCController:
             self.shutdown_server()
             return 'Server shutting down...'
 
-        def shutdown_server():
-            func = request.environ.get('werkzeug.server.shutdown')
-            if func is None:
-                raise RuntimeError('Not running with the Werkzeug Server')
-            func()                
+    def shutdown_server():
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        func()                
 
     def inactivity(self):
         while True:
