@@ -297,7 +297,7 @@ class BCController:
             return json.dumps({"ok": True})
 
         # /shutdown
-        @a.route('/shutdown', methods=['GET'])
+        @a.route('/shutdown', methods=['POST'])
         def shutdown():
             self.shutdown_server()
             return 'Server shutting down...'
