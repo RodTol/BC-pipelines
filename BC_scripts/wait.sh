@@ -18,5 +18,10 @@ while check_job_status; do
         break
     fi
 
+    if ! check_job_status; then
+        echo "Slurm job $JOB_ID not found. It might have been canceled or completed."
+        break
+    fi
+
     sleep 30
 done
