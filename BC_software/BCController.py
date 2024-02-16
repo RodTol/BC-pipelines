@@ -14,9 +14,7 @@ class BCController:
         self.my_index = node_index
         self.last_heartbeat_time = time.time()
         self.heartbeat_url = conf.heartbeat_url
-        # I need to add the  + my_index because each BCC close only one job
-        # is it necessary altough ?
-        self.slurm_job_id = os.environ.get('SLURM_JOB_ID')+ str(self.my_index)
+        self.slurm_job_id = os.environ.get('SLURM_JOB_ID')
     
     @staticmethod
     def return_datetime():
