@@ -27,20 +27,21 @@ class BCController:
             if response.ok:
                 data = response.json()
                 status = data.get("status")
+                inactivity_interval=data.get("inactivity_interval")
                 if status == "true":
                     self.last_heartbeat_time = time.time()
-                    print(self.return_datetime(), '- - Heart stopped. Basecalling has finished.', flush=True)
+                    print(self.return_datetime(), '- - Heart stopped. Basecalling has finished. Inactivity interval: ', inactivity_interval, flush=True)
                     return True
                 elif status == "false":
                     self.last_heartbeat_time = time.time()
-                    print(self.return_datetime(), '- - Heartbeat received. Basecalling still in progress.', flush=True)
+                    print(self.return_datetime(), '- - Heartbeat received. Basecalling still in progress. Inactivity interval: ', inactivity_interval, flush=True)
                     return False
             else:
                 print(self.return_datetime(), '- - Error: Unexpected response from BCManagement server.', flush=True)
         except requests.RequestException:
             print(self.return_datetime(), '- - Error: Failed to connect to BCManagement server.', flush=True)
     
-    def monitor_heartbeat(self, max_idle_time=120):
+    def monitor_heartbeat(self):
         while True:
             # Check the heartbeat. True means it need to be shutted down
             status=self.check_heartbeat()
