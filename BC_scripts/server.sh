@@ -4,7 +4,7 @@ RED="\033[0;31m"
 GREEN="\033[0;32m"
 RESET="\033[0m"  # Reset color to default
 
-echo -e "${GREEN}HOST SERVER SCRIPT${RESET}"
+echo -e "${GREEN}SERVER SCRIPT${RESET}"
 
 model="$1"
 echo -e "${GREEN}model $model${RESET}"

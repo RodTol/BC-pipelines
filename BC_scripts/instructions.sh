@@ -1,4 +1,9 @@
 #!/bin/bash
+
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+RESET="\033[0m"  # Reset color to default
+
 #Input parameters are the json and what node I am on the list 
 json_file=$1
 my_index=$2
@@ -19,8 +24,8 @@ echo "Logs Directory: $logs_dir"
 echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
 
-echo "I am this node_name: $node_name"
-echo "GPUs selected: $gpus_settings"
+echo -e "${RED}I am this node_name: $node_name${RESET}"
+echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 
 #I need launch the server, BCM and BCP on the same dir in order to have
 #the supervisor being able to find the connection file 
