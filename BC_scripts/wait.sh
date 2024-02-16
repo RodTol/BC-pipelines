@@ -23,5 +23,5 @@ while check_job_status; do
         break
     fi
 
-    sleep 30
+    sleep 15
 done
