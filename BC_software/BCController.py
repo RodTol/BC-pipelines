@@ -32,7 +32,7 @@ class BCController:
             else:
                 print(self.return_datetime(), '--Error: Unexpected response from BCManagement server.')
         except requests.RequestException:
-            print(self.return_datetime(), '--Error: Failed to connect to BCManagement server.')      
+            print(self.return_datetime(), '--Error: Failed to connect to BCManagement server.', flush=True)      
 
     def monitor_heartbeat(self, max_idle_time=120):
         while True:
