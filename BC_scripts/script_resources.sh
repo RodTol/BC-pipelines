@@ -15,4 +15,4 @@ index_host=$(jq -r 'Resources.index_host' "$json_file")
 
 srun --het-group=0 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $index_host
 sleep 10
-srun --het-group=1 ~/BC-pipelines/utility/prova.sh ${((index_host + 1))}
+srun --het-group=1 ~/BC-pipelines/utility/prova.sh $((index_host + 1))
