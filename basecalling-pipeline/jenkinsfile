@@ -108,6 +108,7 @@
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 job_id=$(grep -oE '[0-9]+' jobid.txt)
+                                job_id="${job_id}+0"
                                 echo "Job ID: $job_id"
                                 ~/BC-pipelines/BC_scripts/wait.sh $job_id
                             '    
