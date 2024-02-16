@@ -298,10 +298,8 @@ class BCManager:
             current_time = time.time()
             inactivity_interval = current_time - self.last_activity_time
             if inactivity_interval >= self.shutdown_interval:
-                print(inactivity_interval)
                 return jsonify({"status": "true", "inactivity_interval": inactivity_interval})
             else:
-                print(inactivity_interval)
                 return jsonify({"status": "false", "inactivity_interval": inactivity_interval})
 
     #Method that updates only when a /assignwork, /keepalive or /completed

@@ -9,6 +9,8 @@ logs_dir=$(jq -r '.Basecalling.logs_dir' "$json_file")
 input_dir=$(jq -r '.Basecalling.input_dir' "$json_file")
 output_dir=$(jq -r '.Basecalling.output_dir' "$json_file")
 
+
+host_index=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
 node=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
 gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file")
 
@@ -34,8 +36,8 @@ echo ""
 #Load virtualenv for python
 source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
 
-#Start BCM on host node
-if [ "$my_index" -eq 0 ]; then
+#Start BCM and BCC on host node
+if [ "$my_index" -eq $host_index ]; then
   BC_manager_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCManager_log.txt
   python3 BCManagement.py $json_file $my_index >> "$BC_manager_log_path" 2>&1 &
 
@@ -43,7 +45,6 @@ if [ "$my_index" -eq 0 ]; then
 
   BC_controller_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCController_log.txt
   python3 BCController.py $json_file $my_index >> "$BC_controller_log_path" 2>&1 &
-
 fi
 
 sleep 5
