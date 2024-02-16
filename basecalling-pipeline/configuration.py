@@ -21,7 +21,7 @@ def create_sbatch_file(config):
     sbatch_content_2 = f'''    
 #SBATCH -A lage -p DGX --nodelist={nodes_list[0]} --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=2
 #SBATCH hetjob
-#SBATCH -A lage -p DGX --nodelist={nodes_list[1]} --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
+#SBATCH -A lage -p DGX --nodelist=extra_nodeeeeee --nodes=1 --ntasks-per-node=1 --cpus-per-task=1
 '''
     sbatch_content_3 = f'''
 json_file=$1
