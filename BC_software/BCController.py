@@ -19,11 +19,11 @@ class BCController:
             if response.status_code == 200:
                 # Update the last received heartbeat time
                 self.last_heartbeat_time = time.time()
-                print('Heartbeat received.')
+                print(self.last_heartbeat_time, '--Heartbeat received.')
             else:
-                print('Error: Unexpected response from BCManagement server.')
+                print(self.last_heartbeat_time, '--Error: Unexpected response from BCManagement server.')
         except requests.RequestException:
-            print('Error: Failed to connect to BCManagement server.')      
+            print(self.last_heartbeat_time, '--Error: Failed to connect to BCManagement server.')      
 
     def monitor_heartbeat(self, max_idle_time=120):
         while True:
@@ -34,10 +34,10 @@ class BCController:
             time_difference = time.time() - self.last_heartbeat_time
 
             if time_difference > max_idle_time:
-                print(f'No heartbeat received for {time_difference} seconds. Initiating shutdown.')
+                print(self.last_heartbeat_time, f'--No heartbeat received for {time_difference} seconds. Initiating shutdown.')
 
-                # Trigger shutdown process
-                print("Shutdown")
+                # Trigger shutdown process of itself
+                print(self.last_heartbeat_time, '--Shutdown')
                 break
 
             time.sleep(30)  # Check heartbeat every 30 seconds              
