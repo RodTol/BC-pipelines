@@ -37,7 +37,7 @@ echo ""
 source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
 
 #Start BCM and BCC on host node
-if [ "$my_index" -eq "$host_index" ]; then
+if ((my_index == host_index)); then
   BC_manager_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCManager_log.txt
   python3 BCManagement.py $json_file $my_index >> "$BC_manager_log_path" 2>&1 &
 
