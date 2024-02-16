@@ -298,11 +298,11 @@ class BCManager:
             current_time = time.time()
             inactivity_interval = current_time - self.last_activity_time
             if inactivity_interval >= self.shutdown_interval:
-                #print(f"{request.remote_addr} - - {self.return_datetime()} \"GET /heartbeat HTTP/1.1\" 200 - inactivity time = {inactivity_interval:.2f} s", flush=True)
-                return jsonify({"status": "true", "message": "Basecalling has finished"})
+                print(inactivity_interval)
+                return jsonify({"status": "true", "inactivity_interval": inactivity_interval})
             else:
-                #print(f"{request.remote_addr} - - {self.return_datetime()} \"GET /heartbeat HTTP/1.1\" 200 - inactivity time = {inactivity_interval:.2f} s", flush=True)
-                return jsonify({"status": "false", "message": "Basecalling continues"})
+                print(inactivity_interval)
+                return jsonify({"status": "false", "inactivity_interval": inactivity_interval})
 
     #Method that updates only when a /assignwork, /keepalive or /completed
     #request are received

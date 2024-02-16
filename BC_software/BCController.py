@@ -1,5 +1,7 @@
 import requests
 import time
+import os
+import subprocess
 from datetime import datetime
 import sys
 from BCConfiguration import Conf
@@ -11,6 +13,7 @@ class BCController:
         conf = Conf.from_json(json_file_path, node_index)
         self.last_heartbeat_time = time.time()
         self.heartbeat_url = conf.heartbeat_url
+        self.slurm_job_id = os.environ.get('SLURM_JOB_ID')
     
     @staticmethod
     def return_datetime():
@@ -48,9 +51,21 @@ class BCController:
             if status:
                 # Trigger shutdown process of itself
                 print(self.return_datetime(), '- - Shutdown', flush=True)
+                self.cancel_slurm_job()
                 break
 
-            time.sleep(30)  # Check heartbeat every 30 seconds              
+            time.sleep(30)  # Check heartbeat every 30 seconds    
+
+    def cancel_slurm_job(self):
+        if self.slurm_job_id:
+            try:
+                subprocess.run(['scancel', self.slurm_job_id])
+                print(f"SLURM job {self.slurm_job_id} successfully canceled.")
+            except subprocess.CalledProcessError as e:
+                print(f"Error canceling SLURM job {self.slurm_job_id}: {e}")
+        else:
+            print("SLURM_JOB_ID not found in environment variables.")
+
 
 if __name__ == '__main__':
     json_file_path = sys.argv[1]
