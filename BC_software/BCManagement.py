@@ -295,30 +295,20 @@ class BCManager:
         # /heartbeat : for the observer that will close everything
         @a.route('/heartbeat', methods=['GET'])
         def heartbeat():
-            status=self.inactivity()
-            if status:
+            current_time = time.time()
+            inactivity_interval = current_time - self.last_activity_time
+            if inactivity_interval >= self.shutdown_interval:
+                #print(f"{request.remote_addr} - - {self.return_datetime()} \"GET /heartbeat HTTP/1.1\" 200 - inactivity time = {inactivity_interval:.2f} s", flush=True)
                 return jsonify({"status": "true", "message": "Basecalling has finished"})
             else:
-                return jsonify({"status": "true", "message": "Basecalling has finished"})
+                #print(f"{request.remote_addr} - - {self.return_datetime()} \"GET /heartbeat HTTP/1.1\" 200 - inactivity time = {inactivity_interval:.2f} s", flush=True)
+                return jsonify({"status": "false", "message": "Basecalling continues"})
 
     #Method that updates only when a /assignwork, /keepalive or /completed
     #request are received
     def update_last_activity_time(self):
         with self.lock:
-            self.last_activity_time = time.time()   
-
-    #Compute the inactivity
-    def inactivity(self):
-        current_time = time.time()
-        inactivity_interval = current_time - self.last_activity_time
-        print("[Inactivity clock]: ", inactivity_interval, flush=True)
-        #If basecalling has finished return True
-        if inactivity_interval >= self.shutdown_interval:
-            print("Basecalling has finished", flush=True)
-            return True
-        else:
-            return False
-            
+            self.last_activity_time = time.time()            
             
             
 #Launching the flask server
