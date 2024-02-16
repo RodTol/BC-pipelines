@@ -15,7 +15,7 @@ while check_job_status; do
 
     if [[ "$JOB_STATUS" == "JobState=FAILED" || "$JOB_STATUS" == "JobState=CANCELLED" || "$JOB_STATUS" == "JobState=COMPLETED" ]]; then
         echo "Slurm job $JOB_ID has finished with status: $JOB_STATUS"
-        exit 0 
+        break
     fi
 
     sleep 30
