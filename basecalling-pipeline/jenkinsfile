@@ -94,7 +94,8 @@
                                 cd ~/BC-pipelines/basecalling-pipeline
                                 sbatch ~/BC-pipelines/BC_scripts/script_resources.sh '${configFilePath}'> jobid.txt
                                 job_id=$(grep -oE '[0-9]+' jobid.txt)
-                                echo "Job ID: $job_id"
+                                job_id="${job_id}+0"
+                                echo "Server Job ID: $job_id"
                             '    
                         '''
                     }
