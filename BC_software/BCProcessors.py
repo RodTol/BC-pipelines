@@ -9,7 +9,7 @@ from BCConfiguration import Conf
 
 class BCKeepAlive(threading.Thread):
     """
-    Class that encapsulates a thread where the BCEngine constantly informs the BCController on the state
+    Class that encapsulates a thread where the BCEngine constantly informs the BCManager on the state
     of the ongoing processing.
 
     It implements a resiliance protocol, thereby signalling to initiate a SHUTDOWN should the communication
@@ -69,13 +69,13 @@ class BCKeepAlive(threading.Thread):
         self.keep_alive_url = Conf.keep_alive_url # "http://127.0.0.1:5000/keepalive"
         self.keep_alive_terminate_url = Conf.keep_alive_terminate_url # "http://127.0.0.1:5000/completed"
         
-        self.BCCONTROLLER_PB = False  # volatile variable to indicate to the main thread it should stop and shutdown: the bccontroller seems to have crashed!
+        self.BCManager_PB = False  # volatile variable to indicate to the main thread it should stop and shutdown: the BCManager seems to have crashed!
 
     def run(self):
         """
-        Method that starts a loop periodically calling back the BCController to inform it of the ongoing processing.
+        Method that starts a loop periodically calling back the BCManager to inform it of the ongoing processing.
 
-        Once the final state is reached, regardless of success or failure, the BCController is informed, the keep-alive
+        Once the final state is reached, regardless of success or failure, the BCManager is informed, the keep-alive
         is stopped, and the loop exits; thereby ending the thread!
         :return:
         """
@@ -90,7 +90,7 @@ class BCKeepAlive(threading.Thread):
                 #if response.json()["late"]:
                 #    raise Exception("Basecalling Controller replied the keepalive is late, so workload will be reassigned.")
                 time.sleep(interval)
-            # exiting while: it means a final state has been reached and the BCController must be informed
+            # exiting while: it means a final state has been reached and the BCManager must be informed
             payload = {'job_id': self.job_id, 'job_state': self.final_state}
             response = requests.get(self.keep_alive_terminate_url, params=payload)
             response.raise_for_status()
@@ -100,19 +100,19 @@ class BCKeepAlive(threading.Thread):
             As per protocol, we'll interrupt ongoing work and initiate a shutdown of this BCEngine.
             """
             print("EXCEPTION DURING KEEPALIVE! PROTOCOL INITIATION OF BCENGINE SHUTDOWN! " + str(e))
-            self.BCCONTROLLER_PB = True
+            self.BCManager_PB = True
 
     def shutdown_if_broken_keepalive(self):
         """
         Method that checks for a spotted problematic BC Controller: it crashed, the network is down,
         an exception on the server is returned back.
 
-        It will initiate a client shutdown as per protocol, should the BCController be problematic.
+        It will initiate a client shutdown as per protocol, should the BCManager be problematic.
 
         This is meant to be invoked from the main thread where the processing is taking place.
         :return:
         """
-        if self.BCCONTROLLER_PB:
+        if self.BCManager_PB:
             print("BC CONTROLLER PROBLEM! ABORTING PROCESSING AND SHUTTING DOWN!")
             sys.exit(1)
 
@@ -138,7 +138,7 @@ class BCEngine:
     """
     Class that represents a Basecalling Engine sitting in a physical node where GPUs are available.
 
-    It will periodically connect back to BCController to request work for processing. It will then
+    It will periodically connect back to BCManager to request work for processing. It will then
     invoke a local guppy system such as supervisor-guppy, to carry out the work.
     """
 
@@ -202,18 +202,18 @@ class BCEngine:
                 input_dir = os.path.join(self.INPUTDIR, answer['job_input_dir'])
                 output_dir = os.path.join(self.OUTPUTDIR, answer['job_output_dir'])
                 model = self.bc_model
-                # Check how the BCController is doing
+                # Check how the BCManager is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
                 # -------------------------------------------------------------
                 # invoke the external script passing the input dir as parameter
                 # it will block until complete
                 self._basecalling_work(input_dir, output_dir, model)
                 # -------------------------------------------------------------
-                # Check how the BCController is doing
+                # Check how the BCManager is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
                 # Tell keepalive thread to send the result and terminate: will block until thread ends.
                 keep_alive_manager.terminate_keepalive(self.PROCESSING_STATE)
-                # Check how the BCController is doing
+                # Check how the BCManager is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
                 # Go back to START state
                 self.PROCESSING_STATE = bc_status.STARTED
@@ -247,7 +247,7 @@ class BCEngine:
             #  {'report_back_interval' : int, 'jobid' : string, 'job_input_dir' : string, 'bc_engine_id' : string, 'batch_size' : int, 'batch' : [] }
             return response.json()
         except Exception as e:
-            # BCController SERVER PROBLEMS!
+            # BCManager SERVER PROBLEMS!
             print("BC CONTROLLER PROBLEM! AS PER PROTOCOL, ABORTING PROCESSING AND SHUTTING DOWN! " + str(e))
             sys.exit(1)
 

@@ -234,7 +234,7 @@ class BCWorkloadState:
 
 
 
-class BCController:
+class BCManager:
     """
     Class that represents a RESTful Service listening for Basecalling work requests from Basecalling Engines.
     """
@@ -297,7 +297,7 @@ class BCController:
 if __name__ == '__main__':
     json_file_path = sys.argv[1]
     node_index = int(sys.argv[2])
-    RESTFulAPI = BCController(json_file_path, node_index)
+    RESTFulAPI = BCManager(json_file_path, node_index)
     RESTFulAPI.app.run(host='0.0.0.0', port=40765)
 
 

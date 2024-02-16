@@ -8,7 +8,7 @@ class BCController:
     def __init__(self, json_file_path, node_index):
         print("*************BCController READ FROM JSON*************")
         conf = Conf.from_json(json_file_path, node_index)
-        self.last_heartbeat_time = time.tine()
+        self.last_heartbeat_time = time.time()
         self.heartbeat_url = conf.heartbeat_url
 
     def check_heartbeat(self):
