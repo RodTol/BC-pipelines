@@ -10,11 +10,11 @@ input_dir=$(jq -r '.Basecalling.input_dir' "$json_file")
 output_dir=$(jq -r '.Basecalling.output_dir' "$json_file")
 
 
-host_index=$(jq -r 'Resources.index_host' "$json_file")
+host_index=$(jq -r '.Resources.index_host' "$json_file")
 node_name=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
 gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file")
 
-echo "Model: $model"
+echo "Model: $model"gu
 echo "Logs Directory: $logs_dir"
 echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
