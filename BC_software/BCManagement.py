@@ -6,7 +6,7 @@ import threading
 import time
 import uuid
 import subprocess
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from collections import namedtuple
 from BCConfiguration import Conf
 
@@ -239,13 +239,16 @@ class BCManager:
     Class that represents a RESTful Service listening for Basecalling work requests from Basecalling Engines.
     """
 
-    def __init__(self,json_file_path, node_index):
+    def __init__(self,json_file_path, node_index, shutdown_interval=120):
         self.lock = threading.Lock()
         self.tracker = {} # dict of job_id -> [last_ack_time, state, report_back_period]
         self.bc_state = BCWorkloadState(json_file_path, node_index)
         self.bc_state.update()
         self.app = Flask(__name__)
         a = self.app
+        
+        self.shutdown_interval = shutdown_interval
+        self.last_activity_time = time.time()
 
         # /assignwork
         @a.route("/assignwork", methods=["GET"])
@@ -256,6 +259,7 @@ class BCManager:
                 assignment_reply = self.bc_state.assign_work_to(req_engineid, req_batchsize)
                 assignment_reply.report_back_interval = 90 # maximum seconds that will be waited for keep alive from client
                 self.tracker[assignment_reply.jobid] = [time.time(), bc_status.ASSIGNED, 90]
+            self.update_last_activity_time()    #update activy time 
             return json.dumps(assignment_reply.__dict__)
 
         # /keepalive
@@ -270,6 +274,7 @@ class BCManager:
                 entry[1] = req_job_state
                 # entry[2] stays the same
                 self.tracker[req_job_id] = entry
+            self.update_last_activity_time()    #update activy time 
             return json.dumps({"late": False})
 
         # /completed
@@ -284,13 +289,37 @@ class BCManager:
                 del self.tracker[req_job_id]
                 self.bc_state.completed_work(req_job_id, req_job_state)
             # NOTHING TO RETURN
+            self.update_last_activity_time()    #update activy time 
             return json.dumps({"ok": True})    
         
         # /heartbeat : for the observer that will close everything
         @a.route('/heartbeat', methods=['GET'])
         def heartbeat():
-            return 'OK'
+            status=self.inactivity()
+            if status:
+                return jsonify({"status": "true", "message": "Basecalling has finished"})
+            else:
+                return jsonify({"status": "true", "message": "Basecalling has finished"})
 
+    #Method that updates only when a /assignwork, /keepalive or /completed
+    #request are received
+    def update_last_activity_time(self):
+        with self.lock:
+            self.last_activity_time = time.time()   
+
+    #Compute the inactivity
+    def inactivity(self):
+        current_time = time.time()
+        inactivity_interval = current_time - self.last_activity_time
+        print("[Inactivity clock]: ", inactivity_interval, flush=True)
+        #If basecalling has finished return True
+        if inactivity_interval >= self.shutdown_interval:
+            print("Basecalling has finished", flush=True)
+            return True
+        else:
+            return False
+            
+            
             
 #Launching the flask server
 #app.run decide on which host (0.0.0.0 means all) and port to listen

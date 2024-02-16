@@ -23,30 +23,30 @@ class BCController:
     def check_heartbeat(self):
         try:
             # Send a request to BCManagement to get the current heartbeat time
-            response = requests.get(self.heartbeat_url)
-            
-            if response.status_code == 200:
-                # Update the last received heartbeat time
-                self.last_heartbeat_time = time.time()
-                print(self.return_datetime(), '--Heartbeat received.', flush=True)
+            response = requests.get(self.heartbeat_url)            
+            if response.ok:
+                data = response.json()
+                status = data.get("status")
+                if status == "true":
+                    self.last_heartbeat_time = time.time()
+                    print(self.return_datetime(), '- - Heart stopped. Basecalling has finished.', flush=True)
+                    return True
+                elif status == "false":
+                    self.last_heartbeat_time = time.time()
+                    print(self.return_datetime(), '- - Heartbeat received. Basecalling still in progress.', flush=True)
+                    return False
             else:
-                print(self.return_datetime(), '--Error: Unexpected response from BCManagement server.', flush=True)
+                print(self.return_datetime(), '- - Error: Unexpected response from BCManagement server.', flush=True)
         except requests.RequestException:
-            print(self.return_datetime(), '--Error: Failed to connect to BCManagement server.', flush=True)      
-
+            print(self.return_datetime(), '- - Error: Failed to connect to BCManagement server.', flush=True)
+    
     def monitor_heartbeat(self, max_idle_time=120):
         while True:
-            # Check the heartbeat
-            self.check_heartbeat()
-
-            # Calculate the time difference
-            time_difference = time.time() - self.last_heartbeat_time
-
-            if time_difference > max_idle_time:
-                print(self.return_datetime(), f'--No heartbeat received for {time_difference} seconds. Initiating shutdown.')
-
+            # Check the heartbeat. True means it need to be shutted down
+            status=self.check_heartbeat()
+            if status:
                 # Trigger shutdown process of itself
-                print(self.return_datetime(), '--Shutdown', flush=True)
+                print(self.return_datetime(), '- - Shutdown', flush=True)
                 break
 
             time.sleep(30)  # Check heartbeat every 30 seconds              
