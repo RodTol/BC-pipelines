@@ -41,7 +41,7 @@ class Conf:
         
         conf_instance = cls()
 
-        index_host = config["Resources"]["index_host"]
+        index_host = int(config["Resources"]["index_host"])
         host_address = config["Resources"]["nodes_ip"][index_host]
         
         conf_instance.mngt_outputdir = config["Basecalling"]["output_dir"]
