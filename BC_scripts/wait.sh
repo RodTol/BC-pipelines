@@ -19,7 +19,7 @@ while check_job_status; do
     fi
 
     if ! check_job_status; then
-        echo "Slurm job $JOB_ID not found. It might have been canceled or completed."
+        echo "Slurm job $JOB_ID not found. It has disappeared from queue."
         exit 0
     fi
 
