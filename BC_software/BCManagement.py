@@ -285,7 +285,11 @@ class BCController:
                 self.bc_state.completed_work(req_job_id, req_job_state)
             # NOTHING TO RETURN
             return json.dumps({"ok": True})    
-
+        
+        # /heartbeat : for the observer that will close everything
+        @a.route('/heartbeat', methods=['GET'])
+        def heartbeat():
+            return 'OK'
 
             
 #Launching the flask server

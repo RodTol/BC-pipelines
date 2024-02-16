@@ -27,7 +27,7 @@ cd ~/BC-pipelines/BC_software
 
 echo "Launching the server"
 ~/BC-pipelines/BC_scripts/server.sh $model $logs_dir $gpus_settings &
-sleep 10
+sleep 5
 
 echo ""
 
@@ -38,6 +38,12 @@ source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
 if [ "$my_index" -eq 0 ]; then
   BC_manager_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCManager_log.txt
   python3 BCManagement.py $json_file $my_index >> "$BC_manager_log_path" 2>&1 &
+
+  sleep 5
+
+  BC_controller_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCController_log.tx
+  python3 BCController.py $json_file $my_index >> "$BC_controller_log_path" 2>&1 &
+
 fi
 
 sleep 5
