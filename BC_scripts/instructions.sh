@@ -41,7 +41,7 @@ if [ "$my_index" -eq 0 ]; then
 
   sleep 5
 
-  BC_controller_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCController_log.tx
+  BC_controller_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCController_log.txt
   python3 BCController.py $json_file $my_index >> "$BC_controller_log_path" 2>&1 &
 
 fi
