@@ -41,12 +41,12 @@ if ((my_index == host_index)); then
   python3 BCManagement.py $json_file $my_index >> "$BC_manager_log_path" 2>&1 &
 
   sleep 5
+  
+  BC_controller_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCController_log_$node_name.txt
+  python3 BCController.py $json_file $my_index >> "$BC_controller_log_path" 2>&1 &
+  
+  sleep 5
 fi
-
-BC_controller_log_path=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCController_log_$node_name.txt
-python3 BCController.py $json_file $my_index >> "$BC_controller_log_path" 2>&1 &
-
-sleep 5
 
 #Start BCP
 BC_processor_log_path="/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCProcessor_log_$node_name.txt"
