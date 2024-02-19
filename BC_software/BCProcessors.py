@@ -32,7 +32,7 @@ class BCKeepAlive(threading.Thread):
     """
 
     @classmethod
-    def started_instance(cls, answer, starting_state):
+    def started_instance(cls, answer, starting_state, conf):
         """
         Class method that returns an instance of BCKeepAlive and also starts the internal keep alive thread.
 
@@ -42,11 +42,11 @@ class BCKeepAlive(threading.Thread):
         """
         report_back_interval = answer['report_back_interval']
         job_id = answer['jobid']
-        keep_alive_thread = BCKeepAlive(report_back_interval, job_id, starting_state)
+        keep_alive_thread = BCKeepAlive(report_back_interval, job_id, starting_state, conf)
         keep_alive_thread.start()
         return keep_alive_thread
 
-    def __init__(self, report_back_interval, job_id, starting_state):
+    def __init__(self, report_back_interval, job_id, starting_state, conf):
         """
         Constructor that requires the interval in seconds between successive keep-alive messages, the job_id for
         which we are sending the keep_alive, the processing starting_state
@@ -56,19 +56,15 @@ class BCKeepAlive(threading.Thread):
         :param starting_state string representing the current starting processing state
         """
 
-        #Qua forse devo invocare il costruttore coi parametri giusti
+        #Questo è il creator di threading.Thread
         super().__init__()
         self.report_back_interval = report_back_interval
         self.job_id = job_id
         self.starting_state = starting_state
         self.final_state = ''  # volatile variable to indicate to this Thread, what is the final state reached by the processing main thread: once it's set, it implies immediate communication back to server  and shutdown.
         
-        # Qua devo mettere il creatore con il json per le cose giuste ??
-
-        #Metto il conf salvato nel creator della classe ??
-        #Altrimenti prendo quello base no ??
-        self.keep_alive_url = Conf.keep_alive_url
-        self.keep_alive_terminate_url = Conf.keep_alive_terminate_url 
+        self.keep_alive_url = conf.keep_alive_url
+        self.keep_alive_terminate_url = conf.keep_alive_terminate_url 
         
         print('------------------DEBUG2------------------' , flush=True)
         print('keepalive_url: ', self.keep_alive_terminate_url)
@@ -151,31 +147,31 @@ class BCEngine:
     def __init__(self, json_file_path, node_index):
         # READ ALL THE FOLLOWING PARAMS FROM A CONFIG FILE
         print("*************BCP READ FROM JSON*************")
-        conf = Conf.from_json(json_file_path, node_index)
+        self.conf = Conf.from_json(json_file_path, node_index)
         # ideal number of fast5 files to process per request
-        self.optimal_request_size = conf.engine_optimal_request_size #2
+        self.optimal_request_size = self.conf.engine_optimal_request_size #2
         # unique ID of engine
-        self.engine_id = conf.engine_id
+        self.engine_id = self.conf.engine_id
         # minimum time in minutes between successive requests
-        self.polling_interval = conf.engine_polling_interval # 1
+        self.polling_interval = self.conf.engine_polling_interval # 1
         # ROOT of the inputdir where fast5 files are stored
-        self.INPUTDIR = conf.engine_inputdir
-        self.OUTPUTDIR = conf.engine_outputdir 
+        self.INPUTDIR = self.conf.engine_inputdir
+        self.OUTPUTDIR = self.conf.engine_outputdir 
         # local script to execute for BC processing
-        self.bc_script = conf.engine_external_script
-        self.bc_model = conf.engine_model
+        self.bc_script = self.conf.engine_external_script
+        self.bc_model = self.conf.engine_model
         # internal state of processing
         self.PROCESSING_STATE = 'STOPPED'
         # API URL
-        self.api_url = conf.request_work_url 
+        self.api_url = self.conf.request_work_url 
         # shutdown
         self.shutdown = False
         # work until none is left
         self.work_until_none_left = False
 
         print('------------------DEBUG------------------' , flush=True)
-        print('assignwork_url: ', conf.request_work_url)
-        print('keepalive_url: ', conf.keep_alive_url)
+        print('assignwork_url: ', self.conf.request_work_url)
+        print('keepalive_url: ', self.conf.keep_alive_url)
         print('completed_url: ', conf.keep_alive_terminate_url)
         print('-----------------------------------------' , flush=True)
 
@@ -210,7 +206,7 @@ class BCEngine:
             if (batchsize > 0):
                 self.PROCESSING_STATE = bc_status.PROCESSING
                 # get a keep_alive manager with a running keep-alive thread
-                keep_alive_manager = BCKeepAlive.started_instance(answer, self.PROCESSING_STATE)
+                keep_alive_manager = BCKeepAlive.started_instance(answer, self.PROCESSING_STATE, self.conf)
                 # Prepare inputdir and outputdir for processing
                 input_dir = os.path.join(self.INPUTDIR, answer['job_input_dir'])
                 output_dir = os.path.join(self.OUTPUTDIR, answer['job_output_dir'])
