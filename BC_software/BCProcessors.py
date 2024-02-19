@@ -65,9 +65,15 @@ class BCKeepAlive(threading.Thread):
         
         # Qua devo mettere il creatore con il json per le cose giuste ??
 
-        #----------
-        self.keep_alive_url = Conf.keep_alive_url # "http://127.0.0.1:5000/keepalive"
-        self.keep_alive_terminate_url = Conf.keep_alive_terminate_url # "http://127.0.0.1:5000/completed"
+        #Metto il conf salvato nel creator della classe ??
+        #Altrimenti prendo quello base no ??
+        self.keep_alive_url = Conf.keep_alive_url
+        self.keep_alive_terminate_url = Conf.keep_alive_terminate_url 
+        
+        print('------------------DEBUG2------------------' , flush=True)
+        print('keepalive_url: ', self.keep_alive_terminate_url)
+        print('completed_url: ', self.keep_alive_url )
+        print('------------------------------------------' , flush=True)
         
         self.BCManager_PB = False  # volatile variable to indicate to the main thread it should stop and shutdown: the BCManager seems to have crashed!
 
@@ -149,23 +155,30 @@ class BCEngine:
         # ideal number of fast5 files to process per request
         self.optimal_request_size = conf.engine_optimal_request_size #2
         # unique ID of engine
-        self.engine_id = conf.engine_id #"TEST-ENGINE"
+        self.engine_id = conf.engine_id
         # minimum time in minutes between successive requests
         self.polling_interval = conf.engine_polling_interval # 1
         # ROOT of the inputdir where fast5 files are stored
-        self.INPUTDIR = conf.engine_inputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/inputdir"
-        self.OUTPUTDIR = conf.engine_outputdir #"/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/outputdir"
+        self.INPUTDIR = conf.engine_inputdir
+        self.OUTPUTDIR = conf.engine_outputdir 
         # local script to execute for BC processing
-        self.bc_script = conf.engine_external_script #'/home/ezio/PycharmProjects/ONPBasecaller/bcworkloaddir/script.sh'
+        self.bc_script = conf.engine_external_script
         self.bc_model = conf.engine_model
         # internal state of processing
         self.PROCESSING_STATE = 'STOPPED'
         # API URL
-        self.api_url = conf.request_work_url #"http://127.0.0.1:5000/assignwork"
+        self.api_url = conf.request_work_url 
         # shutdown
         self.shutdown = False
         # work until none is left
         self.work_until_none_left = False
+
+        print('------------------DEBUG------------------' , flush=True)
+        print('assignwork_url: ', conf.request_work_url)
+        print('keepalive_url: ', conf.keep_alive_url)
+        print('completed_url: ', conf.keep_alive_terminate_url)
+        print('-----------------------------------------' , flush=True)
+
 
     def begin_working(self):
         """

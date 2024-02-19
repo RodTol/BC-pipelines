@@ -8,24 +8,24 @@ RESET="\033[0m"  # Reset color to default
 json_file=$1
 my_index=$2
 
-#Read from config.json file
-model=$(jq -r '.Basecalling.model' "$json_file")
-logs_dir=$(jq -r '.Basecalling.logs_dir' "$json_file")
-input_dir=$(jq -r '.Basecalling.input_dir' "$json_file")
-output_dir=$(jq -r '.Basecalling.output_dir' "$json_file")
-
-
+#Read from config.json file (necessary)
 host_index=$(jq -r '.Resources.index_host' "$json_file")
 node_name=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
-gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file")
+model=$(jq -r '.Basecalling.model' "$json_file")
+logs_dir=$(jq -r '.Basecalling.logs_dir' "$json_file")
 
+input_dir=$(jq -r '.Basecalling.input_dir' "$json_file") #debug
+output_dir=$(jq -r '.Basecalling.output_dir' "$json_file") #debug
+gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file") #debug
+
+echo -e "${RED}I am this node_name: $node_name${RESET}"
+echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
+echo -e "${RED}-----------------------${RESET}"
 echo "Model: $model"gu
 echo "Logs Directory: $logs_dir"
 echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
-
-echo -e "${RED}I am this node_name: $node_name${RESET}"
-echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
+echo -e "${RED}-----------------------${RESET}"
 
 #I need launch the server, BCM and BCP on the same dir in order to have
 #the supervisor being able to find the connection file ?
