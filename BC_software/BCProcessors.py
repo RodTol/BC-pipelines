@@ -172,7 +172,7 @@ class BCEngine:
         print('------------------DEBUG------------------' , flush=True)
         print('assignwork_url: ', self.conf.request_work_url)
         print('keepalive_url: ', self.conf.keep_alive_url)
-        print('completed_url: ', conf.keep_alive_terminate_url)
+        print('completed_url: ', self.conf.keep_alive_terminate_url)
         print('-----------------------------------------' , flush=True)
 
 
