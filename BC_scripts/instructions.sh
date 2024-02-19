@@ -13,6 +13,7 @@ host_index=$(jq -r '.Resources.index_host' "$json_file")
 node_name=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
 model=$(jq -r '.Basecalling.model' "$json_file")
 logs_dir=$(jq -r '.Basecalling.logs_dir' "$json_file")
+node_queue=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_queue[$my_index]' "$json_file")
 
 input_dir=$(jq -r '.Basecalling.input_dir' "$json_file") #debug
 output_dir=$(jq -r '.Basecalling.output_dir' "$json_file") #debug
@@ -21,7 +22,8 @@ gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]
 echo -e "${RED}I am this node_name: $node_name${RESET}"
 echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 echo -e "${RED}-----------------------${RESET}"
-echo "Model: $model"gu
+echo "Model: $model"
+echo "Node queue: $node_queue"
 echo "Logs Directory: $logs_dir"
 echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
@@ -42,7 +44,13 @@ sleep 5
 echo ""
 
 #Load virtualenv for python
-source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
+if ((node_queue == "DGX")); then
+  source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
+elif ((node_queue == "GPU")); then
+  source /u/area/jenkins_onpexp/python_venvs/GPU_dorado_venv/bin/activate
+else
+  echo -e "${RED}SOMETHING WRONG IN THE VIRTUALENV FOR BC SOFTWARE${RESET}"
+fi
 
 #Start BCM and BCC on host node
 if ((my_index == host_index)); then
