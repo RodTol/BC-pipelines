@@ -21,6 +21,7 @@ output_dir=$(jq -r '.Basecalling.output_dir' "$json_file") #debug
 gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file") #debug
 
 echo -e "${RED}I am this node_name: $node_name${RESET}"
+echo $CUDA_VISIBLE_DEVICES
 echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 echo -e "${RED}-----------------------${RESET}"
 echo "Model: $model"
