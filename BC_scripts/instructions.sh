@@ -28,8 +28,12 @@ echo -e "${RED}I am this node_name: $node_name${RESET}"
 echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 
 #I need launch the server, BCM and BCP on the same dir in order to have
-#the supervisor being able to find the connection file 
-cd ~/BC-pipelines/BC_software
+#the supervisor being able to find the connection file ?
+
+#Let's try with each server having its own connection file in separate dir
+
+mkdir ~/BC-pipelines/BC_software/server_node_${node_name}
+cd ~/BC-pipelines/BC_software/server_node_${node_name}
 
 echo "Launching the server"
 ~/BC-pipelines/BC_scripts/server.sh $model $logs_dir $gpus_settings &
