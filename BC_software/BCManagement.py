@@ -239,7 +239,7 @@ class BCManager:
     Class that represents a RESTful Service listening for Basecalling work requests from Basecalling Engines.
     """
 
-    def __init__(self,json_file_path, node_index, shutdown_interval=120):
+    def __init__(self,json_file_path, node_index, shutdown_interval=100):
         self.lock = threading.Lock()
         self.tracker = {} # dict of job_id -> [last_ack_time, state, report_back_period]
         self.bc_state = BCWorkloadState(json_file_path, node_index)
