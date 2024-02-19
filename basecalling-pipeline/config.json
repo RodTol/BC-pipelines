@@ -14,7 +14,7 @@
       "nodes_queue" : ["DGX", "DGX", "GPU"],
       "nodes_list" : ["dgx001", "dgx002","gpu001"],
       "nodes_ip" : ["10.128.2.161", "10.128.2.162", "10.128.2.151"],
-      "gpus" : ["cuda:0,1", "cuda:0,1,2", "cuda:all"],
+      "gpus" : ["cuda:0,1", "cuda:0,1,2", "cuda:0,1"],
       "batch_size_list" : ["3", "5", "3"],
       "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
     }

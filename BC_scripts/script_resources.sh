@@ -7,7 +7,7 @@
 #SBATCH hetjob
 #SBATCH -A lage -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=3
 #SBATCH hetjob
-#SBATCH -A lage -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=48 --nodelist=gpu003 
+#SBATCH -A lage -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=48
 
 json_file=$1
 index_host=$(jq -r '.Resources.index_host' "$json_file")
