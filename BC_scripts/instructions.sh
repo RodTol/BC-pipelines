@@ -46,8 +46,10 @@ echo ""
 #Load virtualenv for python
 if ((node_queue == "DGX")); then
   source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
+  echo "${node_name} is loading DGX venv"
 elif ((node_queue == "GPU")); then
   source /u/area/jenkins_onpexp/python_venvs/GPU_dorado_venv/bin/activate
+  echo "${node_name} is loading GPU venv"
 else
   echo -e "${RED}SOMETHING WRONG IN THE VIRTUALENV FOR BC SOFTWARE${RESET}"
 fi
