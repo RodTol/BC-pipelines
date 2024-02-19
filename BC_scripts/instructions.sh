@@ -2,7 +2,8 @@
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
-RESET="\033[0m"  # Reset color to default
+CYAN="\033[0;36m"
+RESET="\033[0m"# Reset color to default
 
 #Input parameters are the json and what node I am on the list 
 json_file=$1
@@ -44,11 +45,11 @@ sleep 5
 #Load virtualenv for python
 if ((node_queue == "DGX")); then
   source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
-  echo "${node_name} is loading DGX venv"
+  echo -e "${CYAN}${node_name} is loading DGX venv, given ${node_queue}${RESET}"
   pip freeze
 elif ((node_queue == "GPU")); then
   source /u/area/jenkins_onpexp/python_venvs/GPU_dorado_venv/bin/activate
-  echo "${node_name} is loading GPU venv"
+  echo -e "${CYAN}${node_name} is loading GPU venv, given ${node_queue}${RESET}"
   pip freeze
 else
   echo -e "${RED}SOMETHING WRONG IN THE VIRTUALENV FOR BC SOFTWARE${RESET}"
