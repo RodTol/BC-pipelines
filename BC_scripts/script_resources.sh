@@ -7,7 +7,7 @@
 #SBATCH hetjob
 #SBATCH -A lage -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=3
 #SBATCH hetjob
-#SBATCH -A lage -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=48 --gres=gpu:2 
+#SBATCH -A lage -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=48 --mem=24GB
 
 json_file=$1
 index_host=$(jq -r '.Resources.index_host' "$json_file")
@@ -16,8 +16,8 @@ index_host=$(jq -r '.Resources.index_host' "$json_file")
 #srun ~/BC-pipelines/BC_scripts/instructions.sh $json_file $index_host
 
 srun --het-group=0 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $index_host &   
-sleep 10
+sleep 3
 srun --het-group=1 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $((index_host + 1)) &
-sleep 10
+sleep 3
 srun --het-group=2 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $((index_host + 2)) &
 wait 
