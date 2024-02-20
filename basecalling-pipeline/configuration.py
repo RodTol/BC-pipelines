@@ -39,7 +39,8 @@ def create_sbatch_file(config):
         sbatch_file.write("\n")
         
         sbatch_file.write('json_file=$1\n')
-        sbatch_file.write("index_host=$(jq -r '.Resources.index_host' '$json_file')\n")
+        sbatch_file.write("index_host=$(jq -r '.Resources.index_host' ")
+        sbatch_file.write('"$json_file")\n')
         sbatch_file.write("echo 'INDEX_HOST' $index_host\n")
 
         sbatch_file.write("\n")
