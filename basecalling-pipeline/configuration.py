@@ -40,6 +40,7 @@ def create_sbatch_file(config):
         
         sbatch_file.write('json_file=$1\n')
         sbatch_file.write("index_host=$(jq -r '.Resources.index_host' '$json_file')\n")
+        sbatch_file.write("echo 'INDEX_HOST' $index_host\n")
 
         sbatch_file.write("\n")
 
@@ -68,14 +69,3 @@ if __name__ == "__main__":
     config = load_json(json_file)
 
     create_sbatch_file(config)
-
-    # model = config['Basecalling']['model']
-    # input_dir = config['Basecalling']['input_dir']
-    # output_dir = config['Basecalling']['output_dir']
-    # logs_dir = config['Basecalling']['logs_dir']
-    
-    # print(f"Selected MODEL : {model}")
-    # print(f"Value of INPUT_DIR: {input_dir}")
-    # print(f"Value of OUTPUT_DIR: {output_dir}")
-    # print(f"Value of LOGS_DIR: {logs_dir}")
-

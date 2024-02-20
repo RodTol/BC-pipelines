@@ -20,7 +20,7 @@ input_dir=$(jq -r '.Basecalling.input_dir' "$json_file") #debug
 output_dir=$(jq -r '.Basecalling.output_dir' "$json_file") #debug
 gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file") #debug
 
-echo -e "${RED}I am this node_name: $node_name${RESET}"
+echo -e "${RED}I am this node_name: $node_name${RESET}, and for Slurm $SLURM_NODELIST"
 echo $CUDA_VISIBLE_DEVICES
 echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 echo -e "${RED}-----------------------${RESET}"
@@ -68,7 +68,7 @@ if ((my_index == host_index)); then
 fi
 
 #Start BCP
-BC_processor_log_path="/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCProcessor_log_$node_name.txt"
+BC_processor_log_path="/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCProcessor_log_$SLURM_NODELIST.txt"
 python3 ~/BC-pipelines/BC_software/BCProcessors.py $json_file $my_index >> $BC_processor_log_path 2>&1 
 
 wait

@@ -23,7 +23,7 @@
       "nodes_cpus" : ["64", "64", "48"],
       "nodes_gpus" : ["2", "3", "None"],
       "gpus" : ["cuda:all", "cuda:all", "cuda:all"],
-      "batch_size_list" : ["3", "5", "3"],
+      "batch_size_list" : ["3", "5", "4"],
       "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
     }
   }
