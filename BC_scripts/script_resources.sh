@@ -4,8 +4,10 @@
 #SBATCH --output=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out  
 #SBATCH --error=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.err   
 #SBATCH -A lage -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=2
+
 #SBATCH hetjob
 #SBATCH -A lage -p DGX --nodes=1 --ntasks-per-node=1 --cpus-per-task=24 --gpus=3
+
 #SBATCH hetjob
 #SBATCH -A lage -p GPU --nodes=1 --ntasks-per-node=1 --cpus-per-task=48
 
@@ -19,5 +21,5 @@ srun --het-group=0 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $index_h
 sleep 3
 srun --het-group=1 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $((index_host + 1)) &
 sleep 3
-srun --het-group=2 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $((index_host + 2)) &
+srun -c 48 --het-group=2 ~/BC-pipelines/BC_scripts/instructions.sh $json_file $((index_host + 2)) &
 wait 
