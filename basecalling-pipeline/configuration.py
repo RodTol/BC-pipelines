@@ -12,7 +12,6 @@ def create_sbatch_file(config):
     how_many_nodes = len(config['Resources']['nodes_list'])
 
     with open("script_resources.sh", "w") as sbatch_file:
-        sbatch_file.write('#**********WRITTEN BY CONFIGURATION.PY**********\n')
         sbatch_file.write('#!/bin/bash\n')
         sbatch_file.write(f"#SBATCH --job-name={config['General']['run_name']}\n")
         sbatch_file.write(f"#SBATCH --time={config['General']['run_time']}\n")
@@ -43,12 +42,21 @@ def create_sbatch_file(config):
         sbatch_file.write("index_host=$(jq -r '.Resources.index_host' '$json_file')\n")
 
         sbatch_file.write("\n")
+
         for i in range(how_many_nodes):
-            sbatch_file.write(f"srun --het-group={i} {config['Slurm']['instructions']} $json_file $((index_host + {i})) &\n")
+            if how_many_nodes==1:
+                sbatch_file.write(f"srun ")
+            else :
+                sbatch_file.write(f"srun --het-group={i} ")
+
+            sbatch_file.write(f"{config['Slurm']['instructions']} $json_file $((index_host + {i})) &\n")
+
             if i!=how_many_nodes-1:
                 sbatch_file.write("sleep 5\n")
             else :
                 sbatch_file.write("wait\n")
+
+        sbatch_file.write('#**********WRITTEN BY CONFIGURATION.PY**********\n')
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
