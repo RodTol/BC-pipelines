@@ -7,13 +7,13 @@
     4. [ ] BCProcessor
 2. scripts
     1. [ ] instructions.sh
-    2. [ ] server.sh
+    2. [x] server.sh
     3. [ ] supervisor.sh
-    4. [ ] wait.sh
+    4. [x] wait.sh
 3. basecalling-pipeline
    1. [x] jenkinsfile
    2. [x] configuration
-   3. [ ] telegram_bot
+   3. [x] telegram_bot
    4. [x] configs: you can't. Do a page only for them
 
 ## Features to implement
