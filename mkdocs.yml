@@ -4,4 +4,4 @@ nav:
   - Home: index.md
   - Todo: todo.md
 theme:
-  name: material
+  name: readthedocs
