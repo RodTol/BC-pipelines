@@ -1,6 +1,6 @@
 site_name: Bc-pipelines
 nav:
   - Home: index.md
-  - About: about.md
+  - Todo: todo.md
 theme:
   name: readthedocs
