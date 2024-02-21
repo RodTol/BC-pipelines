@@ -159,3 +159,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 slurm_runner.py
+my-first-jenkins-pipeline/jenkinsfile
+my-first-jenkins-pipeline/telegram_bot.sh
