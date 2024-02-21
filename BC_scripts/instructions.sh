@@ -20,7 +20,7 @@ input_dir=$(jq -r '.Basecalling.input_dir' "$json_file") #debug
 output_dir=$(jq -r '.Basecalling.output_dir' "$json_file") #debug
 gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file") #debug
 
-echo -e "${RED}I am this node_name: $node_name${RESET}, and for Slurm $SLURM_NODELIST"
+echo -e "${RED}I am this node_name: $node_name${RESET}, and for Slurm: $SLURM_NODELIST"
 echo $CUDA_VISIBLE_DEVICES
 echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 echo -e "${RED}-----------------------${RESET}"

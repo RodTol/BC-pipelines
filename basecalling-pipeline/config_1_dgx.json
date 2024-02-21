@@ -19,7 +19,7 @@
       "index_host" : "0",
       "nodes_queue" : ["DGX"],
       "nodes_list" : ["dgx002"],
-      "nodes_ip" : ["10.128.2.161"],
+      "nodes_ip" : ["10.128.2.162"],
       "nodes_cpus" : ["64"],
       "nodes_gpus" : ["8"],
       "gpus" : ["cuda:all"],
