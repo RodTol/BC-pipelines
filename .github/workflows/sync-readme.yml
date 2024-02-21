@@ -10,25 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Check for changes in docs/index.md
-        id: check_changes
-        run: echo "::set-output name=changes::$(git diff --name-only ${{ github.sha }} ${{ github.sha }}~1)"
+    - name: Copy Docs to README
+      run: |
+        # Check if docs/index.md is modified
+        if [[ $(git diff --name-only ${{ github.sha }}^ ${{ github.sha }}) == 'docs/index.md' ]]; then
+          # Copy docs/index.md to README.md
+          cp docs/index.md README.md
+          # Stage changes
+          git add README.md
+          # Commit changes
+          git commit -m "Update README.md from docs/index.md"
+        else
+          echo "No changes in docs/index.md. Skipping the copy operation."
+        fi
 
-      - name: Copy index.md to README.md
-        run: cp docs/index.md README.md
-
-      - name: Commit changes
-        run: |
-          if echo "${{ steps.check_changes.outputs.changes }}" | grep -q "docs/index.md"; then
-            cp docs/index.md README.md
-            git config --global user.email "github-actions@github.com"
-            git config --global user.name "GitHub Actions"
-            git add README.md
-            git commit -m "Auto-sync README from docs/index.md"
-            git push
-          else
-            echo "No changes in docs/index.md. Skipping commit."
-          fi
+    - name: Push Changes
+      if: git diff --name-only ${{ github.sha }}^ ${{ github.sha }} == 'docs/index.md'
+      run: git push
