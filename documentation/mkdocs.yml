@@ -3,4 +3,4 @@ nav:
   - Home: index.md
   - Todo: todo.md
 theme:
-  name: readthedocs
+  name: material
