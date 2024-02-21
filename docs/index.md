@@ -7,6 +7,8 @@ The repository is organized in the following way:
 - BC_scripts
 - docs
 
+## TODO
+see [here](/docs/todo.md) for the roadmap of things to do
 
 ## Mkdocs Commands
 
