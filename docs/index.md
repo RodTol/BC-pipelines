@@ -1,4 +1,8 @@
-# BC-pipelines
+<p align="center">
+  <img src="docs/images/logo-area.png" alt="Area logo" width="150"/>
+</p>
+
+# BC-pipelines 🧬
 This project contains some Jenkins-pipeline created to perform Basecalling on the Orfeo cluster at AreaSciencePark. This project is based on the Master degree thesis of Rodolfo Tolloi.
 
 ## Repository structure
