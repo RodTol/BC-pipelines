@@ -13,7 +13,8 @@
       "model": "dna_r10.4.1_e8.2_400bps_hac.cfg",
       "input_dir": "/u/area/jenkins_onpexp/scratch/10G_dataset_POD5",
       "output_dir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/tmp",
-      "logs_dir": "/u/area/jenkins_onpexp/scratch/dorado_logs"
+      "logs_dir": "/u/area/jenkins_onpexp/scratch/dorado_logs",
+      "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
     },
     "Resources": {
       "index_host" : "0",
@@ -23,8 +24,7 @@
       "nodes_cpus" : ["64"],
       "nodes_gpus" : ["8"],
       "gpus" : ["cuda:all"],
-      "batch_size_list" : ["6"],
-      "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
+      "batch_size_list" : ["6"]
     }
   }
   

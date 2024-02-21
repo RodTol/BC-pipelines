@@ -50,7 +50,7 @@ class Conf:
         if node_index != index_host:
             conf_instance.request_work_url = f'http://{host_address}:40765/assignwork'
         
-        conf_instance.engine_external_script = config["Resources"]["supervisor_script_path"]
+        conf_instance.engine_external_script = config["Basecalling"]["supervisor_script_path"]
         conf_instance.engine_outputdir = config["Basecalling"]["output_dir"]
         conf_instance.engine_inputdir = config["Basecalling"]["input_dir"]
         conf_instance.engine_polling_interval = 1

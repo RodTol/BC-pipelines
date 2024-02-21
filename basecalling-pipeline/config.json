@@ -2,7 +2,7 @@
     "General": {
       "run_name": "ExampleRun",
       "run_time": "00:20:00",
-      "version": "2.0"
+      "version": "3.0"
     },
     "Slurm": {
       "output": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out",
@@ -13,7 +13,8 @@
       "model": "dna_r10.4.1_e8.2_400bps_hac.cfg",
       "input_dir": "/u/area/jenkins_onpexp/scratch/10G_dataset_POD5",
       "output_dir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/tmp",
-      "logs_dir": "/u/area/jenkins_onpexp/scratch/dorado_logs"
+      "logs_dir": "/u/area/jenkins_onpexp/scratch/dorado_logs",
+      "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
     },
     "Resources": {
       "index_host" : "0", 
@@ -23,8 +24,7 @@
       "nodes_cpus" : ["64", "64", "48"],
       "nodes_gpus" : ["2", "3", "None"],
       "gpus" : ["cuda:all", "cuda:all", "cuda:all"],
-      "batch_size_list" : ["3", "5", "4"],
-      "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
+      "batch_size_list" : ["3", "5", "4"]
     }
   }
   
