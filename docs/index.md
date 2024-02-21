@@ -5,6 +5,7 @@ This project contains some Jenkins-pipeline created to perform Basecalling on th
 ## Repository structure
 The repository is organized in the following way:  
 - BC_software
+- BC_scripts
 
 
 ## Mkdocs Commands
