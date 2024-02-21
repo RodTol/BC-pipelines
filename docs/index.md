@@ -11,6 +11,7 @@ The repository is organized in the following way:
 - BC_software
 - BC_scripts
 - docs
+- basecalling-pipeline
 
 ## TODO
 see [here](/docs/todo.md) for the roadmap of things to do
