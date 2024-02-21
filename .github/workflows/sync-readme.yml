@@ -1,0 +1,25 @@
+name: Sync README
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Copy index.md to README.md
+        run: cp docs/index.md README.md
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add README.md
+          git commit -m "Auto-sync README from index.md"
+          git push
