@@ -6,27 +6,31 @@ on:
       - master
 
 jobs:
-  sync:
+  copy-docs:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Copy Docs to README
+    - name: Check for changes in docs/index.md
+      id: check_changes
       run: |
-        # Check if docs/index.md is modified
-        if [[ $(git diff --name-only ${{ github.sha }}^ ${{ github.sha }}) == 'docs/index.md' ]]; then
-          # Copy docs/index.md to README.md
-          cp docs/index.md README.md
-          # Stage changes
-          git add README.md
-          # Commit changes
-          git commit -m "Update README.md from docs/index.md"
+        if [[ -n $(git status --porcelain docs/index.md) ]]; then
+          echo "Docs/index.md has changes."
+          echo "::set-output name=changes::true"
         else
-          echo "No changes in docs/index.md. Skipping the copy operation."
+          echo "No changes in docs/index.md."
+          echo "::set-output name=changes::false"
         fi
 
+    - name: Copy Docs to README
+      if: steps.check_changes.outputs.changes == 'true'
+      run: |
+        cp docs/index.md README.md
+        git add README.md
+        git commit -m "Update README.md from docs/index.md"
+
     - name: Push Changes
-      if: git diff --name-only ${{ github.sha }}^ ${{ github.sha }} == 'docs/index.md'
+      if: steps.check_changes.outputs.changes == 'true'
       run: git push
