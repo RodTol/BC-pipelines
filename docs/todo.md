@@ -12,8 +12,8 @@
     4. [ ] wait.sh
 3. basecalling-pipeline
    1. [x] jenkinsfile
-   2. [] configuration
-   3. [] telegram_bot
+   2. [x] configuration
+   3. [ ] telegram_bot
    4. [x] configs: you can't. Do a page only for them
 
 ## Features to implement
