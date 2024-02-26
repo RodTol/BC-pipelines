@@ -9,11 +9,31 @@ jobs:
   copy-readme:
     runs-on: ubuntu-latest
 
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+    
+    - name: Get changes
+      id: check_changes
+      uses: tj-actions/changed-files@v42.0.5
+    
+    - name: List all changed files
+      env:
+        ALL_CHANGED_FILES: ${{ steps.check_changes.outputs.all_changed_files }}
+      run: |
+        for file in ${ALL_CHANGED_FILES}; do
+          echo "$file was changed"
+        done
 
-    - name: Copy docs/index.md to README.md
+    - name: Copy index.md to README
+      if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
       run: |
         cp docs/index.md README.md
-      if: github.event_name == 'push' && github.event_path == 'docs/index.md'
+
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v5
