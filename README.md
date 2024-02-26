@@ -20,6 +20,7 @@ see [here](/docs/todo.md) for the roadmap of things to do
 - I need launch the server, BCM and BCP on the same dir in order to have
 the supervisor being able to find the connection file ?
 - Let's try with each server having its own connection file in separate dir
+- engine_polling_interval: Indicates after how long it will try to do a polling. It's multiplied by 60
 
 ## Mkdocs Commands
 
