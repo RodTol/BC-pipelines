@@ -5,7 +5,6 @@ import shutil
 import threading
 import time
 import uuid
-import subprocess
 from flask import Flask, request, jsonify
 from collections import namedtuple
 from BCConfiguration import Conf
