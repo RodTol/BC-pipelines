@@ -20,7 +20,7 @@
 1. [ ] Final report construction
 2. [ ] Send report to user
 3. [ ] Adding modifiable number of clients for ont supervisor. Now fixed to 5
-4. [ ] Copying index.md to README at each push if there are changes
+4. [x] Copying index.md to README at each push if there are changes
 
 ## Errors 
 1. [ ] GPU node do not see cuda:0,1. Probably it's something related to how I launch
