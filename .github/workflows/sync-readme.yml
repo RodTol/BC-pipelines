@@ -12,25 +12,19 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
+      with: 
+        fetch-depth: 0
 
     - name: Check for changes in docs/index.md
       id: check_changes
-      run: |
-        if [[ -n $(git status --porcelain docs/index.md) ]]; then
-          echo "Docs/index.md has changes."
-          echo "::set-output name=changes::true"
-        else
-          echo "No changes in docs/index.md."
-          echo "::set-output name=changes::false"
-        fi
+      uses: tj-actions/changed-files@v42.0.5
 
-    - name: Copy Docs to README
-      if: steps.check_changes.outputs.changes == 'true'
+    - name: List all changed files
+      env:
+        ALL_CHANGED_FILES: ${{ steps.check_changes.outputs.all_changed_files }}
       run: |
-        cp docs/index.md README.md
-        git add README.md
-        git commit -m "Update README.md from docs/index.md"
+        for file in ${ALL_CHANGED_FILES}; do
+          echo "$file was changed"
+        done
 
-    - name: Push Changes
-      if: steps.check_changes.outputs.changes == 'true'
-      run: git push
+
