@@ -7,13 +7,23 @@ import sys
 from BCConfiguration import Conf
 
 class BCController:
+    """
+    Class that represents a controller that checks if the Basecalling infrastructure is still working
+    and if it is not, shutdown the whole process. The shutdown will be performed by killing the slurm
+    job
+
+    In order to do this, it will periodically ask for an 'heartbeat' and see if the inactivity
+    time is higher than a specified threshold, specified in BCManagement (shutdown_interval=100)
+    """
 
     def __init__(self, json_file_path, node_index):
+        #Debugging print
         print("*************BCController READ FROM JSON*************")
         conf = Conf.from_json(json_file_path, node_index)
         self.my_index = node_index
         self.last_heartbeat_time = time.time()
         self.heartbeat_url = conf.heartbeat_url
+        #Getting the job id of the slurm job
         self.slurm_job_id = os.environ.get('SLURM_JOB_ID')
     
     @staticmethod
@@ -32,10 +42,13 @@ class BCController:
                 data = response.json()
                 status = data.get("status")
                 inactivity_interval=data.get("inactivity_interval")
-                if status == "true":
+                #Inactivity is higher than allowed threshold
+                if status == "true": 
                     self.last_heartbeat_time = time.time()
                     print(self.return_datetime(), '- - Heart stopped. Basecalling has finished. Inactivity interval: ', inactivity_interval, flush=True)
+                    # Return True to start shutdown routine
                     return True
+                #Inactivity is lower than allowed threshold
                 elif status == "false":
                     self.last_heartbeat_time = time.time()
                     print(self.return_datetime(), '- - Heartbeat received. Basecalling still in progress. Inactivity interval: ', inactivity_interval, flush=True)
@@ -50,8 +63,8 @@ class BCController:
             # Check the heartbeat. True means it need to be shutted down
             status=self.check_heartbeat()
             if status:
-                # Trigger shutdown process of itself
                 print(self.return_datetime(), '- - Shutdown', flush=True)
+                # Triggers shutdown process of itself
                 self.cancel_slurm_job()
                 break
 
@@ -59,6 +72,7 @@ class BCController:
 
     def cancel_slurm_job(self):
         if self.slurm_job_id:
+            # Shutdown routine
             try:
                 subprocess.run(['scancel', self.slurm_job_id])
                 print(f"SLURM job {self.slurm_job_id} successfully canceled.")

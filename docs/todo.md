@@ -2,7 +2,7 @@
 ## File to comment
 1. BC software
     1. [x] BCConfiguration
-    2. [ ] BCController
+    2. [x] BCController
     3. [ ] BCManagement
     4. [ ] BCProcessor
 2. scripts
