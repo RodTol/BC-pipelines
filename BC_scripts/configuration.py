@@ -7,9 +7,12 @@ def load_json(json_file):
         data = json.load(file)
         return data
 
-# Function to create a Slurm sbatch script based on a configuration
-# file (config.json). See the documentation to understand what each 
-# parameter represents
+
+'''
+ Function to create a Slurm sbatch script based on a configuration
+ file (config.json). See the documentation to understand what each 
+ parameter represents
+'''
 def create_sbatch_file(config):
     # Get the number of nodes that will be used for the basecalling
     how_many_nodes = len(config['Resources']['nodes_list'])

@@ -89,7 +89,6 @@
                                 python configuration.py '${configFilePath}'
                                 echo "------File configuration------"
                                 cat script_resources.sh
-                                mv script_resources.sh ~/BC-pipelines/BC_scripts/
                             '
                         '''
                     }    
