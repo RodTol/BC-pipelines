@@ -14,7 +14,7 @@
         parameters {
             /*The idea is to set as parameter the path to the JSON and not the actual JSON. 
             I assumed that the starting directory is the pipeline one*/
-            string(name: 'configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/basecalling-pipeline/config.json', description: 'Path to the config JSON file')
+            string(name: 'configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/configurations/config.json', description: 'Path to the config JSON file')
         }
         triggers {
             pollSCM 'H * * * *'
@@ -85,7 +85,7 @@
                         necessary components for the basecalling procedure*/
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '                          
-                                cd BC-pipelines/basecalling-pipeline
+                                cd BC-pipelines/BC_scripts
                                 python configuration.py '${configFilePath}'
                                 echo "------File configuration------"
                                 cat script_resources.sh
