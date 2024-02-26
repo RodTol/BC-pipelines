@@ -34,6 +34,7 @@ jobs:
       if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
       run: |
         cp docs/index.md README.md
+        sed -i 's/assets\/area_for_white_bkg.png/docs\/assets\/logo-area.png/g' "README.md"
 
     - name: Commit changes
       uses: stefanzweifel/git-auto-commit-action@v5
