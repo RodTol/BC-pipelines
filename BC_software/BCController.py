@@ -17,10 +17,15 @@ class BCController:
     """
 
     def __init__(self, json_file_path, node_index):
+        """
+        Initialize the BCController object by reading configuration from a JSON file and setting up initial values.
+        @param json_file_path - the path to the JSON file containing configuration
+        @param node_index - the index of the node
+        @return None
+        """
         #Debugging print
         print("*************BCController READ FROM JSON*************")
         conf = Conf.from_json(json_file_path, node_index)
-        self.my_index = node_index
         self.last_heartbeat_time = time.time()
         self.heartbeat_url = conf.heartbeat_url
         #Getting the job id of the slurm job
@@ -28,6 +33,10 @@ class BCController:
     
     @staticmethod
     def return_datetime():
+        """
+        A static method that returns the current datetime in a specific format.
+        @return The current datetime in the format "[%d/%b/%Y %H:%M:%S]"
+        """
         # Get the current date and time
         current_datetime = datetime.now()
         # Format the datetime to [DD/Mon/YYYY HH:MM:SS]
@@ -35,6 +44,10 @@ class BCController:
         return formatted_datetime
 
     def check_heartbeat(self):
+        """
+        Check the heartbeat status by sending a request to the specified URL in the settings.
+        @return True if the inactivity is higher than threshold, False if it's lower, None otherwise.
+        """
         try:
             # Send a request to BCManagement to get the current heartbeat time
             response = requests.get(self.heartbeat_url)            
@@ -59,6 +72,9 @@ class BCController:
             print(self.return_datetime(), '- - Error: Failed to connect to BCManagement server.', flush=True)
     
     def monitor_heartbeat(self):
+        """
+        Monitor the heartbeat continuously and starts the shutdown if the heartbeat returns a True value.
+        """
         while True:
             # Check the heartbeat. True means it need to be shutted down
             status=self.check_heartbeat()
@@ -71,6 +87,9 @@ class BCController:
             time.sleep(30)  # Check heartbeat every 30 seconds    
 
     def cancel_slurm_job(self):
+        """
+        Cancel a SLURM job using its job ID.
+        """
         if self.slurm_job_id:
             # Shutdown routine
             try:

@@ -14,15 +14,15 @@ bc_status = BCStatus("ASSIGNED", "STARTED", "PROCESSING", "STOPPED", "DONE", "FA
 
 class BCBatch:
     """
-    Class that represents a batch of fast5 files that have been assigned for processing.
+    Class that represents a batch of pod5 files that have been assigned for processing.
 
     It consists of:
     - jobid           int assigned to the job
-    - job_input_dir   string with the name of the directory RELATIVE TO the guppy server's INPUTDIR that
-                      contains symlinks to the fast5 files that need to be processed.
-    - job_output_dir  string with the name of the directory RELATIVE TO the guppy server's OUTPUTDIR that
+    - job_input_dir   string with the name of the directory RELATIVE TO the dorado server's INPUTDIR that
+                      contains symlinks to the pod5 files that need to be processed.
+    - job_output_dir  string with the name of the directory RELATIVE TO the dorado server's OUTPUTDIR that
                       will contain the output FASTQ files.
-    - guppyid         string identifying the guppy server that was assigned to the processing
+    - bc_engine_id    string identifying the dorado server that was assigned to the processing
     - batch_size      int actual size of the batch, which may differ from the requested size if there weren't
                       enough files to fill the request.
     - batch           list with the actual filenames
@@ -47,7 +47,7 @@ class BCWorkloadState:
     providing methods for operating on it.
 
     Essentially all the raw output from the Oxford Nano Pore sequencing machine
-    consists of .FAST5 files that the machine writes to a specific directory we'll
+    consists of .POD5 files that the machine writes to a specific directory we'll
     refer to as INPUT_DIR.
 
     Each raw file, is the recording of the electrical signal corresponding to the
@@ -62,23 +62,23 @@ class BCWorkloadState:
     biological bases, G A T C, that translates the raw electrical signals.
 
     The actual basecalling functionality is carried out by a different software/system,
-    i.e. the GUPPY system. But there are also other systems such as BONITO that can be used.
+    i.e. the DORADO system. But there are also other systems such as BONITO that can be used.
     This software is needed because the algorithms involved in basecalling make use of
     neural networks in order to translate the electrical signals, and so are rather
     specialised for the task requiring also the availability of GPUs.
 
-    Several instances of the GUPPY servers are expected to be available: at least one for each
-    GPU in the infrastructure. Moreover, each GUPPY server is designed to work on multiple files
+    Several instances of the DORADO servers are expected to be available: at least one for each
+    GPU in the infrastructure. Moreover, each DORADO server is designed to work on multiple files
     which it expects to be present in a specified directory.
 
-    The class allows raw files to be assigned to one of the GUPPY server for processing. This
+    The class allows raw files to be assigned to one of the DORADO server for processing. This
     will be reflected in the filesystem by the presence of the following structure:
 
     INPUT_DIR
-        |- JOB-ID1_GUPPY-SERVER-NAME_inputdir
-            |- file1.fast5   (ATTENTION! IT WILL BE A SYMLINK!)
-            |- file2.fast5   (ATTENTION! IT WILL BE A SYMLINK!)
-            |- file3.fast5   (ATTENTION! IT WILL BE A SYMLINK!)
+        |- JOB-ID1_DORADO-SERVER-NAME_inputdir
+            |- file1.pod5   (ATTENTION! IT WILL BE A SYMLINK!)
+            |- file2.pod5   (ATTENTION! IT WILL BE A SYMLINK!)
+            |- file3.pod5   (ATTENTION! IT WILL BE A SYMLINK!)
     """
 
     def __init__(self, json_file_path, node_index):
@@ -98,7 +98,7 @@ class BCWorkloadState:
 
         In case of any errors, false is returned and empty data structures are filled in.
 
-        The intended use case is scanning for the presence of new fast5 files to process, as
+        The intended use case is scanning for the presence of new pod5 files to process, as
         well as reconstruct the internal state in case of a crash, based on what it finds in
         the filesystem.
 
@@ -117,8 +117,8 @@ class BCWorkloadState:
                         fastq_files.append(str_name[:-6])
         # find all raw files that do not have a FASTQ counterparty,
         # as well as all files that have been assigned for processing
-        potential_files = [] # fast5 files for which there is no fastq counterparty
-        assigned_files = [] # fast5 files assigned for basecalling
+        potential_files = [] # pod5 files for which there is no fastq counterparty
+        assigned_files = [] # pod5 files assigned for basecalling
         for entry in os.scandir(self.INPUTDIR):
             if entry.is_dir():
                 # It's a dir: it should contain symlinks to assigned files that are being worked on
@@ -127,13 +127,13 @@ class BCWorkloadState:
                     for assignment in os.scandir(entry):
                         # check assigned file is a symlink!
                         if assignment.is_symlink():
-                            # check it ends with .fast5
+                            # check it ends with .pod5
                             str_assignment = assignment.name
                             if len(str_assignment)>5 & (str_assignment[-5:].lower() == ".pod5"):
                                 # add it to the list
                                 assigned_files.append(str_assignment[:-5])
             elif entry.is_file():
-                # It's a file: it should be a fast5 file that potentially needs to be processed unless already assigned
+                # It's a file: it should be a pod5 file that potentially needs to be processed unless already assigned
                 str_name = entry.name
                 if len(str_name)>5 & (str_name[-5:].lower() == ".pod5"):
                     str_name = str_name[:-5]
@@ -150,17 +150,17 @@ class BCWorkloadState:
 
     def assign_work_to(self, bc_engine_id="default-engine", batch_size=0):
         """
-        Method invoked to assign work to the supplied guppy_server. By default, the guppy_server's
+        Method invoked to assign work to the supplied dorado_server. By default, the dorado_server's
         inbuilt desired batch size will be used; but optionally this can be overriden through the
         batch_size parameter.
 
         Note that if there aren't enough pending files to meet the required batch size, the request
-        is still successful and the guppy_server will be assigned all available ones.
+        is still successful and the dorado_server will be assigned all available ones.
 
         Finally, a zero or negative value of batch_size will automatically imply the use of the
-        guppy_server's inbuilt default batch size.
+        dorado_server's inbuilt default batch size.
 
-        :param guppy_server: a BCSvc
+        :param dorado_server: a BCSvc
         :param batch_size: optional int for the desired batch size
         :return: BCBatch with the details of the assigned work
         """
