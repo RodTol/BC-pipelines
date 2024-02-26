@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="../docs/images/logo-area.png" alt="Area logo" width="200"/>
+  <img src="docs/images/logo-area.png" alt="Area logo" width="200"/>
 </p>
 
 # BC-pipelines 🧬

@@ -28,7 +28,7 @@ jobs:
         done
 
     - name: Copy index.md to README
-      if : contains(steps.check_changes.outputs.modified_files, 'index.md')
+      if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
       run: |
         cp docs/index.md README.md
         git add README.md
