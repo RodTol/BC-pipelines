@@ -1,7 +1,7 @@
 # TODO
 ## File to comment
 1. BC software
-    1. [ ] BCConfiguration
+    1. [x] BCConfiguration
     2. [ ] BCController
     3. [ ] BCManagement
     4. [ ] BCProcessor

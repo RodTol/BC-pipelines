@@ -14,7 +14,7 @@ class Conf:
     engine_external_script = ''
     engine_outputdir = ''
     engine_inputdir = ''
-    engine_polling_interval = 1 #indicates after how long it will try to do a polling. It's multiplied by 60
+    engine_polling_interval = 1 
     engine_id = ''
     engine_optimal_request_size = 100
     engine_model = ''
