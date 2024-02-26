@@ -16,6 +16,11 @@ The repository is organized in the following way:
 ## TODO
 see [here](/docs/todo.md) for the roadmap of things to do
 
+## Observations
+- I need launch the server, BCM and BCP on the same dir in order to have
+the supervisor being able to find the connection file ?
+- Let's try with each server having its own connection file in separate dir
+
 ## Mkdocs Commands
 
 * `mkdocs new [dir-name]` - Create a new project.

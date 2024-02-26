@@ -15,7 +15,7 @@ jobs:
       with: 
         fetch-depth: 0
 
-    - name: Check for changes in docs/index.md
+    - name: Get changes
       id: check_changes
       uses: tj-actions/changed-files@v42.0.5
 
@@ -27,4 +27,12 @@ jobs:
           echo "$file was changed"
         done
 
+    - name: Copy index.md to README
+      if : contains(steps.check_changes.outputs.modified_files, 'index.md')
+      run: |
+        cp docs/index.md README.md
+        git add README.md
+        git commit -m "Update README.md from docs/index.md"
+        git push
+    
 

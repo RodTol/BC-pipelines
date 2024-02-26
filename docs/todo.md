@@ -6,9 +6,9 @@
     3. [ ] BCManagement
     4. [ ] BCProcessor
 2. scripts
-    1. [ ] instructions.sh
+    1. [x] instructions.sh
     2. [x] server.sh
-    3. [ ] supervisor.sh
+    3. [x] supervisor.sh
     4. [x] wait.sh
 3. basecalling-pipeline
    1. [x] jenkinsfile
