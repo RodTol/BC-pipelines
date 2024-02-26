@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://github.com/RodTol/BC-pipelines/blob/master/docs/images/logo-area.png" alt="Area logo" width="200"/>
+  <img src="images/logo-area.png" alt="Area logo" width="200"/>
 </p>
 
 # BC-pipelines 🧬
