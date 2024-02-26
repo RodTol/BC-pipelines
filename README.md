@@ -8,10 +8,10 @@ This project contains some Jenkins-pipeline created to perform Basecalling on th
 
 ## Repository structure
 The repository is organized in the following way:  
-- BC_software
-- BC_scripts
-- docs
-- basecalling-pipeline: PROVONE
+- [BC_software](/docs/BCsoftware/intro.md): this directory contains the "BC_software" that enables the parallelizzation across multiple nodes of the basecalling process
+- [BC_scripts](/docs/BCscripts/intro.md): here you'll find some bash and python scripts. They are used by both the pipeline itself, the BC_software and also from each other.
+- basecalling-pipeline: a directory with a pipeline for basecalling
+- docs: a directory with all the documentation file.
 
 ## TODO
 see [here](/docs/todo.md) for the roadmap of things to do
