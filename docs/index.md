@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="docs/images/logo-area.png" alt="Area logo" width="200"/>
+  <img src="../docs/images/logo-area.png" alt="Area logo" width="200"/>
 </p>
 
 # BC-pipelines 🧬
@@ -11,7 +11,7 @@ The repository is organized in the following way:
 - BC_software
 - BC_scripts
 - docs
-- basecalling-pipeline: prova
+- basecalling-pipeline: prova,prova
 
 ## TODO
 see [here](/docs/todo.md) for the roadmap of things to do

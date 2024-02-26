@@ -6,33 +6,14 @@ on:
       - master
 
 jobs:
-  copy-docs:
+  copy-readme:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout repository
       uses: actions/checkout@v2
-      with: 
-        fetch-depth: 0
 
-    - name: Get changes
-      id: check_changes
-      uses: tj-actions/changed-files@v42.0.5
-
-    - name: List all changed files
-      env:
-        ALL_CHANGED_FILES: ${{ steps.check_changes.outputs.all_changed_files }}
-      run: |
-        for file in ${ALL_CHANGED_FILES}; do
-          echo "$file was changed"
-        done
-
-    - name: Copy index.md to README
-      if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
+    - name: Copy docs/index.md to README.md
       run: |
         cp docs/index.md README.md
-        git add README.md
-        git commit -m "Update README.md from docs/index.md"
-        git push
-    
-
+      if: github.event_name == 'push' && github.event_path == 'docs/index.md'
