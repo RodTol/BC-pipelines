@@ -31,14 +31,14 @@ jobs:
         done
 
     - name: Copy index.md to README
-      if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
+      if: contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
       run: |
         cp docs/index.md README.md
         sed -i 's/assets\/area_for_white_bkg.png/docs\/assets\/logo-area.png/g' "README.md"
         sed -i '/---/,/---/d' README.md
     
     - name: Replace links in README
-      if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
+      if: contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
       run: |
         replacements=(
             "BC_software.md:docs/BC_software.md"
@@ -46,12 +46,13 @@ jobs:
             "Basecalling-pipeline.md:docs/Basecalling-pipeline.md"
             "configurations.md:docs/configurations.md"
         )
-
+    
         for replacement in "${replacements[@]}"; do
             old_text="${replacement%%:*}"
             new_text="${replacement#*:}"
             sed -i "s/\[$old_text\]($old_text)/\[$old_text\]($new_text)/g" "README.md"
         done
+      
 
   
     - name: Commit changes
