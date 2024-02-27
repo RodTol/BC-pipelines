@@ -1,0 +1,8 @@
+title: Bc-pipelines documentation
+description: A documentation for the parallelization of basecalling through pipelines
+theme: just-the-docs
+
+url: https://rodtol.github.io/BC-pipelines/
+
+aux_links:
+  Template Repository: https://github.com/just-the-docs/just-the-docs-template
