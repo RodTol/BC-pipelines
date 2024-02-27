@@ -1,8 +1,3 @@
----
-layout: default
-title: Home
-nav_order: 1
----
 
 <p align="center">
   <img src="docs/assets/logo-area.png" alt="Area logo" width="200"/>
@@ -41,7 +36,7 @@ The repository is organized in the following way:
 2. [ ] Send report to user
 3. [ ] Adding modifiable number of clients for ont supervisor. Now fixed to 5
 4. [x] Copying index.md to README at each push if there are changes. Using packages
-5. [ ] Note that the page is build correctlu but not when Github do it!!
+5. [x] Note that the page is build correctlu but not when Github do it!!
 
 ### Errors 
 1. [ ] GPU node do not see cuda:0,1. Probably it's something related to how I launch
