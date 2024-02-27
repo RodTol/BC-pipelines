@@ -45,6 +45,7 @@ jobs:
           "BC_scripts.md:docs/BC_scripts.md"
           "Basecalling-pipeline.md:docs/Basecalling-pipeline.md"
           "configurations.md:docs/configurations.md"
+          "todo.md:docs/todo.md"
         )
 
         for replacement in "${replacements[@]}"; do
@@ -52,8 +53,6 @@ jobs:
           new_path="${replacement#*:}"
           sed -i "s|${old_path}|${new_path}|" README.md
         done
-      
-
   
     - name: Commit changes
       uses: stefanzweifel/git-auto-commit-action@v5

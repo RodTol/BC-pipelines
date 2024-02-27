@@ -20,10 +20,13 @@ class BCKeepAlive(threading.Thread):
     - report_back_interval      Seconds between successive keep-alive messages
     - job_id                    The ID of the batch being processed
     - starting_state            The current startinng processing state
-    - final_state               The final state
-    - keep_alive_url
-    - keep_alive_terminate_url
-    - BCManager_PB
+    - final_state               volatile variable to indicate to this Thread, what is the final state reached by
+                                the processing main thread: once it's set, it implies immediate communication back
+                                to server  and shutdown.
+    - keep_alive_url            url for the /keepalive route (it depends on what node is hosting the BCManager)
+    - keep_alive_terminate_url  url for the /completed route (it depends on what node is hosting the BCManager)
+    - BCManager_PB              volatile variable to indicate to the main thread it should stop and shutdown:
+                                the BCManager seems to have crashed!
     """
 
     @classmethod
@@ -57,7 +60,7 @@ class BCKeepAlive(threading.Thread):
         self.report_back_interval = report_back_interval
         self.job_id = job_id
         self.starting_state = starting_state
-        self.final_state = ''  # volatile variable to indicate to this Thread, what is the final state reached by the processing main thread: once it's set, it implies immediate communication back to server  and shutdown.
+        self.final_state = ''
         
         self.keep_alive_url = conf.keep_alive_url
         self.keep_alive_terminate_url = conf.keep_alive_terminate_url 
@@ -67,7 +70,7 @@ class BCKeepAlive(threading.Thread):
         print('completed_url: ', self.keep_alive_url )
         print('------------------------------------------' , flush=True)
         
-        self.BCManager_PB = False  # volatile variable to indicate to the main thread it should stop and shutdown: the BCManager seems to have crashed!
+        self.BCManager_PB = False  
 
     def run(self):
         """
