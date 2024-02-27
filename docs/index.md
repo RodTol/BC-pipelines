@@ -1,3 +1,7 @@
+---
+title: Home
+layout: home
+---
 
 <p align="center">
   <img src="assets/area_for_white_bkg.png" alt="Area logo" width="200"/>
