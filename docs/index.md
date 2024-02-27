@@ -1,6 +1,7 @@
 ---
 title: Home
 layout: home
+nav order: 1
 ---
 
 <p align="center">
