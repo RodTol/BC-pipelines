@@ -18,9 +18,9 @@ class BCKeepAlive(threading.Thread):
 
     It consist of:
     - report_back_interval      Seconds between successive keep-alive messages
-    - job_id                    The ID of the batch being processed.
-    - starting_state
-    - final_state
+    - job_id                    The ID of the batch being processed
+    - starting_state            The current startinng processing state
+    - final_state               The final state
     - keep_alive_url
     - keep_alive_terminate_url
     - BCManager_PB

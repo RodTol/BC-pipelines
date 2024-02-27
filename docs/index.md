@@ -19,4 +19,5 @@ The repository is organized in the following way:
 - [configurations](Configuration.md): the directory containing the JSON file with all the settings for a run.
 
 ## TODO
-See [TODO](/docs/todo.md).
+See [TODO](todo.md).
+
