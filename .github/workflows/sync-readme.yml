@@ -36,6 +36,8 @@ jobs:
         cp docs/index.md README.md
         sed -i 's/assets\/area_for_white_bkg.png/docs\/assets\/logo-area.png/g' "README.md"
         sed -i '/---/,/---/d' README.md
+        sed -i 's/\(\[[^]]*\]\):/docs\/\1:/g' README.md
+
 
     - name: Commit changes
       uses: stefanzweifel/git-auto-commit-action@v5
