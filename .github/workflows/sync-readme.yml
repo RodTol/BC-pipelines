@@ -50,7 +50,7 @@ jobs:
         for replacement in "${replacements[@]}"; do
             old_text="${replacement%%:*}"
             new_text="${replacement#*:}"
-            sed -i "s#\[$old_text\]($old_text)#\[$old_text\]($new_text)#g" "README.md"
+            sed -i'' -e "s#\[$old_text\]($old_text)#\[$old_text\]($new_text)#g" "README.md"
         done
       
 
