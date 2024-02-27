@@ -36,8 +36,25 @@ jobs:
         cp docs/index.md README.md
         sed -i 's/assets\/area_for_white_bkg.png/docs\/assets\/logo-area.png/g' "README.md"
         sed -i '/---/,/---/d' README.md
-        sed -i 's/\(\[[^]]*\]\):/docs\/\1:/g' README.md
+    
+    - name: Replace links in README
+      if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
+      run: |
+        # Define replacements in the format "old_text:new_text"
+        replacements=(
+            "BC_software.md:docs/BC_software.md"
+            "BC_scripts.md:docs/BC_scripts.md"
+            "Basecalling-pipeline.md:docs/Basecalling-pipeline.md"
+            "configurations.md:docs/configurations.md"
+        )
 
+        # Apply each replacement using sed
+        for replacement in "${replacements[@]}"; do
+            old_text="${replacement%%:*}"
+            new_text="${replacement#*:}"
+            sed -i "s/\[$old_text\]($old_text)/\[$old_text\]($new_text)/g" "README.md"
+        done
 
+  
     - name: Commit changes
       uses: stefanzweifel/git-auto-commit-action@v5
