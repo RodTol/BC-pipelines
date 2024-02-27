@@ -94,5 +94,20 @@ except KeyError:
 
 
 ## BCController
+Class that encapsulates a thread where the BCEngine constantly informs the BCManager on the state
+of the ongoing processing.  
+
+It implements a resiliance protocol, thereby signalling to initiate a SHUTDOWN should the communication with the BC Controller encounter any problem: a crash, a network interruption, a malfunctioning.  
+
+Likewise the BC Controller is aware of this protocol, so it knows we'll shutdown as soon as possible and eventually be restarted with a cleared internal state.  
+
+In general, the Single Writer principle is followed: volatile variables are used where there is by design a single Thread expected to write/change a variable, while any number of threads can read that variable.  
+
+In Python this is not needed, but it's important to spell it out in order to clarify the design and intended way of usage (indeed there is no 'volatile' in python).  
+
+Essentially, the main thread where basecalling is happening, should get an instance and start the keepalive; then it should periodically check whether there are problems with the bc controller and so terminate; or upon completion of processing, it should communicate back the result and terminate the keepalive thread.  
+
+Convenience methods have been provided, so they can be invoked on a BCKeepAlive instance; however it is possible also to check/interact directly with the internal 'volatile' variables: provided the resiliance protocol logic is implemented i.e. decide when to shutdown.  
+
 ASSIGNED_(jobid)_(bc_engine_id)         
 LOGOUTPUT_(jobid)_(bc_engine_id)

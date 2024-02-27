@@ -9,7 +9,7 @@ nav_order: 6
 1. BC software
     1. [x] BCConfiguration
     2. [x] BCController
-    3. [ ] BCManagement
+    3. [x] BCManagement
     4. [ ] BCProcessor
 2. scripts
     1. [x] instructions.sh

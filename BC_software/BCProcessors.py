@@ -9,36 +9,33 @@ from BCConfiguration import Conf
 
 class BCKeepAlive(threading.Thread):
     """
-    Class that encapsulates a thread where the BCEngine constantly informs the BCManager on the state
-    of the ongoing processing.
-
-    It implements a resiliance protocol, thereby signalling to initiate a SHUTDOWN should the communication
-    with the BC Controller encounter any problem: a crash, a network interruption, a malfunctioning. Likewise
-    the BC Controller is aware of this protocol, so it knows we'll shutdown as soon as possible and eventually
-    be restarted with a cleared internal state.
-
-    In general, the Single Writer principle is followed: volatile variables are used where there is by design
-    a single Thread expected to write/change a variable, while any number of threads can read that variable. In
-    Python this is not needed, but it's important to spell it out in order to clarify the design and intended
-    way of usage (indeed there is no 'volatile' in python).
-
+    This class encapsulates a thread where the BCEngine constantly informs the BCManager about the state
+    of ongoing processing. It implements a resilience protocol to handle communication problems with the BC Controller.
+    
     Essentially, the main thread where basecalling is happening, should get an instance and start the keepalive;
-    then it should periodically check whether there are problems with the bc controller and so terminate; or upon
+    then it should periodically check whether there are problems with the BCManager and so terminate; or upon
     completion of processing, it should communicate back the result and terminate the keepalive thread.
 
-    Convenience methods have been provided, so they can be invoked on a BCKeepAlive instance; however it is
-    possible also to check/interact directly with the internal 'volatile' variables: provided the resiliance
-    protocol logic is implemented i.e. decide when to shutdown.
+    It consist of:
+    - report_back_interval      Seconds between successive keep-alive messages
+    - job_id                    The ID of the batch being processed.
+    - starting_state
+    - final_state
+    - keep_alive_url
+    - keep_alive_terminate_url
+    - BCManager_PB
     """
 
     @classmethod
     def started_instance(cls, answer, starting_state, conf):
         """
-        Class method that returns an instance of BCKeepAlive and also starts the internal keep alive thread.
+        A class method that initializes an instance of BCKeepAlive and starts an internal keep-alive thread.
 
-        :param answer: dictionary with the JSON of the BCBatch reply
-        :param starting_state: string representing the starting state od the processing
-        :return: BCKeepAlive with a thread running the keep-alive with the BC Controller
+        @param answer: A dictionary with the JSON of the BCBatch reply.
+        @param starting_state: A string representing the starting state of the processing.
+        @param conf: Configuration settings.
+        
+        @return: An instance of BCKeepAlive with a running keep-alive thread connected to the BC Controller.
         """
         report_back_interval = answer['report_back_interval']
         job_id = answer['jobid']
@@ -48,15 +45,14 @@ class BCKeepAlive(threading.Thread):
 
     def __init__(self, report_back_interval, job_id, starting_state, conf):
         """
-        Constructor that requires the interval in seconds between successive keep-alive messages, the job_id for
-        which we are sending the keep_alive, the processing starting_state
+        Initialize a KeepAliveManager object with the specified parameters.
 
-        :param report_back_interval: int representing seconds between successive keep-alive messages
-        :param job_id: string representing the batch being processed
-        :param starting_state string representing the current starting processing state
+        @param report_back_interval: int - Seconds between successive keep-alive messages.
+        @param job_id: str - The ID of the batch being processed.
+        @param starting_state: str - The current starting processing state.
+        @param conf: Configuration object containing URLs for keep-alive messages.
         """
-
-        #Questo è il creator di threading.Thread
+        #this is the creator for threading.Thread
         super().__init__()
         self.report_back_interval = report_back_interval
         self.job_id = job_id
