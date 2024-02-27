@@ -1,3 +1,7 @@
+---
+title: Home
+layout: home
+---
 
 <p align="center">
   <img src="docs/assets/logo-area.png" alt="Area logo" width="200"/>
