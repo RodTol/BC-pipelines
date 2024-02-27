@@ -40,7 +40,6 @@ jobs:
     - name: Replace links in README
       if : contains(steps.check_changes.outputs.all_changed_files, 'docs/index.md')
       run: |
-        # Define replacements in the format "old_text:new_text"
         replacements=(
             "BC_software.md:docs/BC_software.md"
             "BC_scripts.md:docs/BC_scripts.md"
@@ -48,7 +47,6 @@ jobs:
             "configurations.md:docs/configurations.md"
         )
 
-        # Apply each replacement using sed
         for replacement in "${replacements[@]}"; do
             old_text="${replacement%%:*}"
             new_text="${replacement#*:}"
