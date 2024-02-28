@@ -10,7 +10,7 @@ nav_order: 6
     1. [x] BCConfiguration
     2. [x] BCController
     3. [x] BCManagement
-    4. [ ] BCProcessor
+    4. [x] BCProcessor
 2. scripts
     1. [x] instructions.sh
     2. [x] server.sh
@@ -21,6 +21,23 @@ nav_order: 6
    1. [x] jenkinsfile
    2. [x] telegram_bot
    3. [x] configs: you can't. Do a page only for them
+
+## Doc to write
+1. [ ] index.md
+2. [ ] BC_software.md
+3. [ ] BC_scripts.md
+4. [ ] Basecalling-pipeline.md
+5. [ ] Configuration.md
+
+### Doc final structure:
+1. index.md: In the index.md explains the structure and then the Installation procedure + the usage procedure  
+   it's a intro 
+2. config.json: first thing that needs to be explained is how to setup the json. All the options explained
+   in a precise way. The user will work with this!
+3. basecalling-pipeline: what will happen. From start to finish. Here I'all also the report ?
+4. BC_software: the core
+5. BC_scripts: the auxiliary files required for working
+
 
 ## Features to implement
 1. [ ] Final report construction
