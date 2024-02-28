@@ -1,7 +1,7 @@
 ---
 layout: default
 title: BC_software
-nav_order: 2
+nav_order: 4
 ---
 # BC_software
 This directory contains all the 
@@ -109,5 +109,8 @@ Essentially, the main thread where basecalling is happening, should get an insta
 
 Convenience methods have been provided, so they can be invoked on a BCKeepAlive instance; however it is possible also to check/interact directly with the internal 'volatile' variables: provided the resiliance protocol logic is implemented i.e. decide when to shutdown.  
 
-ASSIGNED_(jobid)_(bc_engine_id)         
-LOGOUTPUT_(jobid)_(bc_engine_id)
+### BCEngine.begin_working
+However, after a batch has been processed, if the processing time took longer than the polling
+interval, then only 30 secs will be waited for before a new request is made. This is to allow
+for sustained processing throughput, while at the same time not heavily loading the server with
+useless requests when there is nothing to process.

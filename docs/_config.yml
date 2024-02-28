@@ -5,8 +5,8 @@ url: https://rodtol.github.io/BC-pipelines/
 
 nav:
   - Home
+  - Configuration file
+  - Basecalling-pipeline
   - BC_software
   - BC_scripts
-  - Basecalling-pipeline
-  - Configuration file
   - TODO
