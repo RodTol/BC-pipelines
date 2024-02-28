@@ -78,7 +78,6 @@ class BCKeepAlive(threading.Thread):
 
         Once the final state is reached, regardless of success or failure, the BCManager is informed, the keep-alive
         is stopped, and the loop exits; thereby ending the thread!
-        :return:
         """
 
         try:
@@ -111,7 +110,6 @@ class BCKeepAlive(threading.Thread):
         It will initiate a client shutdown as per protocol, should the BCManager be problematic.
 
         This is meant to be invoked from the main thread where the processing is taking place.
-        :return:
         """
         if self.BCManager_PB:
             print("BC CONTROLLER PROBLEM! ABORTING PROCESSING AND SHUTTING DOWN!")
@@ -126,8 +124,7 @@ class BCKeepAlive(threading.Thread):
 
         This is meant to be invoked from the main thread where the processing is taking place.
 
-        :param final_state string representing the final state that was reached by the processing
-        :return:
+        @param final_state: string representing the final state that was reached by the processing
         """
         self.final_state = final_state
         self.join()
@@ -140,32 +137,48 @@ class BCEngine:
     Class that represents a Basecalling Engine sitting in a physical node where GPUs are available.
 
     It will periodically connect back to BCManager to request work for processing. It will then
-    invoke a local guppy system such as supervisor-guppy, to carry out the work.
+    invoke a local dorado system such as supervisor-dorado, to carry out the work.
+
+    It consist of:
+    - conf                  the configuration data obtained by reading the JSON
+                            file
+    - optimal_request_size  ideal number of pod5 files to process per request
+    - engine_id             unique ID of engine
+    - polling_interval      minimum time in minutes between successive requests
+    - INPUTDIR              ROOT of the inputdir where pod5 files are stored
+    - OUTPUTDIR             path to the dir where the basecalling should direct its
+                            output for this job.
+    - bc_script             local script to execute for BC processing
+    - bc_model              basecalling model (i.e. dna_r10.4.1_e8.2_400bps_hac.cfg)
+    - PROCESSING_STATE      internal state of processing
+    - api_url               url for the request work rout to the BCManager
+    - shutdown              boolean option for stop asking batches of work to the BCManager
+    - work_until_none_left  boolean option for work until none is left
     """
 
     def __init__(self, json_file_path, node_index):
+        """
+        Initialize the BCP object with configuration settings loaded from a JSON file.
+
+        @param json_file_path : the path to the JSON file containing configuration settings
+        @param node_index : the index of the node
+        """
         # READ ALL THE FOLLOWING PARAMS FROM A CONFIG FILE
         print("*************BCP READ FROM JSON*************")
         self.conf = Conf.from_json(json_file_path, node_index)
-        # ideal number of fast5 files to process per request
-        self.optimal_request_size = self.conf.engine_optimal_request_size #2
-        # unique ID of engine
+
+        #Following attributes are all read from the config.json file
+        self.optimal_request_size = self.conf.engine_optimal_request_size
         self.engine_id = self.conf.engine_id
-        # minimum time in minutes between successive requests
-        self.polling_interval = self.conf.engine_polling_interval # 1
-        # ROOT of the inputdir where fast5 files are stored
+        self.polling_interval = self.conf.engine_polling_interval
         self.INPUTDIR = self.conf.engine_inputdir
         self.OUTPUTDIR = self.conf.engine_outputdir 
-        # local script to execute for BC processing
         self.bc_script = self.conf.engine_external_script
         self.bc_model = self.conf.engine_model
-        # internal state of processing
-        self.PROCESSING_STATE = 'STOPPED'
-        # API URL
         self.api_url = self.conf.request_work_url 
-        # shutdown
+
+        self.PROCESSING_STATE = 'STOPPED'
         self.shutdown = False
-        # work until none is left
         self.work_until_none_left = False
 
         print('------------------DEBUG------------------' , flush=True)
@@ -177,24 +190,17 @@ class BCEngine:
 
     def begin_working(self):
         """
-        Method that kicks-off continuous periodic polling for new batches of fast5 files to process.
+        Method that start continuous periodic polling for new batches of pod5 files to process. Polling
+        occurs every polling_interval minutes. If a batch takes longer to process than the polling
+        interval, only 30 seconds will be waited for before a new request is made to maintain processing
+        throughput.
+        
+        The loop can be interrupted by setting the shutdown internal variable to True. Upon completion of the
+        running batch, it will stop.
 
-        Polling will occur every polling_interval minutes.
-
-        However, after a batch has been processed, if the processing time took longer than the polling
-        interval, then only 30 secs will be waited for before a new request is made. This is to allow
-        for sustained processing throughput, while at the same time not heavily loading the server with
-        useless requests when there is nothing to process.
-
-        The loop can be cleanly interrupted by setting shutdown internal variable to True: upon completion
-        of the running batch, it will stop.
-
-        In case of any problem while communicating with the BC Controller, the loop will be interrupted
-        and the client will shutdown, as per protocol.
-
-        :return:
+        If there are any issues communicating with the BC Controller, the loop will be interrupted, and
+        the client will shutdown.
         """
-
         self.PROCESSING_STATE = bc_status.STARTED
         while not self.shutdown:
             # request a batch
@@ -212,11 +218,11 @@ class BCEngine:
                 model = self.bc_model
                 # Check how the BCManager is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
-                # -------------------------------------------------------------
+                
                 # invoke the external script passing the input dir as parameter
                 # it will block until complete
                 self._basecalling_work(input_dir, output_dir, model)
-                # -------------------------------------------------------------
+
                 # Check how the BCManager is doing
                 keep_alive_manager.shutdown_if_broken_keepalive()
                 # Tell keepalive thread to send the result and terminate: will block until thread ends.
@@ -239,13 +245,14 @@ class BCEngine:
 
     def _request_a_batch(self, api_url, engine_id, optimal_request_size):
         """
-        Private method to request a batch for processing to the BC Controller
-
-        As per protocol, in case of any error with the BC Controller, this client will shutdown.
-
-        :return: dictionary with the response from the BC Controller, i.e. JSON of BCBatch
+        Request a batch for processing from the BC Controller using the provided API URL, engine ID, and
+        optimal request size. As per protocol, in case of any error with the BC Controller, this client will shutdown.
+        
+        @param api_url - The URL of the API to request the batch from
+        @param engine_id - The ID of the engine for processing
+        @param optimal_request_size - The optimal size of the batch to request
+        @return A dictionary containing the response from the BC Controller, in the form of JSON of BCBatch
         """
-
         try:
             # send a request for a batch to process
             payload = {'engineid': engine_id, 'batchsize': optimal_request_size}
@@ -261,20 +268,17 @@ class BCEngine:
 
     def _basecalling_work(self, input_dir, output_dir, model):
         """
-        Private method that handles the actual Basecall processing. This implementation will invoke an
-        external script that interacts with guppy_server.
+        This private method handles the basecall processing by invoking an external script that interacts
+        with dorado_server.
+        
+        It updates the internal variable `self.PROCESSING_STATE` based on the output of the external script.
+        If an exception is raised, `self.PROCESSING_STATE` is set to `FAILED` and `self.shutdown` is set to
+        `True` for a clean shutdown.
 
-        It will update the internal variable self.PROCESSING_STATE according to the output of the external
-        script.
-
-        However, should an exception be raised for any reason, self.PROCESSING_STATE will become FAIL but also
-        self.shutdown will be set to True. In this way the engine will cleanly shutdown so the exception cause
-        can be investigated.
-
-        :param input_dir:
-        :param output_dir:
-        :param model:
-        :return:
+        @param input_dir - The input directory for basecalling (i.e ASSIGNED_(jobid)_(bc_engine_id))
+        @param output_dir - The output directory for basecalling results (i.e. LOGOUTPUT_(jobid)_(bc_engine_id))
+        @param model - The model used for basecalling
+        @return None
         """
         try:
             completed_process = subprocess.run([self.bc_script, input_dir, output_dir, model])
@@ -294,16 +298,12 @@ class BCEngine:
 
     def _sleep_before_next_batch(self, start_time, end_time):
         """
-        Private method that sleeps for some time before requesting a new batch to process.
+        This private method sleeps for a specific duration before requesting a new batch
+        for processing. If the processing time exceeds the polling interval, it sleeps for 30
+        seconds; otherwise, it waits for the polling interval duration.
 
-        If the processing time was longer than the polling interval, then sleep just for
-        30 secs. It's likely there are lot's more files to process.
-
-        Otherwise, wait for the polling_interval. It's likely there wasn't anything to do.
-
-        :param start_time: int representing the starting time
-        :param end_time: int representing the ending time
-        :return:
+        @param start_time - The starting time of processing
+        @param end_time - The ending time of processing
         """
         work_time = int(end_time - start_time)
         if work_time > self.polling_interval * 60:
@@ -318,5 +318,4 @@ if __name__ == '__main__':
     node_index = int(sys.argv[2])
     eng = BCEngine(json_file_path, node_index)
     eng.work_until_none_left = True
-   # eng.optimal_request_size = 15
     eng.begin_working()

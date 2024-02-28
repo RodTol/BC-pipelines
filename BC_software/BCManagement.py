@@ -56,6 +56,7 @@ class BCWorkloadState:
     def __init__(self, json_file_path, node_index):
         """
         Initialize the BCMReader class with the provided JSON file path and node index.
+        
         @param json_file_path - the path to the JSON file
         @param node_index - the index of the node
         """
