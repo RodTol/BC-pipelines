@@ -20,14 +20,16 @@ Given this premise, the basic requirements are:
 - The pipeline is parametrized with the path to the configuration file, so the user can point to its personal config.json
 
 ## How to use it:
-- Write your own config.json. See [here](Configuration.md) for a more in depth explanation.
+- Write your own config.json. See [here](docs/Configuration.md) for a more in depth explanation.
 - Start the pipeline
 
+## Notes:
+- Each time the pipeline is runned, it will automatically delete all the temporary files, but also **all the outputs**. So, if the user wish to save the results, it will need to modify the pipeline or manually move the data from the *output/tmp* directory
 
 ## Repository structure 
 The repository is organized in the following way:  
 - [basecalling-pipeline](docs/Basecalling-pipeline.md): a directory with the jenkinsfile that defines the pipeline for basecalling.
-- [configurations](Configuration.md): the directory containing the JSON file with all the settings for a run.
+- [configurations](docs/Configuration.md): the directory containing the JSON file with all the settings for a run.
 - [BC_software](docs/BC_software.md): this directory contains the "BC_software" that enables the parallelizzation across multiple nodes of the basecalling process.
 - [BC_scripts](docs/BC_scripts.md): here you'll find some bash and python scripts. They are used by both the pipeline itself and the BC_software to setup and launch the whole basecalling process.
 
