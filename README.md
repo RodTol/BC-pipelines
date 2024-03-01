@@ -13,12 +13,16 @@ Given this premise, the basic requirements are:
 - **Dorado**: the dorado_server and the ont_basecaller_supervisor are the two componets that actually performs the basecalling. You can find the standlone dorado basecaller software [here](https://github.com/nanoporetech/dorado), but the server version and the ont_basecaller_supervisor are accesible only to "full" members of the ONT community.
 - **Jenkins**: the pipeline is designed to be runned with Jenkins. Of course, the Jenkins agent needs to be able to connect to the cluster, but, that said, only very basic plugins were used.
 
-## How to use it: 
-1. The user needs to setup Jenkins, using the jenksinfile provided in this directory as definition of the pipeline
-2. ⚠️ The directory needs to be cloned on the cluster, since inside the pipeline there's a step to pull the latest version of the directory.
-3. Write your own config.json file
-4. The pipeline is parametrized with the path to the configuration file, so the user can point to its personal config.json
-5. VIRTUALENV
+## Installation: 
+- The user needs to setup Jenkins, using the jenksinfile provided in this directory as definition of the pipeline
+- ⚠️ The directory needs to be cloned on the cluster, since inside the pipeline there's a step to pull the latest version of the directory.
+- In order to be able to run the BC_software, the user should setup a virtual environment, with [these](/BC_software/requirements.txt) packages.  
+- The pipeline is parametrized with the path to the configuration file, so the user can point to its personal config.json
+
+## How to use it:
+- Write your own config.json. See [here](Configuration.md) for a more in depth explanation.
+- Start the pipeline
+
 
 ## Repository structure 
 The repository is organized in the following way:  
