@@ -44,7 +44,7 @@ jobs:
           "BC_software.md:docs/BC_software.md"
           "BC_scripts.md:docs/BC_scripts.md"
           "Basecalling-pipeline.md:docs/Basecalling-pipeline.md"
-          "configurations.md:docs/configurations.md"
+          "Configuration.md:docs/Configuration.md"
           "todo.md:docs/todo.md"
         )
 
