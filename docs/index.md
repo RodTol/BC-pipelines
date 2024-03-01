@@ -28,6 +28,8 @@ Given this premise, the basic requirements are:
 - Write your own config.json. See [here](Configuration.md) for a more in depth explanation.
 - Start the pipeline
 
+## Notes:
+- Each time the pipeline is runned, it will automatically delete all the temporary files, but also **all the outputs**. So, if the user wish to save the results, it will need to modify the pipeline or manually move the data from the *output/tmp* directory
 
 ## Repository structure 
 The repository is organized in the following way:  
