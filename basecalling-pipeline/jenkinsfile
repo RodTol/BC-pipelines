@@ -140,7 +140,7 @@
             stage('Send Report to User') {
                 steps {
                     sh '''
-                    echo "invio il report finale allo user"
+                    echo "Send final report to user"
                     cd basecalling-pipeline
                     bash telegram_bot.sh
                     '''
