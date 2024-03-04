@@ -28,7 +28,7 @@ nav_order: 6
 2. [ ] BC_software.md
 3. [ ] BC_scripts.md
 4. [x] Basecalling-pipeline.md
-5. [ ] Configuration.md: add example 
+5. [x] Configuration.md: add example 
 
 ### Doc final structure:
 1. index.md: In the index.md explains the structure and then the Installation procedure + the usage procedure  

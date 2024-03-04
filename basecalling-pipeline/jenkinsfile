@@ -142,7 +142,7 @@
                     sh '''
                     echo "invio il report finale allo user"
                     cd basecalling-pipeline
-                    #bash telegram_bot.sh
+                    bash telegram_bot.sh
                     '''
                 }
             }
