@@ -1,4 +1,5 @@
 #!/bin/bash
+export TEMP_RUN_NAME=$(jq -r '.General.run_name' < $1)
 
 # Check if BC_TOKEN_BOT is defined
 if [ -n "$BC_TOKEN_BOT" ]; then
