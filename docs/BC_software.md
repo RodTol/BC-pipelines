@@ -6,7 +6,7 @@ nav_order: 4
 # BC_software
 
 ## Overview
-The core of the infrastructure is the BC_software, which enables the parallelizzation across multiple nodes of the basecalling computation. This is achieved through a client-server setup, where the [BC_Manager](../BC_software/BCManagement.py) acts as the server and the [BC_Processor](../BC_software/BCProcessors.py) as the client. The whole infrastructure is built upon the dorado_basecaller_server.  
+The core of the infrastructure is the BC_software, which enables the parallelizzation across multiple nodes of the basecalling computation. This is achieved through a client-server setup, where the [BC_Manager](https://github.com/RodTol/BC-pipelines/blob/master/BC_software/BCManagement.py) acts as the server and the [BC_Processor](https://github.com/RodTol/BC-pipelines/blob/master/BC_software/BCProcessors.py) as the client. The whole infrastructure is built upon the dorado_basecaller_server.  
 The image below illustrates the fundamental concept underlying this software:
 <figure>
     <img src="assets/Tirocinio - Network security diagram example(3).png"
