@@ -11,7 +11,7 @@ The second one encapsulates a thread where the BCEngine constantly informs the B
 
 
 ### BCEngine
-- Attributes
+- **Attributes**
   - `conf`: Configuration data obtained by reading the JSON file.
   - `optimal_request_size`: Ideal number of pod5 files to process per request.
   - `engine_id`: Unique ID of the engine.
@@ -24,7 +24,7 @@ The second one encapsulates a thread where the BCEngine constantly informs the B
   - `api_url`: URL for the request work route to the BCManager.
   - `shutdown`: Boolean option for stopping asking batches of work to the BCManager.
   - `work_until_none_left`: Boolean option for working until none is left.
-- Methods
+- **Methods**
   - `__init__(self, json_file_path, node_index)`: Initializes the BCEngine object with configuration settings loaded from a JSON file.
   - `begin_working(self)`: Starts continuous periodic polling for new batches of pod5 files to process. Polling occurs every polling_interval minutes. If there are any issues communicating with the BC Controller, the loop will be interrupted, and the client will shut down.
   - `_request_a_batch(self, api_url, engine_id, optimal_request_size)`: Requests a batch for processing from the BC Controller using the provided API URL, engine ID, and optimal request size. In case of any error with the BC Controller, this client will shut down.
@@ -32,7 +32,7 @@ The second one encapsulates a thread where the BCEngine constantly informs the B
   - `_sleep_before_next_batch(self, start_time, end_time)`: Sleeps for a specific duration before requesting a new batch for processing. If the processing time exceeds the polling interval, it sleeps for 30 seconds; otherwise, it waits for the polling interval duration.
 
 ### BCKeepAlive
-- Attributes
+- **Attributes**
   - `report_back_interval`: Seconds between successive keep-alive messages.
   - `job_id`: The ID of the batch being processed.
   - `starting_state`: The current starting processing state.
@@ -40,7 +40,7 @@ The second one encapsulates a thread where the BCEngine constantly informs the B
   - `keep_alive_url`: URL for the `/keepalive` route (depends on what node is hosting the BCManager).
   - `keep_alive_terminate_url`: URL for the `/completed` route (depends on what node is hosting the BCManager).
   - `BCManager_PB`: Volatile variable to indicate to the main thread it should stop and shutdown.
-- Methods
+- **Methods**
   - `__init__(self, report_back_interval, job_id, starting_state, conf)`: Initializes a KeepAliveManager object with the specified parameters.
   - `run(self)`: Starts a loop periodically calling back the BCManager to inform it of the ongoing processing. Once the final state is reached, regardless of success or failure, the BCManager is informed, the keep-alive is stopped, and the loop exits.
   - `shutdown_if_broken_keepalive(self)`: Checks for a spotted problematic BC Controller: it crashed, the network is down, an exception on the server is returned back. Initiates a client shutdown as per protocol, should the BCManager be problematic.

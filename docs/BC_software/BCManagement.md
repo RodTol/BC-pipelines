@@ -16,7 +16,7 @@ parent: BC_software
 ### 1. `BCBatch`
 
 - Represents a batch of pod5 files assigned for processing.
-- Attributes:
+- **Attributes**:
   - `report_back_period`: Time interval for reporting back the status.
   - `jobid`: Unique identifier for the job.
   - `job_input_dir`: Directory containing symlinks to pod5 files for processing.
@@ -49,14 +49,14 @@ INPUT_DIR
         |- file2.pod5   (ATTENTION! IT WILL BE A SYMLINK!)
         |- file3.pod5   (ATTENTION! IT WILL BE A SYMLINK!)
 ```
-- Attributes:
+- **Attributes**:
   - `INPUTDIR`: Path to the directory containing raw .POD5 files.
   - `OUTPUTDIR`: Path to the directory for basecalling output.
   - `unassigned_bc`: List of pod5 files yet to be basecalled.
   - `default_batch_size`: Default size of the batch.
   - `assigned_batches`: Dictionary tracking assigned batches.
 
-- Methods:
+- **Methods**:
   - `update()`: Updates the state based on the filesystem, detecting new pod5 files and reconstructing the internal state after a crash.
   - `assign_work_to(bc_engine_id, batch_size)`: Assigns work to a specified dorado server with an optional batch size.
   - `completed_work(jobid, jobstate)`: Handles completion of processing for a given job.
@@ -64,7 +64,7 @@ INPUT_DIR
 ### 3. `BCManager`
 
 - Represents the RESTful service for managing basecalling work.
-- Attributes:
+- **Attributes**:
   - `lock`: Threading lock for ensuring thread safety.
   - `tracker`: Dictionary tracking job status with last acknowledgment time, state, and report back period.
   - `bc_state`: Instance of `BCWorkloadState` representing the current workload state.
@@ -72,7 +72,7 @@ INPUT_DIR
   - `shutdown_interval`: Interval for shutting down due to inactivity.
   - `last_activity_time`: Time of the last activity.
 
-- Methods:
+- **Methods**:
   - `get_assignwork()`: Handles GET requests to assign work to a basecalling engine.
   - `get_keepalive()`: Handles GET requests to keep a job alive.
   - `get_completed()`: Handles GET requests to retrieve completed job information.
