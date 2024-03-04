@@ -14,14 +14,14 @@ This project contains some Jenkins-pipeline created to perform Basecalling on th
 ## Requirements:
 The file in this project are thought to be run on [Orfeo](https://orfeo-doc.areasciencepark.it/), so they are not fully generalized for any system, and if a user wish to run on its custom platform it will require to adapt different files.  
 Given this premise, the basic requirements are:
-- **Python3** : installed on every node. [Here](/BC_software/requirements.txt) you can find a list of the packages used by the software.
+- **Python3** : installed on every node. [Here](https://github.com/RodTol/BC-pipelines/blob/master/BC_software/requirements.txt) you can find a list of the packages used by the software.
 - **Dorado**: the dorado_server and the ont_basecaller_supervisor are the two componets that actually performs the basecalling. You can find the standlone dorado basecaller software [here](https://github.com/nanoporetech/dorado), but the server version and the ont_basecaller_supervisor are accesible only to "full" members of the ONT community.
 - **Jenkins**: the pipeline is designed to be runned with Jenkins. Of course, the Jenkins agent needs to be able to connect to the cluster, but, that said, only very basic plugins were used.
 
 ## Installation: 
 - The user needs to setup Jenkins, using the jenksinfile provided in this directory as definition of the pipeline
 - ⚠️ The directory needs to be cloned on the cluster, since inside the pipeline there's a step to pull the latest version of the directory.
-- In order to be able to run the BC_software, the user should setup a virtual environment, with [these](/BC_software/requirements.txt) packages.  
+- In order to be able to run the BC_software, the user should setup a virtual environment, with [these](https://github.com/RodTol/BC-pipelines/blob/master/BC_software/requirements.txt) packages.  
 - The pipeline is parametrized with the path to the configuration file, so the user can point to its personal config.json
 
 ## How to use it:
