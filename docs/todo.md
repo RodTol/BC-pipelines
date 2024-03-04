@@ -25,7 +25,7 @@ nav_order: 6
 
 ## Doc to write
 1. [x] index.md
-2. [ ] BC_software.md
+2. [x] BC_software.md
 3. [ ] BC_scripts.md
 4. [x] Basecalling-pipeline.md
 5. [x] Configuration.md: add example 
