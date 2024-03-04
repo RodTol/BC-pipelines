@@ -51,7 +51,7 @@ for sustained processing throughput, while at the same time not heavily loading 
 useless requests when there is nothing to process.
 
 
-#### NOTES:
+## NOTES:
 what if the keepalive arrived late?  
 missing entry?  
 active deleting thread?  

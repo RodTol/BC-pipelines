@@ -5,7 +5,7 @@ parent: BC_software
 ---
 
 
-# BCManagement.py
+# BCManager
 
 ## Overview
 
