@@ -139,11 +139,13 @@
             }
             stage('Send Report to User') {
                 steps {
-                    sh '''
-                    echo "Send final report to user"
-                    cd basecalling-pipeline
-                    bash telegram_bot.sh
-                    '''
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                        sh '''
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                bash ~/BC-pipelines/BC_scripts/telegram_bot.sh
+                            '                    
+                        '''
+                    }                        
                 }
             }
         }
