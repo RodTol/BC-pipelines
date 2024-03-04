@@ -47,3 +47,38 @@ The JSON file has the following structures:
   - `gpus`: Within this list, the value indicates the number of GPUs that the dorado_basecalling_server needs to utilize. Typically, this value is set to "cuda:all" to eliminate any ambiguity;
   - `batch_size_list`: a list with the maximum number of file that each node will request to the BCManager. This a crucial value to have an optimal load balance;
 
+## Example
+
+```json
+{
+    "General": {
+      "run_name": "ExampleRun",
+      "run_time": "00:20:00",
+      "version": "3.0"
+    },
+    "Slurm": {
+      "output": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out",
+      "error": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.err",
+      "instructions": "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/instructions.sh "
+    },
+    "Basecalling": {
+      "model": "dna_r10.4.1_e8.2_400bps_hac.cfg",
+      "input_dir": "/u/area/jenkins_onpexp/scratch/10G_dataset_POD5",
+      "output_dir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/tmp",
+      "logs_dir": "/u/area/jenkins_onpexp/scratch/dorado_logs",
+      "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
+    },
+    "Resources": {
+      "index_host" : "0", 
+      "nodes_queue" : ["DGX", "DGX", "GPU"],
+      "nodes_list" : ["dgx001", "dgx002",""],
+      "nodes_ip" : ["10.128.2.161", "10.128.2.162", "10.128.2.151"],
+      "nodes_cpus" : ["64", "64", "24"],
+      "nodes_gpus" : ["2", "3", "None"],
+      "gpus" : ["cuda:all", "cuda:all", "cuda:all"],
+      "batch_size_list" : ["3", "5", "4"]
+    }
+  }
+  
+
+```
