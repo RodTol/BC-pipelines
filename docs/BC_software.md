@@ -36,7 +36,7 @@ The purpouse of this file is to collect all the settings about the basecalling. 
 
 ### Classes
 
-#### 1. `BCBatch`
+### 1. `BCBatch`
 
 - Represents a batch of pod5 files assigned for processing.
 - Attributes:
@@ -48,7 +48,7 @@ The purpouse of this file is to collect all the settings about the basecalling. 
   - `batch_size`: Actual size of the batch.
   - `batch`: List of filenames in the batch.
 
-#### 2. `BCWorkloadState`
+### 2. `BCWorkloadState`
 
 - Represents the state of basecalling processing, as well as
 providing methods for operating on it. Essentially all the raw output from the Oxford Nano Pore sequencing machine consists of .POD5 files that the machine writes to a specific directory we'll
@@ -84,7 +84,7 @@ INPUT_DIR
   - `assign_work_to(bc_engine_id, batch_size)`: Assigns work to a specified dorado server with an optional batch size.
   - `completed_work(jobid, jobstate)`: Handles completion of processing for a given job.
 
-#### 3. `BCManager`
+### 3. `BCManager`
 
 - Represents the RESTful service for managing basecalling work.
 - Attributes:
