@@ -59,6 +59,50 @@ def parse_BCP_logs(config, path_BCP_log):
                     })
 
     print(f'Data has been extracted and saved to {csv_filename}')
+    return csv_filename
+
+def rework_csv(csv_filename):
+    # Read the original CSV file
+    with open(csv_filename, 'r') as file:
+        reader = csv.DictReader(file)
+        data = list(reader)
+
+    # Create a new list to store the modified data
+    modified_data = []
+
+    # Iterate through the original data
+    for row in data:
+        # Extract values from the lists
+        node = row['Node']
+        input_files = eval(row['Input Read Files'])
+        caller_times = eval(row['Caller Time (ms)'])
+        samples_called = eval(row['Samples Called'])
+        samples_per_second = eval(row['Samples/s'])
+
+        # Create a new row for each value in the lists
+        for i in range(len(input_files)):
+            new_row = {
+                'Node': node,
+                'Input Read Files': str(input_files[i]),
+                'Caller Time (ms)': str(caller_times[i]),
+                'Samples Called': str(samples_called[i]),
+                'Samples/s': str(samples_per_second[i])
+            }
+            modified_data.append(new_row)
+
+    # Write the modified data to a new CSV file
+    new_csv_filename = 'modified_' + csv_filename
+    with open(new_csv_filename, 'w', newline='') as file:
+        fieldnames = ['Node', 'Input Read Files', 'Caller Time (ms)', 'Samples Called', 'Samples/s']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        
+        # Write the header
+        writer.writeheader()
+
+        # Write the modified data
+        writer.writerows(modified_data)
+
+    print(f'Modified CSV file created: {new_csv_filename}')
 
 
 if __name__ == "__main__":
@@ -74,4 +118,6 @@ if __name__ == "__main__":
 
     config = load_json(json_file)
 
-    parse_BCP_logs(config, path_BCP_log)
+    csv_filename = parse_BCP_logs(config, path_BCP_log)
+
+    rework_csv(csv_filename)
