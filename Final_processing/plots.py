@@ -25,11 +25,12 @@ fig, ax = plt.subplots()
 node_colors = plt.cm.rainbow_r(np.linspace(0, 1, len(grouped_data)))
 
 # Plot each group separately
-bar_width = 0.8 / len(grouped_data)  # Adjusted width for thinner bars
+bar_width = 0.2  # Adjusted width for thinner bars
+space_width = 0.2  # Adjusted width for space between groups
 
 for i, (name, group) in enumerate(grouped_data):
     color = node_colors[i]
-    x_values = np.arange(len(group)) + i * bar_width
+    x_values = np.arange(len(group)) * (bar_width + space_width) + i * (bar_width + space_width)
     ax.bar(x_values, group['Samples/s'], width=bar_width, color=color, label=name)
     
     # Add text label near each column with the number of input files
@@ -43,7 +44,7 @@ ax.set_ylabel('Samples/s')
 ax.set_title('Run Speed Comparison')
 
 # Set the x-axis ticks and labels
-ax.set_xticks(np.arange(len(df['Node'].unique())))
+ax.set_xticks(np.arange(len(df['Node'].unique())) * (len(grouped_data)*(bar_width + space_width) + space_width/2))
 ax.set_xticklabels(df['Node'].unique())
 
 # Display the legend
