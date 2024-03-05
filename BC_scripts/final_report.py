@@ -12,9 +12,6 @@ def load_json(json_file):
 
 
 def parse_BCP_logs(config, path_BCP_log):
-    # Define the pattern to match the lines in the log files
-    pattern = re.compile(r'Found (\d+) input read files to process\.\s+Processing \.\.\.\s+Caller time: (\d+) ms, Samples called: (\d+), samples/s: ([\d\.]+)')
-
     # List of node names
     nodes_list = config['Resources']['nodes_list']
 
@@ -37,18 +34,20 @@ def parse_BCP_logs(config, path_BCP_log):
             # Check if the log file exists
             if os.path.exists(log_filename):
                 with open(log_filename, 'r') as log_file:
+
+                    content = log_file.read()
+
                     # Initialize variables to store extracted information
                     input_read_files = None
                     caller_time = None
                     samples_called = None
                     samples_per_second = None
 
-                    # Loop through each line in the log file
-                    for line in log_file:
-                        match = pattern.search(line)
-                        if match:
-                            input_read_files, caller_time, samples_called, samples_per_second = match.groups()
-                            break
+                    # Extracting information using regular expressions
+                    input_read_files = re.findall(r'Input directory\n(.*?)\n', content, re.DOTALL)
+                    caller_time = re.findall(r'Caller time: (\d+) ms', content)
+                    samples_called = re.findall(r'Samples called: (\d+)', content)
+                    samples_per_second = re.findall(r'samples/s: ([\d.]+)', content)
 
                     # Write the extracted information to the CSV file
                     csv_writer.writerow({
