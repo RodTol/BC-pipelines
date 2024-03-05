@@ -61,6 +61,15 @@
                             '
                         '''
 
+
+                        /*Final_processing dir cleanup*/
+                        sh '''
+                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                cd /u/area/jenkins_onpexp/BC-pipelines/Final_processing
+                                rm -f *.csv
+                            '
+                        '''
+
                     }
                 }
             }   
