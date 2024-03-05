@@ -13,4 +13,6 @@ file_counts = df.groupby('Node')['Input Read Files'].sum()
 plt.figure(figsize=(8, 8))
 plt.pie(file_counts, labels=file_counts.index, autopct='%1.1f%%', startangle=140)
 plt.title('Number of Files Processed by Each Node')
-plt.show()
+# Save the pie chart to a file
+plt.savefig('pie_chart.png')
+
