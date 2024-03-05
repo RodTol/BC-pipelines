@@ -47,7 +47,7 @@ def parse_BCP_logs(config, path_BCP_log):
                     input_read_files = re.findall(r'Input directory\n(.*?)\n', content, re.DOTALL)
                     caller_time = re.findall(r'Caller time: (\d+) ms', content)
                     samples_called = re.findall(r'Samples called: (\d+)', content)
-                    samples_per_second = re.findall(r'samples/s: ([\d.]+)', content)
+                    samples_per_second = re.findall(r'samples/s: ([\d.]+e[+\-]\d+)', content)
 
                     # Write the extracted information to the CSV file
                     csv_writer.writerow({
