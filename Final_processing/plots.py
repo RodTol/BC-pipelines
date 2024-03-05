@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys
+import numpy as np
 
 csv_file_path = sys.argv[1]
 df = pd.read_csv(csv_file_path)
@@ -16,34 +17,23 @@ plt.text(0, -1.2, f'Total Files: {total_files}', ha='center', va='center', fonts
 plt.savefig('pie_chart.png')
 plt.close()
 
-# Get unique nodes and assign unique colors
-unique_nodes = df['Node'].unique()
-colors = plt.cm.viridis(range(len(unique_nodes)))
+# Group data by 'Node'
+grouped_data = df.groupby('Node')
+fig, ax = plt.subplots()
 
-# Create a color dictionary mapping each node to its color
-node_color_dict = dict(zip(unique_nodes, colors))
+# Assign different colors to each group
+colors = iter(plt.cm.rainbow_r(np.linspace(0, 1, len(grouped_data))))
 
-# Plot bar chart
-plt.figure(figsize=(12, 8))
+# Plot each group separately
+for name, group in grouped_data:
+    color = next(colors)
+    ax.bar(group.index, group['Samples/s'], color=color, label=f'{name} - {group["Input Read Files"].sum()} files')
 
-# Iterate over unique nodes
-for node in unique_nodes:
-    node_df = df[df['Node'] == node]
-    node_color = node_color_dict[node]
-
-    # Plot bars for each run of the node
-    for index, row in node_df.iterrows():
-        plt.barh(node, row['Samples/s'], color=node_color, label=f'{row["Input Read Files"]}', alpha=0.7)
-        plt.text(row['Samples/s'], node, f'{row["Input Read Files"]}', va='center', ha='left', fontsize=10, color='black')
-
-# Customize plot
-plt.xlabel('Samples/s')
-plt.ylabel('Node')
-plt.title('Samples/s Performance of Each Run')
-plt.legend(title='Input Read Files', loc='upper right', bbox_to_anchor=(1.15, 1))
-plt.grid(axis='x', linestyle='--', alpha=0.7)
-
-plt.tight_layout()
+# Set labels and title
+ax.set_xlabel('Run Index')
+ax.set_ylabel('Samples/s')
+ax.set_title('Run Speed Comparison')
+ax.legend()
 plt.savefig('bar_chart.png')
 plt.close()
 
