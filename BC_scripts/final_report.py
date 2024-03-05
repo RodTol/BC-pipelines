@@ -62,7 +62,7 @@ def parse_BCP_logs(config, path_BCP_log):
 
 if __name__ == "__main__":
     # Check if the correct number of command-line arguments is provided
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("Error!")
         print("Usage: python script.py <path_to_json_file>")
         sys.exit(1)
