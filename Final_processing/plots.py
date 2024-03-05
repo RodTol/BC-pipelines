@@ -40,8 +40,6 @@ for i, (name, group) in enumerate(grouped_data):
 ax.set_xlabel('Node')
 ax.set_ylabel('Samples/s')
 ax.set_title('Run Speed Comparison')
-ax.set_xticks(np.arange(len(df['Node'].unique())) + (bar_width * (len(grouped_data) - 1)) / 2)
-ax.set_xticklabels(df['Node'].unique())
 plt.savefig('bar_chart.png')
 plt.close()
 
