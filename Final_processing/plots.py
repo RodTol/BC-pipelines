@@ -3,6 +3,7 @@ import pandas as pd
 import sys
 
 
+csv_file_path = sys.argv[1]
 df = pd.read_csv(csv_file_path)
 file_counts = df.groupby('Node')['Input Read Files'].sum()
 
@@ -19,4 +20,5 @@ plt.title('Number of Files Processed by Each Node')
 plt.text(0, -1.2, f'Total Files: {total_files}', ha='center', va='center', fontsize=12, color='darkblue')
 
 plt.savefig('pie_chart.png')
+
 
