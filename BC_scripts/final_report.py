@@ -32,6 +32,7 @@ def parse_BCP_logs(config, path_BCP_log):
     # Loop through each node
     for node_name in nodes_list:
         log_filename = os.path.join(path_BCP_log, f'BCProcessor_log_{node_name}.txt')
+        print(log_filename)
 
         # Check if the log file exists
         if os.path.exists(log_filename):
