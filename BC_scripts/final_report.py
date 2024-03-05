@@ -91,7 +91,7 @@ def rework_csv(csv_filename):
             modified_data.append(new_row)
 
     # Write the modified data to a new CSV file
-    new_csv_filename = 'modified_' + csv_filename
+    new_csv_filename = csv_filename
     with open(new_csv_filename, 'w', newline='') as file:
         fieldnames = ['Node', 'Input Read Files', 'Caller Time (ms)', 'Samples Called', 'Samples/s']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
