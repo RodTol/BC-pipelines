@@ -26,10 +26,15 @@ node_color_dict = dict(zip(unique_nodes, colors))
 # Plot bar chart
 plt.figure(figsize=(12, 8))
 
-for index, row in df.iterrows():
-    node = row['Node']
-    color = node_color_dict.get(node, 'gray')  # Use gray if the node is not explicitly defined in node_color_dict
-    plt.barh(row['Node'], row['Samples/s'], color=color, label=f'{row["Input Read Files"]}', alpha=0.7)
+# Iterate over unique nodes
+for node in unique_nodes:
+    node_df = df[df['Node'] == node]
+    node_color = node_color_dict[node]
+
+    # Plot bars for each run of the node
+    for index, row in node_df.iterrows():
+        plt.barh(node, row['Samples/s'], color=node_color, label=f'{row["Input Read Files"]}', alpha=0.7)
+        plt.text(row['Samples/s'], node, f'{row["Input Read Files"]}', va='center', ha='left', fontsize=10, color='black')
 
 # Customize plot
 plt.xlabel('Samples/s')
