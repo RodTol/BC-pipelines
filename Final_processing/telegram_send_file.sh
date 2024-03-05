@@ -12,17 +12,16 @@ STD=$(echo -e "\033[0m") # Clear colour
 ##############################################################
 echo "_____________________________________"
 echo " "
-echo "${GREEN} Title ${STD}"
+echo "${GREEN}Title ${STD}"
 echo " "
-echo " ${RED} Message${STD}"
+echo "${RED}Message${STD}"
 echo " "
-echo "${GREEN} DATE:$DATE ${STD}"
+echo "${GREEN}DATE:$DATE ${STD}"
 echo "_____________________________________"
 echo " "
 ######################## BOT INFO ############################
 BOT_TOKEN="$BC_TOKEN_BOT"
 CHAT_ID="-4074077922"
-file_path="$1"
 # Function to send a message to Telegram
 send_message() {
  local message="$1"
@@ -52,5 +51,6 @@ send_file() {
 }
 send_file "$1" "Your file is here." > /dev/null
 echo " ${ON_BLUE} File Upload Complete ${STD}"
-send_file "$1" "Your file2 is here." > /dev/null
+
+send_file "$2" "Your file2 is here." > /dev/null
 echo " ${ON_BLUE} File2 Upload Complete ${STD}"
