@@ -3,16 +3,20 @@ import pandas as pd
 import sys
 
 
-csv_file_path = sys.argv[1]
 df = pd.read_csv(csv_file_path)
-
-# Group data by Node and sum the number of files processed
 file_counts = df.groupby('Node')['Input Read Files'].sum()
 
-# Create a pie chart
-plt.figure(figsize=(8, 8))
-plt.pie(file_counts, labels=file_counts.index, autopct='%1.1f%%', startangle=140)
+total_files = file_counts.sum()
+
+plt.figure(figsize=(10, 10))
+plt.pie(file_counts, labels=file_counts.index, autopct='%1.0f%%', startangle=140)
+
+# Display the number of files instead of percentages
+plt.gca().set_aspect('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 plt.title('Number of Files Processed by Each Node')
-# Save the pie chart to a file
+
+# Display the total number of files
+plt.text(0, -1.2, f'Total Files: {total_files}', ha='center', va='center', fontsize=12, color='darkblue')
+
 plt.savefig('pie_chart.png')
 
