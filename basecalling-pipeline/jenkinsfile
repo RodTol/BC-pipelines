@@ -131,7 +131,7 @@
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                echo "Final file"
+                                python ~/BC-pipelines/Final_processing/final_report.py '${configFilePath}' ~/scratch/jenkins_logs/tmp
                             '    
                         '''
                     }
@@ -142,7 +142,7 @@
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                bash ~/BC-pipelines/BC_scripts/telegram_bot.sh '${configFilePath}'
+                                bash ~/BC-pipelines/Final_processing/telegram_bot.sh '${configFilePath}'
                             '                    
                         '''
                     }                        
