@@ -26,6 +26,7 @@ node_colors = plt.cm.rainbow_r(np.linspace(0, 1, len(grouped_data)))
 
 # Plot each group separately
 bar_width = 0.8 / len(grouped_data)  # Adjusted width for thinner bars
+
 for i, (name, group) in enumerate(grouped_data):
     color = node_colors[i]
     x_values = np.arange(len(group)) + i * bar_width
@@ -40,6 +41,14 @@ for i, (name, group) in enumerate(grouped_data):
 ax.set_xlabel('Node')
 ax.set_ylabel('Samples/s')
 ax.set_title('Run Speed Comparison')
+
+# Set the x-axis ticks and labels
+ax.set_xticks(np.arange(len(df['Node'].unique())))
+ax.set_xticklabels(df['Node'].unique())
+
+# Display the legend
+ax.legend()
+
 plt.savefig('bar_chart.png')
 plt.close()
 
