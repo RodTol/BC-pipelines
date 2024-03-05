@@ -11,7 +11,7 @@ def load_json(json_file):
         return data
 
 
-def parse_BCP_logs(config):
+def parse_BCP_logs(config, path_BCP_log):
     # Define the pattern to match the lines in the log files
     pattern = re.compile(r'Found (\d+) input read files to process\.\s+Processing \.\.\.\s+Caller time: (\d+) ms, Samples called: (\d+), samples/s: ([\d\.]+)')
 
@@ -29,33 +29,33 @@ def parse_BCP_logs(config):
         # Write the header to the CSV file
         csv_writer.writeheader()
 
-        # Loop through each node
-        for node_name in nodes_list:
-            log_filename = f'BCProcessor_log_{node_name}.txt'
+    # Loop through each node
+    for node_name in nodes_list:
+        log_filename = os.path.join(path_BCP_log, f'BCProcessor_log_{node_name}.txt')
 
-            # Check if the log file exists
-            if os.path.exists(log_filename):
-                with open(log_filename, 'r') as log_file:
-                    # Initialize variables to store extracted information
-                    input_read_files = None
-                    caller_time = None
-                    samples_called = None
-                    samples_per_second = None
+        # Check if the log file exists
+        if os.path.exists(log_filename):
+            with open(log_filename, 'r') as log_file:
+                # Initialize variables to store extracted information
+                input_read_files = None
+                caller_time = None
+                samples_called = None
+                samples_per_second = None
 
-                    # Loop through each line in the log file
-                    for line in log_file:
-                        match = pattern.search(line)
-                        if match:
-                            input_read_files, caller_time, samples_called, samples_per_second = match.groups()
+                # Loop through each line in the log file
+                for line in log_file:
+                    match = pattern.search(line)
+                    if match:
+                        input_read_files, caller_time, samples_called, samples_per_second = match.groups()
 
-                    # Write the extracted information to the CSV file
-                    csv_writer.writerow({
-                        'Node': node_name,
-                        'Input Read Files': input_read_files,
-                        'Caller Time (ms)': caller_time,
-                        'Samples Called': samples_called,
-                        'Samples/s': samples_per_second
-                    })
+                # Write the extracted information to the CSV file
+                csv_writer.writerow({
+                    'Node': node_name,
+                    'Input Read Files': input_read_files,
+                    'Caller Time (ms)': caller_time,
+                    'Samples Called': samples_called,
+                    'Samples/s': samples_per_second
+                })
 
     print(f'Data has been extracted and saved to {csv_filename}')
 
@@ -69,6 +69,8 @@ if __name__ == "__main__":
     
     # Load the configuration from the specified JSON file
     json_file = sys.argv[1]
+    path_BCP_log = sys.argv[2]
+
     config = load_json(json_file)
 
-    parse_BCP_logs(config)
+    parse_BCP_logs(config, path_BCP_log)
