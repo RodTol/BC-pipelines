@@ -17,17 +17,18 @@ plt.text(0, -1.2, f'Total Files: {total_files}', ha='center', va='center', fonts
 plt.savefig('pie_chart.png')
 plt.close()
 
+# Group by Node and create a bar plot for each run
+grouped_df = df.groupby('Node')
 fig, ax = plt.subplots()
 
-plt.bar(df['Node'], df['Samples/s'])
+for name, group in grouped_df:
+    ax.bar(group['Input Read Files'], group['Samples/s'], label=name)
 
 # Set labels and title
-ax.set_xlabel('Node')
+ax.set_xlabel('Input Read Files')
 ax.set_ylabel('Samples/s')
-ax.set_title('Run Speed Comparison')
-
-# Display the legend
-ax.legend()
+ax.set_title('Samples/s for Each Node and Run')
+ax.legend(title='Node')
 
 plt.savefig('bar_chart.png')
 plt.close()
