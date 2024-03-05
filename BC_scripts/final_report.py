@@ -48,6 +48,7 @@ def parse_BCP_logs(config, path_BCP_log):
                         match = pattern.search(line)
                         if match:
                             input_read_files, caller_time, samples_called, samples_per_second = match.groups()
+                            break
 
                     # Write the extracted information to the CSV file
                     csv_writer.writerow({
