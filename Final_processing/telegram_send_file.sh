@@ -22,6 +22,7 @@ echo " "
 ######################## BOT INFO ############################
 BOT_TOKEN="$BC_TOKEN_BOT"
 CHAT_ID="-4074077922"
+
 # Function to send a message to Telegram
 send_message() {
  local message="$1"
@@ -29,16 +30,14 @@ send_message() {
  -d "chat_id=$CHAT_ID" \
  -d "text=$message"
 }
+
 send_message "Hi I'm your bot to send files.. UPLOADING here…"
+
 echo " "
 echo "_____________________________________"
 echo " "
 echo " ${RED} Message Sent ${STD}"
 echo "_____________________________________"
-echo " "
-echo " ${ON_BLUE} Uploading to Telegram${STD}"
-echo " "
-echo " "
  
 # Function to send a file to Telegram
 send_file() {
@@ -49,8 +48,9 @@ send_file() {
  -F "document=@$file_path" \
  -F "caption=$caption"
 }
-send_file "$1" "Your file is here." > /dev/null
+
+send_file "$1" "First plot." > /dev/null
 echo " ${ON_BLUE} File Upload Complete ${STD}"
 
-send_file "$2" "Your file2 is here." > /dev/null
+send_file "$2" "Second plot." > /dev/null
 echo " ${ON_BLUE} File2 Upload Complete ${STD}"

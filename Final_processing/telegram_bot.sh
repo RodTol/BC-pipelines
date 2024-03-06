@@ -1,14 +1,24 @@
 #!/bin/bash
+
+######################## BOT INFO ############################
+BOT_TOKEN="$BC_TOKEN_BOT"
+CHAT_ID="-4074077922"
+
+# Function to send a message to Telegram
+send_message() {
+ local message="$1"
+ curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+ -d "chat_id=$CHAT_ID" \
+ -d "text=$message"
+}
+
 export TEMP_RUN_NAME=$(jq -r '.General.run_name' < $1)
 
 # Check if BC_TOKEN_BOT is defined
 if [ -n "$BC_TOKEN_BOT" ]; then
     # Send a "Hello World" message to the Telegram bot
     echo "Sending a message to bot"
-    curl -s -X POST "https://api.telegram.org/bot$BC_TOKEN_BOT/sendMessage" -d "chat_id=-4074077922" -d "text=Hello World"
-    
-    # Send a message containing the build number to the Telegram bot
-    curl -s -X POST "https://api.telegram.org/bot$BC_TOKEN_BOT/sendMessage" -d "chat_id=-4074077922" -d text="from build #${TEMP_RUN_NAME}"
+    send_message "Build $TEMP_RUN_NAME was executed succesfully"
 else
     # Print an error message if BC_TOKEN_BOT is not found
     echo "BC_TOKEN_BOT not found "

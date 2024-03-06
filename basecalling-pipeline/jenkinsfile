@@ -152,6 +152,7 @@
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 bash ~/BC-pipelines/Final_processing/telegram_bot.sh '${configFilePath}'
+                                ~/BC-pipelines/Final_processing/telegram_send_file.sh bar_chart.png pie_chart.png
                             '                    
                         '''
                     }                        
