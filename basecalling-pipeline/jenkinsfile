@@ -98,6 +98,7 @@
                                 python configuration.py '${configFilePath}'
                                 echo "------File configuration------"
                                 cat script_resources.sh
+                                ./startup.sh '${configFilePath}'
                             '
                         '''
                     }    
@@ -143,10 +144,10 @@
                                 cd ~/BC-pipelines/Final_processing
                                 python final_report.py '${configFilePath}' ~/scratch/jenkins_logs/tmp
 
-                                run_name=$(jq -r '.General.run_name' "$json_file_path")
+                                run_name=$(jq -r '.General.run_name' '${configFilePath}' )
 
-                                cat $run_name.csv
-                                python plot.py $run_name.csv
+                                cat output_$run_name.csv
+                                python plot.py output_$run_name.csv
                             '    
                         '''
                     }
