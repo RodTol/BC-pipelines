@@ -140,7 +140,9 @@
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                python ~/BC-pipelines/Final_processing/final_report.py '${configFilePath}' ~/scratch/jenkins_logs/tmp
+                                cd ~/BC-pipelines/Final_processing
+                                python final_report.py '${configFilePath}' ~/scratch/jenkins_logs/tmp
+                                cat *.csv
                             '    
                         '''
                     }
@@ -151,8 +153,9 @@
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                bash ~/BC-pipelines/Final_processing/telegram_bot.sh '${configFilePath}'
-                                ~/BC-pipelines/Final_processing/telegram_send_file.sh bar_chart.png pie_chart.png
+                                cd ~/BC-pipelines/Final_processing
+                                ./telegram_bot.sh '${configFilePath}'
+                                ./telegram_send_file.sh bar_chart.png pie_chart.png
                             '                    
                         '''
                     }                        
