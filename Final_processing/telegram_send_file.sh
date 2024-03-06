@@ -31,7 +31,7 @@ send_message() {
  -d "text=$message"
 }
 
-send_message "Hi I'm your bot to send files.. UPLOADING here…"
+send_message "Hi I'm your bot to send files.. UPLOADING here…" > /dev/null
 
 echo " "
 echo "_____________________________________"

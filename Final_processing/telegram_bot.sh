@@ -18,7 +18,7 @@ export TEMP_RUN_NAME=$(jq -r '.General.run_name' < $1)
 if [ -n "$BC_TOKEN_BOT" ]; then
     # Send a "Hello World" message to the Telegram bot
     echo "Sending a message to bot"
-    send_message "Build $TEMP_RUN_NAME was executed succesfully"
+    send_message "Build $TEMP_RUN_NAME was executed succesfully" > /dev/null
 else
     # Print an error message if BC_TOKEN_BOT is not found
     echo "BC_TOKEN_BOT not found "

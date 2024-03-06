@@ -147,7 +147,7 @@
                                 run_name=$(jq -r '.General.run_name' '${configFilePath}' )
 
                                 cat output_$run_name.csv
-                                python plot.py output_$run_name.csv
+                                python plots.py output_$run_name.csv
                             '    
                         '''
                     }
