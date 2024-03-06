@@ -17,7 +17,7 @@ $message
  curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
  -d "chat_id=$CHAT_ID" \
  -d "text=$formatted_message" \
- -d "parse_mode=Markdown"
+ -d "parse_mode=MarkdownV2"
 }
 
 
