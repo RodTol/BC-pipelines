@@ -3,16 +3,10 @@
 # Function to send a message to Telegram
 send_message() {
  local message="$1"
- local background_color="$2"
- local formatted_message="<b>${message}</b>"
- 
+  
  curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
  -d "chat_id=$CHAT_ID" \
- -d "text=$formatted_message" \
- -d "parse_mode=HTML" \
- -d "disable_web_page_preview=true" \
- -d "caption=$formatted_message" \
- -d "reply_markup={\"inline_keyboard\":[[{\"text\":\"Click me\",\"url\":\"https://example.com\"}]]}"
+ -d "text=$message"
 }
 
 BOT_TOKEN="$BC_TOKEN_BOT"

@@ -7,19 +7,19 @@ check_job_status() {
     scontrol show job $JOB_ID &> /dev/null
 }
 
-# Function to send a message to Telegram
+# Function to send a message to Telegram with code block formatting
 send_message() {
  local message="$1"
- 
- local background_color="$2"
- 
- local formatted_message="<div style=\"background-color:${background_color}; padding: 10px;\">${message}</div>"
- 
+ local formatted_message="\\\`\\\`\\\`bash
+$message
+\\\`\\\`\\\`"
+
  curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
  -d "chat_id=$CHAT_ID" \
  -d "text=$formatted_message" \
- -d "parse_mode=HTML"
+ -d "parse_mode=Markdown"
 }
+
 
 BOT_TOKEN="$BC_TOKEN_BOT"
 CHAT_ID="-4074077922"
