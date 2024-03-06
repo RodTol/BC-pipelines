@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys
-import numpy as np
 
 csv_file_path = sys.argv[1]
 df = pd.read_csv(csv_file_path)
@@ -17,18 +16,22 @@ plt.text(0, -1.2, f'Total Files: {total_files}', ha='center', va='center', fonts
 plt.savefig('pie_chart.png')
 plt.close()
 
-# Group by Node and create a bar plot for each run
-# Group by Node and plot a bar for each node
-fig, ax = plt.subplots()
-for name, group in df.groupby('Node'):
-    ax.bar(name, group['Samples/s'].values[0], label=name)
+# Get unique nodes and assign colors dynamically
+unique_nodes = df['Node'].unique()
+colors = plt.cm.rainbow(range(len(unique_nodes)))
+plt.figure(figsize=(10, 10))
 
-# Set labels and title
-ax.set_xlabel('Node')
-ax.set_ylabel('Samples/s')
-ax.set_title('Samples/s for Each Node')
-ax.legend(title='Node')
+for index, row in df.iterrows():
+    node_color = colors[list(unique_nodes).index(row['Node'])]
+    plt.bar(index, row['Samples/s'], color=node_color, width=0.8, align='center')
 
+    plt.text(index, row['Samples/s'] + 0.1, f"{row['Input Read Files']}", ha='center', va='bottom', fontsize=8, color='black')
+
+# Customize the plot
+plt.ylabel('Samples/s')
+plt.title('Samples/s')
+plt.xticks(range(len(df)), df.index)
+plt.legend(labels=unique_nodes)
 plt.savefig('bar_chart.png')
 plt.close()
 
