@@ -22,5 +22,5 @@ run_name=$(jq -r '.General.run_name' "$json_file")
 model=$(jq -r '.Basecalling.model' "$json_file")
 nodes_list=$(jq -r '.Resources.nodes_list' "$json_file")
 
-send_message "The $run_name is started at $(date +"%H:%M:%S")." "#BB8FCE" > /dev/null
+send_message "The $run_name is started at $(date +"%H:%M:%S")." "#BB8FCE"
 send_message "The basecalling will be executed on $nodes_list with model $model" "#BB8FCE" > /dev/null
