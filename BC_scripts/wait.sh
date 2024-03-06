@@ -2,14 +2,15 @@
 
 JOB_ID=$1
 
+# Function to check the job status
 check_job_status() {
-    scontrol show job "$JOB_ID" > /dev/null 2>&1
+    scontrol show job $JOB_ID &> /dev/null
 }
 
 # Function to send a message to Telegram with code block formatting
 send_message() {
     local message="$1"
-    local formatted_message="```\n $message \n```"
+    local formatted_message="``` $message ```"
 
     curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
     -d "chat_id=$CHAT_ID" \
