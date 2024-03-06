@@ -24,7 +24,7 @@
       "nodes_cpus" : ["64", "64", "24"],
       "nodes_gpus" : ["2", "3", "None"],
       "gpus" : ["cuda:all", "cuda:all", "cuda:all"],
-      "batch_size_list" : ["3", "5", "4"]
+      "batch_size_list" : ["1", "1", "1"]
     }
   }
   
