@@ -22,9 +22,9 @@
       "nodes_list" : ["dgx001"],
       "nodes_ip" : ["10.128.2.162"],
       "nodes_cpus" : ["64"],
-      "nodes_gpus" : ["8"],
+      "nodes_gpus" : ["2"],
       "gpus" : ["cuda:all"],
-      "batch_size_list" : ["6"]
+      "batch_size_list" : ["3"]
     }
   }
   
