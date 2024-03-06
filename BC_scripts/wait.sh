@@ -10,6 +10,7 @@ check_job_status() {
 # Function to send a message to Telegram
 send_message() {
  local message="$1"
+ local formatted_message="```\n $message \n```"
  curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
  -d "chat_id=$CHAT_ID" \
  -d "text=$message"
@@ -22,7 +23,7 @@ CHAT_ID="-4074077922"
 start_time=$(date +%s)
 interval=300 
 
-send_message "Job $JOB_ID is queued at $start_time"
+send_message "Job $JOB_ID is queued at $(date +"%H:%M:%S")"
 
 # Loop until the job is completed
 while check_job_status; do
@@ -34,7 +35,7 @@ while check_job_status; do
     if ((elapsed_time >= interval)); then
         JOB_STATUS=$(scontrol show job $JOB_ID | awk '/JobState=/{print $1}')
         echo "Slurm job $JOB_ID status: $JOB_STATUS"
-        send_message "At $current_time Slurm job $JOB_ID status is $JOB_STATUS"
+        send_message "At $(date +"%H:%M:%S") Slurm job $JOB_ID status is $JOB_STATUS"
         
         # Capture the output of squeue -p DGX,GPU
         squeue_output=$(squeue -p DGX,GPU)
