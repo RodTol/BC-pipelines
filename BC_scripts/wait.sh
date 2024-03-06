@@ -10,10 +10,15 @@ check_job_status() {
 # Function to send a message to Telegram
 send_message() {
  local message="$1"
- local formatted_message="```\n $message \n```"
+ 
+ local background_color="$2"
+ 
+ local formatted_message="<div style=\"background-color:${background_color}; padding: 10px;\">${message}</div>"
+ 
  curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
  -d "chat_id=$CHAT_ID" \
- -d "text=$message"
+ -d "text=$formatted_message" \
+ -d "parse_mode=HTML"
 }
 
 BOT_TOKEN="$BC_TOKEN_BOT"

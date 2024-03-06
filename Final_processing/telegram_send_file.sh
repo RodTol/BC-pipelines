@@ -10,15 +10,7 @@ BLUE=$(echo -e "\033[1;34m")
 GREEN=$(echo -e "\033[1;32m")
 STD=$(echo -e "\033[0m") # Clear colour
 ##############################################################
-echo "_____________________________________"
-echo " "
-echo "${GREEN}Title ${STD}"
-echo " "
-echo "${RED}Message${STD}"
-echo " "
-echo "${GREEN}DATE:$DATE ${STD}"
-echo "_____________________________________"
-echo " "
+
 ######################## BOT INFO ############################
 BOT_TOKEN="$BC_TOKEN_BOT"
 CHAT_ID="-4074077922"
@@ -31,9 +23,8 @@ send_message() {
  -d "text=$message"
 }
 
-send_message "Hi I'm your bot to send files.. UPLOADING here…" > /dev/null
+send_message "UPLOADING your files!! " > /dev/null
 
-echo " "
 echo "_____________________________________"
 echo " "
 echo " ${RED} Message Sent ${STD}"
