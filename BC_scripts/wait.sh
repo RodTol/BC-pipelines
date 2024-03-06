@@ -9,13 +9,13 @@ check_job_status() {
 
 # Function to send a message to Telegram with code block formatting
 send_message() {
- local message="$1"
- local formatted_message="```\n $message \n```"
+    local message="$1"
+    local formatted_message="```\n $message \n```"
 
- curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
- -d "chat_id=$CHAT_ID" \
- -d "text=$formatted_message" \
- -d "parse_mode=MarkdownV2"
+    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+    -d "chat_id=$CHAT_ID" \
+    -d "text=$formatted_message" \
+    -d "parse_mode=MarkdownV2"
 }
 
 
