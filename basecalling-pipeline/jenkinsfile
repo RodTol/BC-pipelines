@@ -142,7 +142,11 @@
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd ~/BC-pipelines/Final_processing
                                 python final_report.py '${configFilePath}' ~/scratch/jenkins_logs/tmp
-                                cat *.csv
+
+                                run_name=$(jq -r '.General.run_name' "$json_file_path")
+
+                                cat $run_name.csv
+                                python plot.py $run_name.csv
                             '    
                         '''
                     }
