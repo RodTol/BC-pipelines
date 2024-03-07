@@ -44,7 +44,7 @@ def parse_BCP_logs(config, path_BCP_log):
                     samples_per_second = None
 
                     # Extracting information using regular expressions
-                    input_read_files = re.findall(r'Found (\d+) input read files to process\.', content)
+                    input_read_files = re.findall(r'Found (\d+) input read files to process', content)
                     caller_time = re.findall(r'Caller time: (\d+) ms', content)
                     samples_called = re.findall(r'Samples called: (\d+)', content)
                     samples_per_second = re.findall(r'samples/s: ([\d.]+e[+\-]\d+)', content)
@@ -83,7 +83,6 @@ def rework_csv(csv_filename):
         node = row['Node']
         input_files = eval(row['Input Read Files'])
         caller_times = eval(row['Caller Time (ms)'])
-        print(row, caller_times)
         samples_called = eval(row['Samples Called'])
         samples_per_second = eval(row['Samples/s'])
 
