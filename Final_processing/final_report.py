@@ -59,9 +59,9 @@ def parse_BCP_logs(config, path_BCP_log):
                     })
                     
                     # Debugging
-                    print("Node:", node_name)
-                    print("Input Read Files:", input_read_files)
-                    print("Caller Time (ms):", caller_time)
+                    #print("Node:", node_name)
+                    #print("Input Read Files:", input_read_files)
+                    #print("Caller Time (ms):", caller_time)
                     # print("Samples Called:", samples_called)
                     # print("Samples/s:", samples_per_second)
 
@@ -87,7 +87,7 @@ def rework_csv(csv_filename):
         samples_per_second = eval(row['Samples/s'])
 
         # Create a new row for each value in the lists
-        for i in range(len(caller_times)):
+        for i in range(len(input_files)):
             new_row = {
                 'Node': node,
                 'Input Read Files': str(input_files[i]),
@@ -95,7 +95,6 @@ def rework_csv(csv_filename):
                 'Samples Called': str(samples_called[i]),
                 'Samples/s': str(samples_per_second[i])
             }
-            print("index", i, new_row)
             modified_data.append(new_row)
 
     # Write the modified data to a new CSV file
