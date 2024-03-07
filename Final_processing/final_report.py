@@ -83,7 +83,7 @@ def rework_csv(csv_filename):
         node = row['Node']
         input_files = eval(row['Input Read Files'])
         caller_times = eval(row['Caller Time (ms)'])
-        print(caller_times)
+        print(row, caller_times)
         samples_called = eval(row['Samples Called'])
         samples_per_second = eval(row['Samples/s'])
 
@@ -96,7 +96,7 @@ def rework_csv(csv_filename):
                 'Samples Called': str(samples_called[i]),
                 'Samples/s': str(samples_per_second[i])
             }
-            print(new_row)
+            print("index", i, new_row)
             modified_data.append(new_row)
 
     # Write the modified data to a new CSV file
