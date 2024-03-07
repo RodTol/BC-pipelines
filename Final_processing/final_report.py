@@ -44,7 +44,7 @@ def parse_BCP_logs(config, path_BCP_log):
                     samples_per_second = None
 
                     # Extracting information using regular expressions
-                    input_read_files = re.findall(r'Found (\d+) input read files to process\.', content)
+                    input_read_files = re.search(r'Found (\d+) input read files to process\.', content)
                     caller_time = re.findall(r'Caller time: (\d+) ms', content)
                     samples_called = re.findall(r'Samples called: (\d+)', content)
                     samples_per_second = re.findall(r'samples/s: ([\d.]+e[+\-]\d+)', content)
