@@ -44,7 +44,7 @@ def parse_BCP_logs(config, path_BCP_log):
                     samples_per_second = None
 
                     # Extracting information using regular expressions
-                    input_read_files = re.findall(r'Found (\d+) input read files to process\.', content)
+                    input_read_files = re.findall(r'Found\s+(\d+)\s+input read files to process\.', content)
                     caller_time = re.findall(r'Caller time: (\d+) ms', content)
                     samples_called = re.findall(r'Samples called: (\d+)', content)
                     samples_per_second = re.findall(r'samples/s: ([\d.]+e[+\-]\d+)', content)
@@ -57,12 +57,13 @@ def parse_BCP_logs(config, path_BCP_log):
                         'Samples Called': samples_called,
                         'Samples/s': samples_per_second
                     })
-
+                    
+                    # Debugging
                     print("Node:", node_name)
                     print("Input Read Files:", input_read_files)
-                    print("Caller Time (ms):", caller_time)
-                    print("Samples Called:", samples_called)
-                    print("Samples/s:", samples_per_second)
+                    # print("Caller Time (ms):", caller_time)
+                    # print("Samples Called:", samples_called)
+                    # print("Samples/s:", samples_per_second)
 
 
     print(f'Data has been extracted and saved to {csv_filename}')
