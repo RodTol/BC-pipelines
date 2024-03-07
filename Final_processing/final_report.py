@@ -75,7 +75,6 @@ def rework_csv(csv_filename):
     with open(csv_filename, 'r') as file:
         reader = csv.DictReader(file)
         data = list(reader) 
-    print(data)
     # Create a new list to store the modified data
     modified_data = []
 
@@ -97,6 +96,7 @@ def rework_csv(csv_filename):
                 'Samples Called': str(samples_called[i]),
                 'Samples/s': str(samples_per_second[i])
             }
+            print(new_row)
             modified_data.append(new_row)
 
     # Write the modified data to a new CSV file
