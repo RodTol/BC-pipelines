@@ -62,7 +62,7 @@ def parse_BCP_logs(config, path_BCP_log):
                     # Debugging
                     print("Node:", node_name)
                     print("Input Read Files:", input_read_files)
-                    # print("Caller Time (ms):", caller_time)
+                    print("Caller Time (ms):", caller_time)
                     # print("Samples Called:", samples_called)
                     # print("Samples/s:", samples_per_second)
 
@@ -74,8 +74,8 @@ def rework_csv(csv_filename):
     # Read the original CSV file
     with open(csv_filename, 'r') as file:
         reader = csv.DictReader(file)
-        data = list(reader)
-
+        data = list(reader) 
+    print(data)
     # Create a new list to store the modified data
     modified_data = []
 
