@@ -41,8 +41,8 @@ nav_order: 6
 
 
 ## Features to implement
-1. [ ] Final report construction
-2. [ ] Send report to user
+1. [x] Final report construction
+2. [x] Send report to user
 3. [ ] Adding modifiable number of clients for ont supervisor. Now fixed to 5
 4. [ ] **Live reading trigger from an input directory**
    
