@@ -88,7 +88,7 @@ def rework_csv(csv_filename):
         samples_per_second = eval(row['Samples/s'])
 
         # Create a new row for each value in the lists
-        for i in range(len(input_files)):
+        for i in range(len(caller_times)):
             new_row = {
                 'Node': node,
                 'Input Read Files': str(input_files[i]),
