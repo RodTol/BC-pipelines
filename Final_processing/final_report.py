@@ -36,8 +36,7 @@ def parse_BCP_logs(config, path_BCP_log):
                 with open(log_filename, 'r') as log_file:
 
                     content = log_file.read()
-                    print(content)
-
+                    
                     # Initialize variables to store extracted information
                     input_read_files = None
                     caller_time = None
