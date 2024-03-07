@@ -16,9 +16,6 @@
             I assumed that the starting directory is the pipeline one*/
             string(name: 'configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx.json', description: 'Path to the config JSON file')
         }
-        triggers {
-            pollSCM 'H */6 * * *'
-        }
         stages {
             stage('Cleanup tmp dir') {
                 steps {

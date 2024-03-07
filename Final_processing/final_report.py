@@ -58,6 +58,13 @@ def parse_BCP_logs(config, path_BCP_log):
                         'Samples/s': samples_per_second
                     })
 
+                    print("Node:", node_name)
+                    print("Input Read Files:", input_read_files)
+                    print("Caller Time (ms):", caller_time)
+                    print("Samples Called:", samples_called)
+                    print("Samples/s:", samples_per_second)
+
+
     print(f'Data has been extracted and saved to {csv_filename}')
     return csv_filename
 

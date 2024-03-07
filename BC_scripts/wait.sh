@@ -24,7 +24,7 @@ CHAT_ID="-4074077922"
 
 # Set initial time and interval
 start_time=$(date +%s)
-interval=200 
+interval=300 
 
 send_message "Job $JOB_ID is queued at $(date +"%H:%M:%S")"
 
