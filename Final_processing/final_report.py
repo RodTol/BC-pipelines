@@ -36,7 +36,7 @@ def parse_BCP_logs(config, path_BCP_log):
                 with open(log_filename, 'r') as log_file:
 
                     content = log_file.read()
-                    
+
                     # Initialize variables to store extracted information
                     input_read_files = None
                     caller_time = None
@@ -74,29 +74,29 @@ def rework_csv(csv_filename):
     with open(csv_filename, 'r') as file:
         reader = csv.DictReader(file)
         data = list(reader) 
-    # Create a new list to store the modified data
-    modified_data = []
+        # Create a new list to store the modified data
+        modified_data = []
 
-    # Iterate through the original data
-    for row in data:
-        # Extract values from the lists
-        node = row['Node']
-        input_files = eval(row['Input Read Files'])
-        caller_times = eval(row['Caller Time (ms)'])
-        samples_called = eval(row['Samples Called'])
-        samples_per_second = eval(row['Samples/s'])
+        # Iterate through the original data
+        for row in data:
+            # Extract values from the lists
+            node = row['Node']
+            input_files = eval(row['Input Read Files'])
+            caller_times = eval(row['Caller Time (ms)'])
+            samples_called = eval(row['Samples Called'])
+            samples_per_second = eval(row['Samples/s'])
 
-        # Create a new row for each value in the lists
-        for i in range(len(input_files)):
-            new_row = {
-                'Node': node,
-                'Input Read Files': str(input_files[i]),
-                'Caller Time (ms)': str(caller_times[i]),
-                'Samples Called': str(samples_called[i]),
-                'Samples/s': str(samples_per_second[i])
-            }
-            print(new_row)
-            modified_data.append(new_row)
+            # Create a new row for each value in the lists
+            for i in range(len(input_files)):
+                new_row = {
+                    'Node': node,
+                    'Input Read Files': str(input_files[i]),
+                    'Caller Time (ms)': str(caller_times[i]),
+                    'Samples Called': str(samples_called[i]),
+                    'Samples/s': str(samples_per_second[i])
+                }
+                print(new_row)
+                modified_data.append(new_row)
 
     # Write the modified data to a new CSV file
     new_csv_filename = csv_filename
