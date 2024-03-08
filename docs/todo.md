@@ -50,6 +50,9 @@ nav_order: 6
 ## Errors 
 1. [ ] GPU node do not see cuda:0,1. Probably it's something related to how I launch
 the scripts and the env variables
+2. [ ] if I run with gpu004 specified, there's something wrong with how I launch the server since I am 
+not able to find the connection file and also the log (ExampleRun.out) does not say exist, like for the
+others. Maybe too few time ?
 
 ## Observations
 - I need launch the server, BCM and BCP on the same dir in order to have
