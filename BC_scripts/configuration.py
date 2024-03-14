@@ -68,7 +68,7 @@ def create_sbatch_file(config):
 
             # Add a sleep command after each srun command except the last one
             if i != how_many_nodes-1:
-                sbatch_file.write("sleep 5\n")
+                sbatch_file.write("sleep 10\n")
             else:
                 sbatch_file.write("wait\n")
 
