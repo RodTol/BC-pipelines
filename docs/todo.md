@@ -6,6 +6,13 @@ nav_order: 6
 
 # TODO
 
+## Errors 
+1. [ ] **GPU node do not see cuda:0,1.** Probably it's something related to how I launch
+the scripts and the env variables
+2. [ ] if I run with gpu004 specified, there's something wrong with how I launch the server since I am 
+not able to **find the connection file and also the log** (ExampleRun.out) does not say exist, like for the
+others. Maybe too few time ?
+
 <!-- ## File to comment
 1. BC software
     1. [x] BCConfiguration
@@ -43,16 +50,10 @@ nav_order: 6
 ## Features to implement
 1. [x] Final report construction
 2. [x] Send report to user
-3. [ ] Adding modifiable number of clients for ont supervisor. Now fixed to 5
-4. [ ] **Live reading trigger from an input directory**
+3. [ ] JSON check to see if it's compatible ?
+4. [ ] Adding modifiable number of clients for ont supervisor. Now fixed to 5
+5. [ ] **Live reading trigger from an input directory**
    
-
-## Errors 
-1. [ ] GPU node do not see cuda:0,1. Probably it's something related to how I launch
-the scripts and the env variables
-2. [ ] if I run with gpu004 specified, there's something wrong with how I launch the server since I am 
-not able to find the connection file and also the log (ExampleRun.out) does not say exist, like for the
-others. Maybe too few time ?
 
 ## Observations
 - I need launch the server, BCM and BCP on the same dir in order to have
