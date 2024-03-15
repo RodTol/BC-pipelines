@@ -14,7 +14,7 @@
         parameters {
             /*The idea is to set as parameter the path to the JSON and not the actual JSON. 
             I assumed that the starting directory is the pipeline one*/
-            string(name: 'configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx.json', description: 'Path to the config JSON file')
+            string(name: 'configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_1_gpu.json', description: 'Path to the config JSON file')
         }
         stages {
             stage('Cleanup tmp dir') {
