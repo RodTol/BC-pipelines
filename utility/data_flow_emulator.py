@@ -34,11 +34,13 @@ def mimic_live_writing_groups(src_dir, dest_dir, interval_seconds=10, n_files=4)
             print(f"Copying file: {file}", end=" ")
             shutil.copy(src_file_path, dest_file_path)
             print("Copy successful")
-            bar()
             
             if (counter==n_files):
                 counter=0
                 time.sleep(interval_seconds)
+            
+            bar()
+
         
     print("No new files to copy.")
 
