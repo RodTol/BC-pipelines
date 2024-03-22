@@ -23,7 +23,8 @@ def mimic_live_writing(src_dir, dest_dir, interval_seconds=10):
 def mimic_live_writing_groups(src_dir, dest_dir, interval_seconds=10, n_files=4):
     files = os.listdir(src_dir)
     files_set = set(files)  # Set to keep track of copied files
-
+    
+    counter = 0
     with alive_bar(len(files)) as bar:   # Expected total
         for file in files_set:   
             counter = counter+1 
@@ -48,6 +49,6 @@ if __name__ == "__main__":
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
 
-    mimic_live_writing(src_dir, dest_dir)
+    #mimic_live_writing(src_dir, dest_dir)
 
     mimic_live_writing_groups(src_dir, dest_dir)
