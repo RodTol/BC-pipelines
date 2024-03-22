@@ -15,8 +15,9 @@ def mimic_live_writing(src_dir, dest_dir, interval_seconds=30):
             file_to_copy = random.choice(available_files)  # Choose a random file from the available files
             src_file_path = os.path.join(src_dir, file_to_copy)
             dest_file_path = os.path.join(dest_dir, file_to_copy)
-            print(f"Copying file: {file_to_copy}")
+            print(f"Copying file: {file_to_copy}", end=" ")
             shutil.copy(src_file_path, dest_file_path)
+            print("Copy successful")
             copied_files.add(file_to_copy)  # Add the copied file to the set
         else:
             print("No new files to copy.")
