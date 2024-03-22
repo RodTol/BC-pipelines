@@ -8,7 +8,7 @@ def mimic_live_writing(src_dir, dest_dir, interval_seconds=10):
     files = os.listdir(src_dir)
     files_set = set(files)  # Set to keep track of copied files
 
-    with alive_bar(len(files)) as bar # Expected total
+    with alive_bar(len(files)) as bar:   # Expected total
         for file in files_set:    
             src_file_path = os.path.join(src_dir, file)
             dest_file_path = os.path.join(dest_dir, file)
