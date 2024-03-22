@@ -23,6 +23,7 @@ def mimic_live_writing(src_dir, dest_dir, interval_seconds=30):
             print("No new files to copy.")
 
         time.sleep(interval_seconds)
+        sys.exit()
 
 if __name__ == "__main__":
     src_dir = sys.argv[1]  # Source directory
