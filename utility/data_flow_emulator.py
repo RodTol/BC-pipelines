@@ -17,8 +17,9 @@ def mimic_live_writing(src_dir, dest_dir, interval_seconds=10):
             shutil.copy(src_file_path, dest_file_path)
             print("Copy successful")
 
-            time.sleep(interval_seconds)
             bar()
+            time.sleep(interval_seconds)
+
         
     print("No new files to copy.")
 
