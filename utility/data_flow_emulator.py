@@ -38,9 +38,7 @@ def mimic_live_writing_groups(src_dir, dest_dir, interval_seconds=10, n_files=4)
             if (counter==n_files):
                 counter=0
                 time.sleep(interval_seconds)
-            
-            bar()
-
+                bar()
         
     print("No new files to copy.")
 
