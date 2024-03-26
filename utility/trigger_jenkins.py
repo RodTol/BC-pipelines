@@ -4,6 +4,7 @@ from datetime import datetime
 import re
 import time
 import os
+import uuid
 
 class Jenkins_trigger:
 
@@ -41,7 +42,8 @@ class Jenkins_trigger:
                     print(f"{timestamp} - Stage : {stage}")
                     print("Build is ", build_status)
                     previous_stage = stage
-                #else if previous_stage = 'Send Report to User':
+                elif stage == 'Send Report to User':
+                    break
         print("Build is ", build_status)        
 
     def trigger_jenkins_pipeline(self, job_name, parameters):
@@ -76,46 +78,57 @@ class Jenkins_trigger:
         self.__get_current_stage(job_name, build_info['number'], build_info['result'])
 
 
-def count_files(dir_path):
-    file_count = 0
-    for _, _, files in os.walk(dir_path):
-        file_count += len(files)
+class Live_Reading :
 
-    return file_count
+    def __init__(self, input_dir) :
+        self.input_dir = input_dir
 
-def create_tmp_input_dir(input_dir_path, batch):
-    '''
-    This function will create a dir called tmp_ASSIGNED inside the input_dir
-    with a symlink to each file assigned to this batch
-    '''
-    tmp_dir = 'tmp_ASSIGNED'
-    tmp_dir_fullpath = os.path.join(tmp_dir, input_dir_path)
-    os.mkdir(tmp_dir_fullpath)
-    for fl in batch:
-        os.symlink(os.path.join(input_dir_path, fl), os.path.join(tmp_dir_fullpath, fl))
+    def __list_all_pod5_files(self) :
+        all_files= os.listdir(self.input_dir)
+        pod5_files = [file for file in all_files if file.endswith('.pod5')]
+        return pod5_files
+
+    def __create_tmp_input_dir(self, batchid, batch):
+        '''
+        This function will create a dir called tmp_ASSIGNED inside the input_dir
+        with a symlink to each file assigned to this batch
+        '''
+        tmp_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_dir_fullpath = os.path.join(tmp_dir, self.input_dir)
+        os.mkdir(tmp_dir_fullpath)
+        for fl in batch:
+            os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
 
 
-def live_reading_dir(input_dir_path, threshold=5, scanning_time=10):
-    '''
-    The purpouse of this function is to scan the input directory and trigger
-    the basecalling pipeline when we have added more than "threshold" files.
-    Idea: 
-    1. Each 10 seconds the dir will be scanned
-    2. If # of files has reached a threshold, create a tmp dir with a work 
-    batch. Save what files have been assigned. For now the batch size is made of all the files
-    that have been added over the threshold
-    3. Keep scanning the dir and repeat
-    '''
-    unassigned_files = []
-    prev_total_files = 0
-    while True:
-        curr_total_files = count_files(input_dir_path)
-        print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
-        time.sleep(10)
+    def live_reading_dir(self, threshold=5, scanning_time=2):
+        '''
+        The purpouse of this function is to scan the input directory and trigger
+        the basecalling pipeline when we have added more than "threshold" files.
+        Idea: 
+        1. Each 10 seconds the dir will be scanned
+        2. If # of files has reached a threshold, create a tmp dir with a work 
+        batch. Save what files have been assigned. For now the batch size is made of all the files
+        that have been added over the threshold
+        3. Keep scanning the dir and repeat
+        '''
+        pod5_files = []
+        prev_total_files = 0
 
-        if curr_total_files-prev_total_files>=threshold :
-            prev_total_files = curr_total_files
-            print("Create and launch a batch of work")
+        while True:
+            time.sleep(scanning_time)
+            pod5_files = self.__list_all_pod5_files()
+            curr_total_files = len(pod5_files)
+            
+            number_new_file = curr_total_files-prev_total_files
+
+            if number_new_file >=threshold :
+                print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
+                prev_total_files = curr_total_files
+
+                batchid = str(uuid.uuid4().int)
+                print("Create and launch batch ", batchid)
+                #batch = 
+                #self.__create_tmp_input_dir(batchid, batch)
 
 
 
@@ -136,7 +149,8 @@ if __name__ == "__main__":
     }
 
     # Trigger the Jenkins pipeline with parameters
-    jenkins_handler = Jenkins_trigger(jenkins_url, username, password, token)
-    jenkins_handler.trigger_jenkins_pipeline(job_name,config_path)
+    #jenkins_handler = Jenkins_trigger(jenkins_url, username, password, token)
+    #jenkins_handler.trigger_jenkins_pipeline(job_name,config_path)
     
-    #live_reading_dir('$HOME/dataset_10G_bc')
+    reader = Live_Reading('/home/rodolfo/dataset_10G_bc/test')
+    reader.live_reading_dir()
