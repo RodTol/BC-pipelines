@@ -5,6 +5,8 @@ import re
 import time
 import os
 import uuid
+from pod5.tools.parsers import prepare_pod5_inspect_argparser
+from pod5.tools.pod5_inspect import inspect_pod5
 
 class Jenkins_trigger:
 
@@ -84,10 +86,44 @@ class Live_Reading :
         self.input_dir = input_dir
 
     def __list_all_pod5_files(self) :
+        '''
+        This function will list only the closed files, which means
+        that they are fully copied into the filesystem. If a file is open, an
+        exception will be thrown and catched and a debug message printed. This
+        will continue until the file is closed 
+        '''
+        pod5_files = []
         all_files= os.listdir(self.input_dir)
-        pod5_files = [file for file in all_files if file.endswith('.pod5')]
-        return pod5_files
+        
+        for file in all_files:
+            # Check if it is .pod5
+            if file.endswith('.pod5'):
+                # Check if it is closed
+                path_to_file = os.path.join(self.input_dir, file)
 
+                # I have to parse the inputs with the provided parser
+                parser = prepare_pod5_inspect_argparser()
+                args = parser.parse_args(['debug', path_to_file])
+
+                # Redirect stdout in order to have no prints
+                sys.stdout = open(os.devnull, 'w')
+                try :
+                    inspect_pod5(command=args.command, input_files=args.input_files)
+                except Exception as exc:
+                    print(f"Failed to open file {file} due to {exc}")
+                finally:
+                    # Reset stdout to its default value
+                    sys.stdout = sys.__stdout__                    
+                    print('Added ', file , ' to the list')
+                    pod5_files.append(file)
+        return pod5_files        
+
+    def __update_unassigned_files (self, total_files, unassigned_files):
+        for file in total_files:
+            if file not in unassigned_files:
+                unassigned_files.append(file)
+        return unassigned_files
+    
     def __create_tmp_input_dir(self, batchid, batch):
         '''
         This function will create a dir called tmp_ASSIGNED inside the input_dir
@@ -112,8 +148,10 @@ class Live_Reading :
         3. Keep scanning the dir and repeat
         '''
         pod5_files = []
+        pod5_unassigned = []
         prev_total_files = 0
 
+        print("I am watching ", self.input_dir)
         while True:
             time.sleep(scanning_time)
             pod5_files = self.__list_all_pod5_files()
@@ -125,8 +163,13 @@ class Live_Reading :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
                 prev_total_files = curr_total_files
 
+                # Update unassigned files
+                unassigned_files = self.__update_unassigned_files(pod5_files, pod5_unassigned)
+                print("Unassigned files: ", unassigned_files)
                 batchid = str(uuid.uuid4().int)
                 print("Create and launch batch ", batchid)
+                
+                
                 #batch = 
                 #self.__create_tmp_input_dir(batchid, batch)
 

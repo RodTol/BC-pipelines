@@ -54,6 +54,5 @@ if __name__ == "__main__":
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
 
-    #mimic_live_writing(src_dir, dest_dir)
-
-    mimic_live_writing_groups(src_dir, dest_dir)
+    mimic_live_writing(src_dir, dest_dir)
+    #mimic_live_writing_groups(src_dir, dest_dir)
