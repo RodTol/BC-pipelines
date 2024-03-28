@@ -94,7 +94,9 @@ class Live_Reading :
         '''
         pod5_files = []
         all_files= os.listdir(self.input_dir)
-        
+
+        print(all_files)
+
         for file in all_files:
             # Check if it is .pod5
             if file.endswith('.pod5'):
@@ -110,12 +112,16 @@ class Live_Reading :
                 try :
                     inspect_pod5(command=args.command, input_files=args.input_files)
                 except Exception as exc:
-                    print(f"Failed to open file {file} due to {exc}")
-                finally:
-                    # Reset stdout to its default value
-                    sys.stdout = sys.__stdout__                    
+                    # This is how we handle this exception 
+                    sys.stdout = sys.__stdout__ 
+                    print(f"Failed to open file {file} due to {exc}") 
+                else:
+                    # But we must reset stdout to its default value every time
+                    sys.stdout = sys.__stdout__ 
                     print('Added ', file , ' to the list')
                     pod5_files.append(file)
+
+        print("Final list: ", pod5_files)
         return pod5_files        
 
     def __update_unassigned_files (self, total_files, unassigned_files):
@@ -136,15 +142,15 @@ class Live_Reading :
             os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
 
 
-    def live_reading_dir(self, threshold=5, scanning_time=2):
+    def live_reading_dir(self, threshold=5, scanning_time=5):
         '''
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
         Idea: 
         1. Each 10 seconds the dir will be scanned
         2. If # of files has reached a threshold, create a tmp dir with a work 
-        batch. Save what files have been assigned. For now the batch size is made of all the files
-        that have been added over the threshold
+        batch. Save what files have been assigned. For now the batch size is made
+        of all the files that have been added over the threshold
         3. Keep scanning the dir and repeat
         '''
         pod5_files = []
