@@ -5,8 +5,44 @@ import re
 import time
 import os
 import uuid
+# I need to rewrite the function in order to raise the exception!
+from pathlib import Path
+from typing import Callable, Dict, List
+import pod5
+from pod5.tools.pod5_inspect import do_debug_command, do_read_command, do_reads_command, do_summary_command
+from pod5.tools.utils import collect_inputs
 from pod5.tools.parsers import prepare_pod5_inspect_argparser
-from pod5.tools.pod5_inspect import inspect_pod5
+
+def inspect_pod5(
+    command: str, input_files: List[Path], recursive: bool = False, **kwargs
+):
+    """
+    Determine which inspect command to run from the parsed arguments and run it.
+
+    Rewrote by myself in order to throw an exception in case something went wrong
+    (like in my case the file is yet to to be finished to be copied).
+    """
+
+    commands: Dict[str, Callable] = {
+        "reads": do_reads_command,
+        "read": do_read_command,
+        "summary": do_summary_command,
+        "debug": do_debug_command,
+    }
+
+    for idx, filename in enumerate(
+        collect_inputs(input_files, recursive=recursive, pattern="*.pod5")
+    ):
+        try:
+            reader = pod5.Reader(filename)
+        except Exception as exc:
+            print(f"Failed to open pod5 file: {filename}: {exc}", file=sys.stderr)
+            raise #ONLY DIFFERENCE
+
+        kwargs["reader"] = reader
+        kwargs["write_header"] = idx == 0
+        commands[command](**kwargs)
+
 
 class Jenkins_trigger:
 
@@ -95,8 +131,6 @@ class Live_Reading :
         pod5_files = []
         all_files= os.listdir(self.input_dir)
 
-        print(all_files)
-
         for file in all_files:
             # Check if it is .pod5
             if file.endswith('.pod5'):
@@ -112,16 +146,14 @@ class Live_Reading :
                 try :
                     inspect_pod5(command=args.command, input_files=args.input_files)
                 except Exception as exc:
-                    # This is how we handle this exception 
+                    # This is how we handle this exception THAT IS NOT RAISEED
                     sys.stdout = sys.__stdout__ 
-                    print(f"Failed to open file {file} due to {exc}") 
+                    #print(f"Failed to open file {file} due to {exc}") 
                 else:
                     # But we must reset stdout to its default value every time
                     sys.stdout = sys.__stdout__ 
-                    print('Added ', file , ' to the list')
+                    #print('Added ', file , ' to the list')
                     pod5_files.append(file)
-
-        print("Final list: ", pod5_files)
         return pod5_files        
 
     def __update_unassigned_files (self, total_files, unassigned_files):
