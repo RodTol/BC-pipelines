@@ -118,8 +118,11 @@ class Jenkins_trigger:
 
 class Live_Reading :
 
-    def __init__(self, input_dir) :
+    def __init__(self, input_dir, Jenkins_handler, Jenkins_job_name, Jenkins_config) :
         self.input_dir = input_dir
+        self.Jenkins = Jenkins_handler
+        self.job_name = Jenkins_job_name 
+        self.config = Jenkins_config
 
     def __list_all_pod5_files(self) :
         '''
@@ -155,12 +158,21 @@ class Live_Reading :
                     #print('Added ', file , ' to the list')
                     pod5_files.append(file)
         return pod5_files        
-
-    def __update_unassigned_files (self, total_files, unassigned_files):
-        for file in total_files:
-            if file not in unassigned_files:
-                unassigned_files.append(file)
-        return unassigned_files
+    
+    def __create_batch(self,  all_files, assigned_files, size=5):
+        
+        if size>len(all_files)-len(assigned_files):
+            print("Error: batch is bigger than number of available files")
+            return None
+        batch = []
+        for file in all_files:
+            if file not in assigned_files:
+                batch.append(file)
+                assigned_files.append(file)
+        
+        #print("Batch: ", batch)    
+                
+        return batch
     
     def __create_tmp_input_dir(self, batchid, batch):
         '''
@@ -168,7 +180,7 @@ class Live_Reading :
         with a symlink to each file assigned to this batch
         '''
         tmp_dir = "_".join(["ASSIGNED", str(batchid)])
-        tmp_dir_fullpath = os.path.join(tmp_dir, self.input_dir)
+        tmp_dir_fullpath = os.path.join(self.input_dir, tmp_dir )
         os.mkdir(tmp_dir_fullpath)
         for fl in batch:
             os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
@@ -186,10 +198,10 @@ class Live_Reading :
         3. Keep scanning the dir and repeat
         '''
         pod5_files = []
-        pod5_unassigned = []
+        pod5_assigned = []
         prev_total_files = 0
+        print("\033[91mI am watching\033[0m: ", self.input_dir)
 
-        print("I am watching ", self.input_dir)
         while True:
             time.sleep(scanning_time)
             pod5_files = self.__list_all_pod5_files()
@@ -197,19 +209,31 @@ class Live_Reading :
             
             number_new_file = curr_total_files-prev_total_files
 
-            if number_new_file >=threshold :
+            print("Current amount of files : ", curr_total_files, "\n",
+                   "Previous : ", prev_total_files, "\n",
+                   "Number of assigned files : ", len(pod5_assigned))
+
+            if number_new_file >= threshold or curr_total_files-len(pod5_assigned)>=threshold :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
                 prev_total_files = curr_total_files
 
-                # Update unassigned files
-                unassigned_files = self.__update_unassigned_files(pod5_files, pod5_unassigned)
-                print("Unassigned files: ", unassigned_files)
+                #print("All files: ", pod5_files)
+                #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
+
+                # Update unassigned files and create a batch
+                batch = self.__create_batch(pod5_files, pod5_assigned, size=number_new_file)
                 batchid = str(uuid.uuid4().int)
+
+                #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
+
                 print("Create and launch batch ", batchid)
-                
-                
-                #batch = 
-                #self.__create_tmp_input_dir(batchid, batch)
+                self.__create_tmp_input_dir(batchid, batch)
+
+                self.Jenkins.trigger_jenkins_pipeline(self.job_name,self.config)
+                # How can I exit gracefully ? What tells me that 
+                # the writing has stopped ? 
+                # I need to dispatch of all the remaing files
+
 
 
 
@@ -224,14 +248,17 @@ if __name__ == "__main__":
     jenkins_url = "http://jenkins-sandbox.rd.areasciencepark.it:8080" 
     # Jenkins job name
     job_name = "tolloi/basecalling_pipeline"  
-    # Parameters for the Jenkins pipeline
+    # Parameters for the Jenkins pipeline. This will be used as a "template"
+    # and for each run we will modify:
+    # - run_name
+    # - basecalling input
+    # - basecalling output
     config_path = {
-        "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx.json",
+        "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_template.json",
     }
 
-    # Trigger the Jenkins pipeline with parameters
-    #jenkins_handler = Jenkins_trigger(jenkins_url, username, password, token)
-    #jenkins_handler.trigger_jenkins_pipeline(job_name,config_path)
+    # Create the Jenkins handler
+    jenkins_handler = Jenkins_trigger(jenkins_url, username, password, token)
     
-    reader = Live_Reading('/home/rodolfo/dataset_10G_bc/test')
+    reader = Live_Reading('/home/rodolfo/dataset_10G_bc/test', jenkins_handler, job_name, config_path)
     reader.live_reading_dir()
