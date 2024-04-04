@@ -1,0 +1,2 @@
+pod5==0.3.10
+python-jenkins==1.8.2

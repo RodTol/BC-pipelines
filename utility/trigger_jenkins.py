@@ -5,6 +5,8 @@ import re
 import time
 import os
 import uuid
+import json
+import shutil
 # I need to rewrite the function in order to raise the exception!
 from pathlib import Path
 from typing import Callable, Dict, List
@@ -12,6 +14,7 @@ import pod5
 from pod5.tools.pod5_inspect import do_debug_command, do_read_command, do_reads_command, do_summary_command
 from pod5.tools.utils import collect_inputs
 from pod5.tools.parsers import prepare_pod5_inspect_argparser
+
 
 def inspect_pod5(
     command: str, input_files: List[Path], recursive: bool = False, **kwargs
@@ -119,11 +122,11 @@ class Jenkins_trigger:
 
 class Live_Reading :
 
-    def __init__(self, input_dir, Jenkins_handler, Jenkins_job_name, Jenkins_config) :
+    def __init__(self, input_dir, Jenkins_handler, Jenkins_job_name, Jenkins_job_config) :
         self.input_dir = input_dir
         self.Jenkins = Jenkins_handler
         self.job_name = Jenkins_job_name 
-        self.config = Jenkins_config
+        self.job_config = Jenkins_job_config
 
     def __list_all_pod5_files(self) :
         '''
@@ -186,22 +189,48 @@ class Live_Reading :
         for fl in batch:
             os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
 
-    def _modify_configurations_file(self, parameters, batchid) :
+    def _modify_configurations_file(self, job_config_template, batchid) :
         '''
         This function needs to modify the config.json file in order
         to launch the basecalling from the batch temprary directory to a
         temporary selected output directory
         '''
-        run_id = "run_".join(str(batchid))
+        # Create path for the tmp JSON file
+        config_dir = os.path.dirname(job_config_template["configFilePath"])
+        tmp_config_name = f'config_{str(batchid)}.json'
+        path_for_tmp_config = os.path.join(config_dir, f'tmp_config/{tmp_config_name}')
+
+        # Copy the template file to the new location
+        shutil.copy(job_config["configFilePath"], path_for_tmp_config)
+
+        # Modify it
+        with open(path_for_tmp_config, 'r') as file:
+            tmp_config = json.load(file)
+
+        tmp_config['General']['run_name'] = "run_".join(str(batchid))
         
         tmp_input_dir = "_".join(["ASSIGNED", str(batchid)])
         tmp_input_dir_fullpath = os.path.join(self.input_dir, tmp_input_dir )
 
+        tmp_config['Basecalling']['input_dir'] = tmp_input_dir_fullpath
+
         tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
         tmp_output_dir_fullpath = os.path.join(self.input_dir, tmp_output_dir )
 
-        tmp_config = parameters
-        return tmp_config
+        tmp_config['Basecalling']['output_dir'] = tmp_output_dir_fullpath
+
+        # Convert the modified data structure back to JSON format
+        json_content = json.dumps(tmp_config, indent=2)
+
+        # Write the modified JSON content back to the copied file
+        with open(path_for_tmp_config, 'w') as file:
+            file.write(json_content)
+
+        jenkins_parameter =  {
+            "configFilePath": path_for_tmp_config,
+        }
+
+        return jenkins_parameter
 
     def live_reading_dir(self, threshold=5, scanning_time=5):
         '''
@@ -246,10 +275,12 @@ class Live_Reading :
                 print("Create and launch batch ", batchid)
                 self.__create_tmp_input_dir(batchid, batch)
 
-                tmp_config = self._modify_configurations_file(self.config, batchid)
-
-                self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_config)
+                tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
+                print(tmp_job_config)
+                self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
                 
+                # How can I use this on the login node ?
+
                 # How can I exit gracefully ? What tells me that 
                 # the writing has stopped ? 
                 # I need to dispatch of all the remaing files
@@ -273,12 +304,12 @@ if __name__ == "__main__":
     # - run_name
     # - basecalling input
     # - basecalling output
-    config_path = {
+    job_config = {
         "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_template.json",
     }
 
     # Create the Jenkins handler
     jenkins_handler = Jenkins_trigger(jenkins_url, username, password, token)
     
-    reader = Live_Reading('/home/rodolfo/dataset_10G_bc/test', jenkins_handler, job_name, config_path)
+    reader = Live_Reading('/home/rodolfo/dataset_10G_bc/test', jenkins_handler, job_name, job_config)
     reader.live_reading_dir()
