@@ -207,7 +207,7 @@ class Live_Reading :
         with open(path_for_tmp_config, 'r') as file:
             tmp_config = json.load(file)
 
-        tmp_config['General']['run_name'] = "run_".join(str(batchid))
+        tmp_config['General']['run_name'] = f"run_{str(batchid)}"
         
         tmp_input_dir = "_".join(["ASSIGNED", str(batchid)])
         tmp_input_dir_fullpath = os.path.join(self.input_dir, tmp_input_dir )
@@ -305,7 +305,8 @@ if __name__ == "__main__":
     # - basecalling input
     # - basecalling output
     job_config = {
-        "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_template.json",
+       # "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_template.json",
+       "configFilePath": "/home/rodolfo/BC-pipelines/configurations/config_1_dgx_template.json",
     }
 
     # Create the Jenkins handler
