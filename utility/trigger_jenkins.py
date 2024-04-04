@@ -83,6 +83,7 @@ class Jenkins_trigger:
                 elif stage == 'Send Report to User':
                     break
         print("Build is ", build_status)        
+ 
 
     def trigger_jenkins_pipeline(self, job_name, parameters):
         
@@ -185,6 +186,22 @@ class Live_Reading :
         for fl in batch:
             os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
 
+    def _modify_configurations_file(self, parameters, batchid) :
+        '''
+        This function needs to modify the config.json file in order
+        to launch the basecalling from the batch temprary directory to a
+        temporary selected output directory
+        '''
+        run_id = "run_".join(str(batchid))
+        
+        tmp_input_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_input_dir_fullpath = os.path.join(self.input_dir, tmp_input_dir )
+
+        tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_output_dir_fullpath = os.path.join(self.input_dir, tmp_output_dir )
+
+        tmp_config = parameters
+        return tmp_config
 
     def live_reading_dir(self, threshold=5, scanning_time=5):
         '''
@@ -229,7 +246,10 @@ class Live_Reading :
                 print("Create and launch batch ", batchid)
                 self.__create_tmp_input_dir(batchid, batch)
 
-                self.Jenkins.trigger_jenkins_pipeline(self.job_name,self.config)
+                tmp_config = self._modify_configurations_file(self.config, batchid)
+
+                self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_config)
+                
                 # How can I exit gracefully ? What tells me that 
                 # the writing has stopped ? 
                 # I need to dispatch of all the remaing files
