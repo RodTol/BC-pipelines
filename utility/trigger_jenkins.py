@@ -200,6 +200,8 @@ class Live_Reading :
         tmp_config_name = f'config_{str(batchid)}.json'
         path_for_tmp_config = os.path.join(config_dir, f'tmp_config/{tmp_config_name}')
 
+        print('path_for_tmp_config ', path_for_tmp_config)
+
         # Copy the template file to the new location
         shutil.copy(job_config["configFilePath"], path_for_tmp_config)
 
