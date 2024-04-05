@@ -17,61 +17,6 @@
             string(name: 'configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/configurations/config.json', description: 'Path to the config JSON file')
         }
         stages {
-            stage('Cleanup tmp dir') {
-                steps {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
-                        /*Logs dir cleanup*/
-                        sh '''
-                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                cd /u/area/jenkins_onpexp/scratch/jenkins_logs
-                                rm -rf tmp
-                                mkdir tmp
-                            '    
-                        '''
-                        /*Output dir cleanup*/
-                        /*
-                        sh '''
-                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                cd /u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/
-                                rm -rf tmp
-                                mkdir tmp
-                                mkdir tmp/pass
-                                mkdir tmp/fail
-                            '    
-                        '''
-                        */
-                        
-                        /*Input dir cleanup*/
-                        sh '''
-                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                cd /u/area/jenkins_onpexp/scratch/10G_dataset_POD5
-                                rm -rf ASSIGNED_*
-                                rm -rf FAILED_*
-                                rm -rf TMP_*
-                            '
-                        '''
-
-                        /*BC_software dir cleanup*/
-                        sh '''
-                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                cd /u/area/jenkins_onpexp/BC-pipelines/BC_software
-                                rm -rf server_node_*
-                                rm -rf __pycache__
-                            '
-                        '''
-
-
-                        /*Final_processing dir cleanup*/
-                        sh '''
-                            ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
-                                cd /u/area/jenkins_onpexp/BC-pipelines/Final_processing
-                                rm -f *.csv
-                            '
-                        '''
-
-                    }
-                }
-            }   
             stage('Pull project repository on the Cluster') {
                 steps {
                     script {
