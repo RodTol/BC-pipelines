@@ -203,6 +203,14 @@ class Live_Reading :
             template_config = json.load(file)
         base_output_dir = template_config['Basecalling']['output_dir']
 
+        # Create 'pass' directory
+        pass_dir = os.path.join(base_output_dir, 'pass')
+        os.makedirs(pass_dir, exist_ok=True)
+
+        # Create 'fail' directory
+        fail_dir = os.path.join(base_output_dir, 'fail')
+        os.makedirs(fail_dir, exist_ok=True)
+
         # Create path for the tmp JSON file
         config_dir = os.path.dirname(job_config_template["configFilePath"])
         tmp_config_name = f'config_{str(batchid)}.json'
