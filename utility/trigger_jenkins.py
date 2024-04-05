@@ -203,20 +203,12 @@ class Live_Reading :
             template_config = json.load(file)
         base_output_dir = template_config['Basecalling']['output_dir']
 
-        # Create 'pass' directory
-        pass_dir = os.path.join(base_output_dir, 'pass')
-        os.makedirs(pass_dir, exist_ok=True)
-
-        # Create 'fail' directory
-        fail_dir = os.path.join(base_output_dir, 'fail')
-        os.makedirs(fail_dir, exist_ok=True)
-
         # Create path for the tmp JSON file
         config_dir = os.path.dirname(job_config_template["configFilePath"])
         tmp_config_name = f'config_{str(batchid)}.json'
         path_for_tmp_config = os.path.join(config_dir, f'tmp_config/{tmp_config_name}')
 
-        print('path_for_tmp_config ', path_for_tmp_config)
+        #print('path_for_tmp_config ', path_for_tmp_config)
 
         # Copy the template file to the new location
         shutil.copy(job_config["configFilePath"], path_for_tmp_config)
@@ -234,7 +226,16 @@ class Live_Reading :
 
         tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
         tmp_output_dir_fullpath = os.path.join(base_output_dir, tmp_output_dir )
-        print('output dir ', tmp_output_dir_fullpath)
+
+        # Create 'pass' directory
+        pass_dir = os.path.join(tmp_output_dir_fullpath, 'pass')
+        os.makedirs(pass_dir, exist_ok=True)
+
+        # Create 'fail' directory
+        fail_dir = os.path.join(tmp_output_dir_fullpath, 'fail')
+        os.makedirs(fail_dir, exist_ok=True)
+
+        #print('output dir ', tmp_output_dir_fullpath)
 
         tmp_config['Basecalling']['output_dir'] = tmp_output_dir_fullpath
 
