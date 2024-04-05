@@ -309,8 +309,8 @@ if __name__ == "__main__":
     # - basecalling input
     # - basecalling output
     job_config = {
-       # "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_template.json",
-       "configFilePath": "~/BC-pipelines/configurations/config_1_dgx_template.json",
+       "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_template.json",
+       # "configFilePath": "/home/rodolfo/BC-pipelines/configurations/config_1_dgx_template.json",
     }
 
     # Create the Jenkins handler
