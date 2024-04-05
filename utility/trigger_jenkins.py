@@ -263,8 +263,8 @@ class Live_Reading :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
                 prev_total_files = curr_total_files
 
-                #print("All files: ", pod5_files)
-                #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
+                print("All files: ", pod5_files)
+                print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
                 # Update unassigned files and create a batch
                 batch = self.__create_batch(pod5_files, pod5_assigned, size=number_new_file)
