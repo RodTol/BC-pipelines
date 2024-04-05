@@ -197,6 +197,12 @@ class Live_Reading :
         to launch the basecalling from the batch temprary directory to a
         temporary selected output directory
         '''
+
+        # Get output directory from template
+        with open(job_config_template["configFilePath"], 'r') as file:
+            template_config = json.load(file)
+        base_output_dir = template_config['Basecalling']['output_dir']
+
         # Create path for the tmp JSON file
         config_dir = os.path.dirname(job_config_template["configFilePath"])
         tmp_config_name = f'config_{str(batchid)}.json'
@@ -219,7 +225,8 @@ class Live_Reading :
         tmp_config['Basecalling']['input_dir'] = tmp_input_dir_fullpath
 
         tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
-        tmp_output_dir_fullpath = os.path.join(self.input_dir, tmp_output_dir )
+        tmp_output_dir_fullpath = os.path.join(base_output_dir, tmp_output_dir )
+        print('output dir ', tmp_output_dir_fullpath)
 
         tmp_config['Basecalling']['output_dir'] = tmp_output_dir_fullpath
 
