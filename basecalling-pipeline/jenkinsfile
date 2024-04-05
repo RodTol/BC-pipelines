@@ -29,6 +29,7 @@
                             '    
                         '''
                         /*Output dir cleanup*/
+                        /*
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd /u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/
@@ -38,6 +39,7 @@
                                 mkdir tmp/fail
                             '    
                         '''
+                        */
                         
                         /*Input dir cleanup*/
                         sh '''
