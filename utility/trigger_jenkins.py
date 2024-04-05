@@ -137,6 +137,8 @@ class Live_Reading :
         '''
         pod5_files = []
         all_files= os.listdir(self.input_dir)
+        
+        print("Reading...")
 
         for file in all_files:
             # Check if it is .pod5
