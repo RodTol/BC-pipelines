@@ -116,7 +116,7 @@ class Live_Reading :
         for fl in batch:
             os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
 
-    def _create_tmp_output_dir(base_output_dir, batchid):
+    def _create_tmp_output_dir(self, base_output_dir, batchid):
         tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
         tmp_output_dir_fullpath = os.path.join(base_output_dir, tmp_output_dir )
 
