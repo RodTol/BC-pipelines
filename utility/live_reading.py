@@ -52,7 +52,7 @@ class Live_Reading :
         self.job_name = Jenkins_job_name 
         self.job_config = Jenkins_job_config
 
-    def __list_all_pod5_files(self) :
+    def _list_all_pod5_files(self) :
         '''
         This function will list only the closed files, which means
         that they are fully copied into the filesystem. If a file is open, an
@@ -89,7 +89,7 @@ class Live_Reading :
                     pod5_files.append(file)
         return pod5_files        
     
-    def __create_batch(self,  all_files, assigned_files, size=5):
+    def _create_batch(self,  all_files, assigned_files, size=5):
         
         if size>len(all_files)-len(assigned_files):
             print("Error: batch is bigger than number of available files")
@@ -104,7 +104,7 @@ class Live_Reading :
                 
         return batch
     
-    def __create_tmp_input_dir(self, batchid, batch):
+    def _create_tmp_input_dir(self, batchid, batch):
         '''
         This function will create a dir called tmp_ASSIGNED inside the input_dir
         with a symlink to each file assigned to this batch
@@ -115,6 +115,20 @@ class Live_Reading :
         for fl in batch:
             os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
 
+    def _create_tmp_output_dir(base_output_dir, batchid):
+        tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_output_dir_fullpath = os.path.join(base_output_dir, tmp_output_dir )
+
+        # Create 'pass' directory
+        pass_dir = os.path.join(tmp_output_dir_fullpath, 'pass')
+        os.makedirs(pass_dir, exist_ok=True)
+
+        # Create 'fail' directory
+        fail_dir = os.path.join(tmp_output_dir_fullpath, 'fail')
+        os.makedirs(fail_dir, exist_ok=True)
+
+        return tmp_output_dir_fullpath
+    
     def _modify_configurations_file(self, job_config_template, batchid) :
         '''
         This function needs to modify the config.json file in order
@@ -122,7 +136,7 @@ class Live_Reading :
         temporary selected output directory
         '''
 
-        # Get output directory from template
+        # Get the output directory from template config
         with open(job_config_template["configFilePath"], 'r') as file:
             template_config = json.load(file)
         base_output_dir = template_config['Basecalling']['output_dir']
@@ -145,22 +159,9 @@ class Live_Reading :
         
         tmp_input_dir = "_".join(["ASSIGNED", str(batchid)])
         tmp_input_dir_fullpath = os.path.join(self.input_dir, tmp_input_dir )
-
         tmp_config['Basecalling']['input_dir'] = tmp_input_dir_fullpath
 
-        tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
-        tmp_output_dir_fullpath = os.path.join(base_output_dir, tmp_output_dir )
-
-        # Create 'pass' directory
-        pass_dir = os.path.join(tmp_output_dir_fullpath, 'pass')
-        os.makedirs(pass_dir, exist_ok=True)
-
-        # Create 'fail' directory
-        fail_dir = os.path.join(tmp_output_dir_fullpath, 'fail')
-        os.makedirs(fail_dir, exist_ok=True)
-
-        #print('output dir ', tmp_output_dir_fullpath)
-
+        tmp_output_dir_fullpath = self._create_tmp_output_dir(base_output_dir, batchid)
         tmp_config['Basecalling']['output_dir'] = tmp_output_dir_fullpath
 
         # Convert the modified data structure back to JSON format
@@ -194,7 +195,7 @@ class Live_Reading :
 
         while True:
             time.sleep(scanning_time)
-            pod5_files = self.__list_all_pod5_files()
+            pod5_files = self._list_all_pod5_files()
             curr_total_files = len(pod5_files)
             
             number_new_file = curr_total_files-prev_total_files
@@ -211,13 +212,13 @@ class Live_Reading :
                 print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
                 # Update unassigned files and create a batch
-                batch = self.__create_batch(pod5_files, pod5_assigned, size=number_new_file)
+                batch = self._create_batch(pod5_files, pod5_assigned, size=number_new_file)
                 batchid = str(uuid.uuid4().int)
 
                 #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
                 print("Create and launch batch ", batchid)
-                self.__create_tmp_input_dir(batchid, batch)
+                self._create_tmp_input_dir(batchid, batch)
 
                 tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
                 print(tmp_job_config)

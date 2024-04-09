@@ -19,7 +19,7 @@ class Jenkins_trigger:
         print('Hello %s from Jenkins %s' % (user['fullName'], version))
 
 
-    def __get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
+    def _get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
         while build_status not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
             console_output = self.server.get_build_console_output(job_name, build_number)
             #print(console_output)
@@ -28,7 +28,7 @@ class Jenkins_trigger:
                     if line.endswith("[Pipeline] stage") and i < len(console_output.split('\n')) - 1:
                         last_stage_line = console_output.split('\n')[i + 1]
 
-            print(last_stage_line)
+            #print(last_stage_line)
             
             pattern = r'\((.*?)\)'
             match = re.search(pattern, last_stage_line)    
@@ -74,4 +74,4 @@ class Jenkins_trigger:
         print("Timestamp (UTC):", timestamp_date)
         print("url", build_info['url'])
 
-        self.__get_current_stage(job_name, build_info['number'], build_info['result'])
+        self._get_current_stage(job_name, build_info['number'], build_info['result'])
