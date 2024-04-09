@@ -2,7 +2,7 @@ import time
 import os
 import uuid
 import json
-import datetime import datetime
+from datetime import datetime
 import sys
 import shutil
 # I need to rewrite the function in order to raise the exception!
