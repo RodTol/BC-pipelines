@@ -87,6 +87,7 @@ class Live_Reading :
                     sys.stdout = sys.__stdout__ 
                     #print('Added ', file , ' to the list')
                     pod5_files.append(file)
+                    print(f'Appended file {file}')
         return pod5_files        
     
     def _create_batch(self,  all_files, assigned_files, size=5):
