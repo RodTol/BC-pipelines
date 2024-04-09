@@ -69,7 +69,7 @@ if ((my_index == host_index)); then
 fi
 
 # Start BCProcessor
-BC_processor_log_path="/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/BCProcessor_log_$SLURM_NODELIST.txt"
+BC_processor_log_path="${logs_dir}/BCProcessor_log_$SLURM_NODELIST.txt"
 python3 ~/BC-pipelines/BC_software/BCProcessors.py $json_file $my_index >> $BC_processor_log_path 2>&1 
 
 wait

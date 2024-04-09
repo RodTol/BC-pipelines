@@ -88,7 +88,7 @@ class Live_Reading :
                     sys.stdout = sys.__stdout__ 
                     #print('Added ', file , ' to the list')
                     pod5_files.append(file)
-                    print(f'Appended file {file} at ', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    print(f'Appended file {file} at ', datetime.now().strftime("%H:%M:%S"))
         return pod5_files        
     
     def _create_batch(self,  all_files, assigned_files, size=5):
@@ -108,17 +108,17 @@ class Live_Reading :
     
     def _create_tmp_input_dir(self, batchid, batch):
         '''
-        This function will create a dir called tmp_ASSIGNED inside the input_dir
+        This function will create a dir called tmp_BATCH inside the input_dir
         with a symlink to each file assigned to this batch
         '''
-        tmp_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_dir = "_".join(["BATCH", str(batchid)])
         tmp_dir_fullpath = os.path.join(self.input_dir, tmp_dir )
         os.mkdir(tmp_dir_fullpath)
         for fl in batch:
             os.symlink(os.path.join(self.input_dir, fl), os.path.join(tmp_dir_fullpath, fl))
 
     def _create_tmp_output_dir(self, base_output_dir, batchid):
-        tmp_output_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_output_dir = "_".join(["BATCH", str(batchid)])
         tmp_output_dir_fullpath = os.path.join(base_output_dir, tmp_output_dir )
 
         # Create 'pass' directory
@@ -160,14 +160,15 @@ class Live_Reading :
 
         tmp_config['General']['run_name'] = f"run_{str(batchid)}"
         
-        tmp_input_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_input_dir = "_".join(["BATCH", str(batchid)])
         tmp_input_dir_fullpath = os.path.join(self.input_dir, tmp_input_dir )
         tmp_config['Basecalling']['input_dir'] = tmp_input_dir_fullpath
 
         tmp_output_dir_fullpath = self._create_tmp_output_dir(template_output_dir, batchid)
         tmp_config['Basecalling']['output_dir'] = tmp_output_dir_fullpath
 
-        tmp_logs_dir = "_".join(["ASSIGNED", str(batchid)])
+        # Basecalling log dir
+        tmp_logs_dir = "_".join(["BATCH", str(batchid)])
         tmp_logs_dir_fullpath = os.path.join(template_logs_dir, tmp_logs_dir)
         tmp_config['Basecalling']['logs_dir'] = tmp_logs_dir_fullpath
 
