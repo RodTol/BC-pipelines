@@ -2,6 +2,7 @@ import time
 import os
 import uuid
 import json
+import datetime
 import sys
 import shutil
 # I need to rewrite the function in order to raise the exception!
@@ -87,7 +88,7 @@ class Live_Reading :
                     sys.stdout = sys.__stdout__ 
                     #print('Added ', file , ' to the list')
                     pod5_files.append(file)
-                    print(f'Appended file {file}')
+                    print(f'Appended file {file} at ', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         return pod5_files        
     
     def _create_batch(self,  all_files, assigned_files, size=5):
@@ -140,7 +141,8 @@ class Live_Reading :
         # Get the output directory from template config
         with open(job_config_template["configFilePath"], 'r') as file:
             template_config = json.load(file)
-        base_output_dir = template_config['Basecalling']['output_dir']
+        template_output_dir = template_config['Basecalling']['output_dir']
+        template_logs_dir = template_config['Basecalling']['logs_dir']
 
         # Create path for the tmp JSON file
         config_dir = os.path.dirname(job_config_template["configFilePath"])
@@ -162,8 +164,12 @@ class Live_Reading :
         tmp_input_dir_fullpath = os.path.join(self.input_dir, tmp_input_dir )
         tmp_config['Basecalling']['input_dir'] = tmp_input_dir_fullpath
 
-        tmp_output_dir_fullpath = self._create_tmp_output_dir(base_output_dir, batchid)
+        tmp_output_dir_fullpath = self._create_tmp_output_dir(template_output_dir, batchid)
         tmp_config['Basecalling']['output_dir'] = tmp_output_dir_fullpath
+
+        tmp_logs_dir = "_".join(["ASSIGNED", str(batchid)])
+        tmp_logs_dir_fullpath = os.path.join(template_logs_dir, tmp_logs_dir)
+        tmp_config['Basecalling']['logs_dir'] = tmp_logs_dir_fullpath
 
         # Convert the modified data structure back to JSON format
         json_content = json.dumps(tmp_config, indent=2)

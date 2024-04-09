@@ -19,6 +19,7 @@ if __name__ == "__main__":
     # - run_name
     # - basecalling input
     # - basecalling output
+    # - logs dir
     job_config = {
        "configFilePath": "/u/area/jenkins_onpexp/BC-pipelines/configurations/config_1_dgx_template.json",
        # "configFilePath": "/home/rodolfo/BC-pipelines/configurations/config_1_dgx_template.json",
