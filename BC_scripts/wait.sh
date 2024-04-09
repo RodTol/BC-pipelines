@@ -26,7 +26,7 @@ CHAT_ID="-4074077922"
 start_time=$(date +%s)
 interval=300 
 
-send_message "Job $JOB_ID is queued at $(date +"%H:%M:%S")"
+send_message "Job $JOB_ID is queued at $(date +"%H:%M:%S")" > /dev/null
 
 # Loop until the job is completed
 while check_job_status; do
