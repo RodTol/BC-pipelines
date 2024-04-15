@@ -27,9 +27,9 @@ echo -e "${RED}I am this node_name: $node_name${RESET}, and for Slurm: $SLURM_NO
 if  [ "$node_name" == "" ]; then
   echo -e "${RED}Update node_name from $node_name to $SLURM_NODELIST${RESET}"
   # Modify the JSON file
-  jq --arg assigned_node "$SLURM_NODELIST" --argjson my_index "$my_index" '.Resources.nodes_list[$my_index] = $assigned_node' $json_file > temp.json
+  jq --arg assigned_node "$SLURM_NODELIST" --argjson my_index "$my_index" '.Resources.nodes_list[$my_index] = $assigned_node' $json_file > temp_$SLURM_NODELIST.json
   # Rename temp.json to config.json to overwrite the original file
-  mv temp.json $json_file 
+  mv temp_$SLURM_NODELIST.json $json_file 
   node_name=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
 fi
 echo $CUDA_VISIBLE_DEVICES
