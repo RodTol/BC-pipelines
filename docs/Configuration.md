@@ -41,8 +41,9 @@ The JSON file has the following structures:
   - `index_host`: an integer number that selects what node from `nodes_list` will host the BCManager;
   - `nodes_queue`: list composed by the Slurm partition for each of the nodes;
   - `nodes_list`: the list of nodes that will perform the basecalling;
-  {: .warning}
+  {: .warning }
   > If no nodes are specified, let slurm decide what node to pick. It is necessary to specify the host node if the run is shared among 2+ nodes;
+
   - `nodes_ip`: list of the ip of the selected nodes (usually on network 2);
   - `nodes_cpus`: list with the value of how many cores will be allocated to each node;
   - `nodes_gpus`: list of how many GPUs will be allocated by each node. If a node does not require this parameter, it needs to be setup to "None"
