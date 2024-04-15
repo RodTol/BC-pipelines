@@ -40,6 +40,7 @@ if  [ "$node_name" == "" ]; then
   jq --arg assigned_node "$SLURM_NODELIST" --argjson my_index "$my_index" '.Resources.nodes_list[$my_index] = $assigned_node' $json_file > temp.json
   # Rename temp.json to config.json to overwrite the original file
   mv temp.json $json_file 
+fi
 
 # Each node has its own dir with the port file for the connection
 mkdir ~/BC-pipelines/BC_software/server_node_$SLURM_NODELIST
