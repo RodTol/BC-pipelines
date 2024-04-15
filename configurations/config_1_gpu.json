@@ -19,7 +19,7 @@
     "Resources": {
       "index_host" : "0",
       "nodes_queue" : ["GPU"],
-      "nodes_list" : ["gpu004"],
+      "nodes_list" : [""],
       "nodes_ip" : ["10.128.2.154"],
       "nodes_cpus" : ["24"],
       "nodes_mem" : ["200GB"],
