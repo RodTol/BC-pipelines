@@ -23,6 +23,15 @@ gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]
 
 # Brief output for checking everything it's correct
 echo -e "${RED}I am this node_name: $node_name${RESET}, and for Slurm: $SLURM_NODELIST"
+# Update config.json file
+if  [ "$node_name" == "" ]; then
+  echo -e "${RED}Update node_name from $node_name to $SLURM_NODELIST${RESET}"
+  # Modify the JSON file
+  jq --arg assigned_node "$SLURM_NODELIST" --argjson my_index "$my_index" '.Resources.nodes_list[$my_index] = $assigned_node' $json_file > temp.json
+  # Rename temp.json to config.json to overwrite the original file
+  mv temp.json $json_file 
+  node_name=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
+fi
 echo $CUDA_VISIBLE_DEVICES
 echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 echo -e "${RED}-----------------------${RESET}"
@@ -33,18 +42,9 @@ echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
 echo -e "${RED}-----------------------${RESET}"
 
-# Update config.json file
-if  [ "$node_name" == "" ]; then
-  echo "Update node_name from $node_name to $SLURM_NODELIST"
-  # Modify the JSON file
-  jq --arg assigned_node "$SLURM_NODELIST" --argjson my_index "$my_index" '.Resources.nodes_list[$my_index] = $assigned_node' $json_file > temp.json
-  # Rename temp.json to config.json to overwrite the original file
-  mv temp.json $json_file 
-fi
-
 # Each node has its own dir with the port file for the connection
-mkdir ~/BC-pipelines/BC_software/server_node_$SLURM_NODELIST
-cd ~/BC-pipelines/BC_software/server_node_$SLURM_NODELIST
+mkdir ~/BC-pipelines/BC_software/server_node_$node_name
+cd ~/BC-pipelines/BC_software/server_node_$node_name
 
 # Starting the dorado_basecall_server, using the script
 echo "Launching the server"
@@ -56,10 +56,10 @@ sleep 5
 # do not share python
 if [ "$node_queue" == "DGX" ]; then
   source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
-  echo -e "${CYAN}$SLURM_NODELIST is loading DGX venv, given ${node_queue}${RESET}"
+  echo -e "${CYAN}$node_name is loading DGX venv, given ${node_queue}${RESET}"
 elif [ "$node_queue" == "GPU" ]; then
   source /u/area/jenkins_onpexp/python_venvs/GPU_dorado_venv/bin/activate
-  echo -e "${CYAN}$SLURM_NODELIST is loading GPU venv, given ${node_queue}${RESET}"
+  echo -e "${CYAN}$node_name is loading GPU venv, given ${node_queue}${RESET}"
 else
   echo -e "${RED}SOMETHING WRONG IN THE VIRTUALENV FOR BC SOFTWARE${RESET}"
 fi
@@ -71,14 +71,14 @@ if ((my_index == host_index)); then
 
   sleep 5
   
-  BC_controller_log_path=${logs_dir}/BCController_log_$SLURM_NODELIST.txt
+  BC_controller_log_path=${logs_dir}/BCController_log_$node_name.txt
   python3 ~/BC-pipelines/BC_software/BCController.py $json_file $my_index >> "$BC_controller_log_path" 2>&1 &
   
   sleep 5
 fi
 
 # Start BCProcessor
-BC_processor_log_path="${logs_dir}/BCProcessor_log_$SLURM_NODELIST.txt"
+BC_processor_log_path="${logs_dir}/BCProcessor_log_$node_name.txt"
 python3 ~/BC-pipelines/BC_software/BCProcessors.py $json_file $my_index >> $BC_processor_log_path 2>&1 
 
 wait
