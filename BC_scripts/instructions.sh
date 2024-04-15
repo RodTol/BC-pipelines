@@ -21,17 +21,14 @@ input_dir=$(jq -r '.Basecalling.input_dir' "$json_file") #debug
 output_dir=$(jq -r '.Basecalling.output_dir' "$json_file") #debug
 gpus_settings=$(jq -r --argjson my_index "$my_index" '.Resources.gpus[$my_index]' "$json_file") #debug
 
-# Brief output for checking everything it's correct
 echo -e "${RED}I am this node_name: $node_name${RESET}, and for Slurm: $SLURM_NODELIST"
+
 # Update config.json file
 if  [ "$node_name" == "" ]; then
-  echo -e "${RED}Update node_name from $node_name to $SLURM_NODELIST${RESET}"
-  # Modify the JSON file
-  jq --arg assigned_node "$SLURM_NODELIST" --argjson my_index "$my_index" '.Resources.nodes_list[$my_index] = $assigned_node' $json_file > temp_$SLURM_NODELIST.json
-  # Rename temp.json to config.json to overwrite the original file
-  mv temp_$SLURM_NODELIST.json $json_file 
-  node_name=$(jq -r --argjson my_index "$my_index" '.Resources.nodes_list[$my_index]' "$json_file")
+  echo -e "${RED}|||Update node_name from $node_name to $SLURM_NODELIST|||${RESET}"
+  node_name=$SLURM_NODELIST
 fi
+# Brief output for checking everything it's correct
 echo $CUDA_VISIBLE_DEVICES
 echo -e "${RED}GPUs selected: $gpus_settings${RESET}"
 echo -e "${RED}-----------------------${RESET}"
