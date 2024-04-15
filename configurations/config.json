@@ -22,6 +22,7 @@
       "nodes_list" : ["dgx001", "gpu003","gpu004"],
       "nodes_ip" : ["10.128.2.161", "10.128.2.153", "10.128.2.154"],
       "nodes_cpus" : ["64", "24", "24"],
+      "nodes_mem" : ["200GB", "200GB", "200GB"],
       "nodes_gpus" : ["1", "None", "None"],
       "gpus" : ["cuda:all", "cuda:all", "cuda:all"],
       "batch_size_list" : ["2", "2", "2"]

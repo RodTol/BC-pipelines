@@ -22,6 +22,7 @@
       "nodes_list" : ["dgx001"],
       "nodes_ip" : ["10.128.2.161"],
       "nodes_cpus" : ["64"],
+      "nodes_mem" : ["200GB"],
       "nodes_gpus" : ["2"],
       "gpus" : ["cuda:all"],
       "batch_size_list" : ["3"]

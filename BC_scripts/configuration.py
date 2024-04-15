@@ -34,7 +34,8 @@ def create_sbatch_file(config):
             sbatch_file.write(f" --nodelist={config['Resources']['nodes_list'][i]}")
             sbatch_file.write(f" --nodes=1 --ntasks-per-node=1")
             sbatch_file.write(f" --cpus-per-task={config['Resources']['nodes_cpus'][i]}")
-            
+            sbatch_file.write(f" --mem={config['Resources']['nodes_mem'][i]}")
+
             if config['Resources']['nodes_gpus'][i] != "None":
                 sbatch_file.write(f" --gpus {config['Resources']['nodes_gpus'][i]}\n")
             else:
