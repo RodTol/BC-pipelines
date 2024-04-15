@@ -34,8 +34,8 @@ echo "Output Directory: $output_dir"
 echo -e "${RED}-----------------------${RESET}"
 
 # Each node has its own dir with the port file for the connection
-mkdir ~/BC-pipelines/BC_software/server_node_${node_name}
-cd ~/BC-pipelines/BC_software/server_node_${node_name}
+mkdir ~/BC-pipelines/BC_software/server_node_$SLURM_NODELIST
+cd ~/BC-pipelines/BC_software/server_node_$SLURM_NODELIST
 
 # Starting the dorado_basecall_server, using the script
 echo "Launching the server"
@@ -62,7 +62,7 @@ if ((my_index == host_index)); then
 
   sleep 5
   
-  BC_controller_log_path=${logs_dir}/BCController_log_$node_name.txt
+  BC_controller_log_path=${logs_dir}/BCController_log_$SLURM_NODELIST.txt
   python3 ~/BC-pipelines/BC_software/BCController.py $json_file $my_index >> "$BC_controller_log_path" 2>&1 &
   
   sleep 5
