@@ -19,8 +19,8 @@
     "Resources": {
       "index_host" : "0", 
       "nodes_queue" : ["DGX", "GPU", "GPU"],
-      "nodes_list" : ["dgx001", "gpu003","gpu004"],
-      "nodes_ip" : ["10.128.2.161", "10.128.2.153", "10.128.2.154"],
+      "nodes_list" : ["dgx002", "",""],
+      "nodes_ip" : ["10.128.2.161", "", ""],
       "nodes_cpus" : ["64", "24", "24"],
       "nodes_mem" : ["200GB", "200GB", "200GB"],
       "nodes_gpus" : ["1", "None", "None"],
