@@ -10,3 +10,8 @@ nav:
   - BC_software
   - BC_scripts
   - TODO
+
+callouts:
+  warning:
+    title: Warning ⚠️
+    color: red
