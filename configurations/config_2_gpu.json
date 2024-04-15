@@ -19,11 +19,11 @@
     "Resources": {
       "index_host" : "0",
       "nodes_queue" : ["GPU", "GPU"],
-      "nodes_list" : ["gpu002", "gpu003"],
-      "nodes_ip" : ["10.128.2.152", "10.128.2.153"],
+      "nodes_list" : ["", ""],
+      "nodes_ip" : ["", ""],
       "nodes_cpus" : ["24", "24"],
       "nodes_mem" : ["200GB", "200GB"],
-      "nodes_gpus" : ["2", "2"],
+      "nodes_gpus" : ["", ""],
       "gpus" : ["cuda:all", "cuda:all"],
       "batch_size_list" : ["3", "3"]
     }
