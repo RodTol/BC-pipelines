@@ -23,7 +23,7 @@
       "nodes_ip" : ["", ""],
       "nodes_cpus" : ["24", "24"],
       "nodes_mem" : ["200GB", "200GB"],
-      "nodes_gpus" : ["", ""],
+      "nodes_gpus" : ["None", "None"],
       "gpus" : ["cuda:all", "cuda:all"],
       "batch_size_list" : ["3", "3"]
     }
