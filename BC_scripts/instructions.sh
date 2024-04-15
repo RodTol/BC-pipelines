@@ -33,6 +33,14 @@ echo "Input Directory: $input_dir"
 echo "Output Directory: $output_dir"
 echo -e "${RED}-----------------------${RESET}"
 
+# Update config.json file
+if  [ "$node_name" == "" ]; then
+  echo "Update node_name from $node_name to $SLURM_NODELIST"
+  # Modify the JSON file
+  jq --arg assigned_node "$SLURM_NODELIST" --argjson my_index "$my_index" '.Resources.nodes_list[$my_index] = $assigned_node' $json_file > temp.json
+  # Rename temp.json to config.json to overwrite the original file
+  mv temp.json $json_file 
+
 # Each node has its own dir with the port file for the connection
 mkdir ~/BC-pipelines/BC_software/server_node_$SLURM_NODELIST
 cd ~/BC-pipelines/BC_software/server_node_$SLURM_NODELIST
