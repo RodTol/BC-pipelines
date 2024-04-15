@@ -10,10 +10,26 @@ def load_json(json_file):
         data = json.load(file)
         return data
 
+def extrapolate_node_names(config, path_BCP_log):
+    nodes_list = []
+    for filename in os.listdir(path_BCP_log):
+        if filename.startswith("BCProcessor_log_"):
+            name = filename.split("_")[-1].split(".")[0]
+            nodes_list.append(name)
+
+    number_of_nodes = len(config['Resources']['nodes_list'])
+    if  number_of_nodes != len(nodes_list):
+        raise
+    
+    return nodes_list    
 
 def parse_BCP_logs(config, path_BCP_log):
+
     # List of node names
-    nodes_list = config['Resources']['nodes_list']
+    try :
+        nodes_list = extrapolate_node_names(config, path_BCP_log)
+    except Exception as exc:
+        print("Something went wrong. Log files indicates a different number of nodes")
 
     # Create a CSV file to store the extracted information
     csv_filename = 'output_' + config['General']['run_name'] + '.csv'
