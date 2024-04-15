@@ -47,10 +47,10 @@ sleep 5
 # do not share python
 if [ "$node_queue" == "DGX" ]; then
   source /u/area/jenkins_onpexp/python_venvs/DGX_dorado_venv/bin/activate
-  echo -e "${CYAN}${node_name} is loading DGX venv, given $SLURM_NODELIST${RESET}"
+  echo -e "${CYAN}$SLURM_NODELIST is loading DGX venv, given ${node_queue}${RESET}"
 elif [ "$node_queue" == "GPU" ]; then
   source /u/area/jenkins_onpexp/python_venvs/GPU_dorado_venv/bin/activate
-  echo -e "${CYAN}${node_name} is loading GPU venv, given $SLURM_NODELIST${RESET}"
+  echo -e "${CYAN}$SLURM_NODELIST is loading GPU venv, given ${node_queue}${RESET}"
 else
   echo -e "${RED}SOMETHING WRONG IN THE VIRTUALENV FOR BC SOFTWARE${RESET}"
 fi
