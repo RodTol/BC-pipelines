@@ -13,4 +13,5 @@
 source=/u/area/jenkins_onpexp/scratch/10G_dataset_POD5
 dest=/u/area/jenkins_onpexp/scratch/test_10G_dataset_POD5
 
+source /u/area/jenkins_onpexp/python_venvs/epyc_venv_jenkins/bin/activate
 python3 /u/area/jenkins_onpexp/BC-pipelines/utility/data_flow_emulator.py $source $dest

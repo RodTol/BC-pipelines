@@ -10,4 +10,5 @@
 #SBATCH --cpus-per-task=6
 #SBATCH --mem=10GB
 
+source /u/area/jenkins_onpexp/python_venvs/epyc_venv_jenkins/bin/activate
 python3 /u/area/jenkins_onpexp/BC-pipelines/utility/main.py Alfredo95 elefante
