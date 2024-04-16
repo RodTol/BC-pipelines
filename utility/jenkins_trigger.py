@@ -42,8 +42,8 @@ class Jenkins_trigger:
                 stage = match.group(1)
                 if previous_stage != stage:
                     timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                    print(f"{timestamp} - Stage : {stage}")
-                    print("Build is ", build_status)
+                    print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
+                    print("\033[36m" + "Build is " + "\033[0m", build_status)
                     previous_stage = stage
                 elif stage == 'Send Report to User':
                     break
