@@ -60,6 +60,7 @@ for index, row in df.iterrows():
 
 # Customize the plot
 plt.ylabel('Samples/s')
+plt.xlabel('Run')
 plt.title('Samples/s')
 plt.legend()
 plt.xticks(range(len(df)), df.index)
