@@ -233,7 +233,7 @@ class Live_Reading :
                 print(tmp_job_config)
                 self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
                 counter = 0
-            else :
+            if number_new_file==0:
                 # How can I exit gracefully ? What tells me that the writing has stopped ? 
                 # I need to dispatch of all the remaing files
                 # This is a temporary solution that if the directory does not change for 
