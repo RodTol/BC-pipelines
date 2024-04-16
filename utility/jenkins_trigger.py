@@ -25,6 +25,7 @@ class Jenkins_trigger:
             #print(console_output)
 
             for i,line in enumerate(console_output.split('\n')):
+                    last_stage_line = console_output.split('\n')[i + 1]
                     if line.endswith("[Pipeline] stage") and i < len(console_output.split('\n')) - 1:
                         last_stage_line = console_output.split('\n')[i + 1]
 
