@@ -24,7 +24,7 @@ class Jenkins_trigger:
             try :
                 console_output = self.server.get_build_console_output(job_name, build_number)
             except Exception as exc:
-                print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),  " Reconnecting")
+                print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),  " Reconnecting", flush=True)
                 self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
                 console_output = self.server.get_build_console_output(job_name, build_number)
             #print(console_output)
@@ -78,6 +78,6 @@ class Jenkins_trigger:
         print("\033[91mResult:", build_info['result'], "\033[0m")
         print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
         print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
-        print("\033[91murl", build_info['url'], "\033[0m")
+        print("\033[91murl", build_info['url'], "\033[0m", flush=True)
 
         self._get_current_stage(job_name, build_info['number'], build_info['result'])
