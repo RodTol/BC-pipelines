@@ -232,8 +232,6 @@ class Live_Reading :
                 print(tmp_job_config)
                 self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
                 
-                # How can I use this on the login node ?
-
                 # How can I exit gracefully ? What tells me that 
                 # the writing has stopped ? 
                 # I need to dispatch of all the remaing files

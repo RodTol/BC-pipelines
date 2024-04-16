@@ -23,9 +23,8 @@ class Jenkins_trigger:
         while build_status not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
             console_output = self.server.get_build_console_output(job_name, build_number)
             #print(console_output)
-
+            last_stage_line = ""
             for i,line in enumerate(console_output.split('\n')):
-                    last_stage_line = console_output.split('\n')[i + 1]
                     if line.endswith("[Pipeline] stage") and i < len(console_output.split('\n')) - 1:
                         last_stage_line = console_output.split('\n')[i + 1]
 
