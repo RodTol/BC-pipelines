@@ -86,7 +86,7 @@
                         sh '''
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd ~/BC-pipelines/Final_processing
-                                python final_report.py '${configFilePath}' ~/scratch/jenkins_logs/tmp
+                                python final_report.py '${configFilePath}'
 
                                 run_name=$(jq -r '.General.run_name' '${configFilePath}' )
 
