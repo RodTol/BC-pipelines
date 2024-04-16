@@ -23,7 +23,9 @@ def extrapolate_node_names(config, path_BCP_log):
     
     return nodes_list    
 
-def parse_BCP_logs(config, path_BCP_log):
+def parse_BCP_logs(config):
+
+    path_BCP_log = config["Basecalling"]["logs_dir"]
 
     # List of node names
     try :
@@ -130,17 +132,16 @@ def rework_csv(csv_filename):
 
 if __name__ == "__main__":
     # Check if the correct number of command-line arguments is provided
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         print("Error!")
         print("Usage: python script.py <path_to_json_file>")
         sys.exit(1)
     
     # Load the configuration from the specified JSON file
     json_file = sys.argv[1]
-    path_BCP_log = sys.argv[2]
-
     config = load_json(json_file)
 
-    csv_filename = parse_BCP_logs(config, path_BCP_log)
+
+    csv_filename = parse_BCP_logs(config)
 
     rework_csv(csv_filename)
