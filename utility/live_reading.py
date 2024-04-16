@@ -211,7 +211,7 @@ class Live_Reading :
 
             print("\033[32m" + "Current amount of files : " + "\033[0m", curr_total_files, "\n",
                 "\033[32m" + "Previous : " + "\033[0m", prev_total_files, "\n",
-                "\033[32m" + "Number of assigned files : " + "\033[0m", len(pod5_assigned))
+                "\033[32m" + "Number of assigned files : " + "\033[0m", len(pod5_assigned), flush=True)
 
             if number_new_file >= threshold or curr_total_files-len(pod5_assigned)>=threshold :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
@@ -226,7 +226,7 @@ class Live_Reading :
 
                 #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
-                print("Create and launch batch ", batchid)
+                print("Create and launch batch ", batchid, flush=True)
                 self._create_tmp_input_dir(batchid, batch)
 
                 tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
@@ -239,7 +239,7 @@ class Live_Reading :
                 # This is a temporary solution that if the directory does not change for 
                 # 5 times, will shutdown
                 counter = counter +1
-                print (f"This is the {counter} time the directory is the same")
+                print (f"This is the {counter} time the directory is the same", flush=True)
                 if counter == max_retry:
                     print("\033[31m" + f"For {max_retry} times the directory wasn't updated" + "\033[0m")
                     print("\033[31m" + "Exiting gracefully..." + "\033[0m")
