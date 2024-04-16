@@ -42,6 +42,7 @@ class Jenkins_trigger:
                     previous_stage = stage
                 elif stage == 'Send Report to User':
                     break
+            time.sleep(5)
         print("Build is ", build_status)        
  
 

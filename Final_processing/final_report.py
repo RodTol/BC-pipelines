@@ -143,5 +143,4 @@ if __name__ == "__main__":
 
 
     csv_filename = parse_BCP_logs(config)
-
     rework_csv(csv_filename)
