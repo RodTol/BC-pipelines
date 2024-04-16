@@ -2,7 +2,6 @@ import os
 import sys
 import shutil
 import time
-from alive_progress import alive_it
 
 
 def list_all_pod5_files(input_dir) :
@@ -14,7 +13,7 @@ def mimic_live_writing(src_dir, dest_dir, interval_seconds=10):
     files = list_all_pod5_files(src_dir)
     files_set = set(files)  # Set to keep track of copied files
 
-    for file in alive_it(files_set):    
+    for file in files_set:    
         src_file_path = os.path.join(src_dir, file)
         dest_file_path = os.path.join(dest_dir, file)
 
@@ -31,7 +30,7 @@ def mimic_live_writing_groups(src_dir, dest_dir, interval_seconds=10, n_files=4)
     
     counter = 0
 
-    for file in alive_it(files_set):   
+    for file in files_set:   
         counter = counter+1 
         src_file_path = os.path.join(src_dir, file)
         dest_file_path = os.path.join(dest_dir, file)
