@@ -13,7 +13,7 @@ class Jenkins_trigger:
         self.token = token
 
         #Get the Jenkins server 
-        self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password)
+        self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
         user = self.server.get_whoami()
         version = self.server.get_version()
         print('Hello %s from Jenkins %s' % (user['fullName'], version))
@@ -69,10 +69,10 @@ class Jenkins_trigger:
         timestamp_date = datetime.utcfromtimestamp(timestamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
 
         # Print basic information about the build
-        print("Build Number:", build_info['number'])
-        print("Result:", build_info['result'])
-        print("Duration (seconds):", duration_seconds)
-        print("Timestamp (UTC):", timestamp_date)
-        print("url", build_info['url'])
+        print("\033[91mBuild Number:", build_info['number'], "\033[0m")
+        print("\033[91mResult:", build_info['result'], "\033[0m")
+        print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
+        print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
+        print("\033[91murl", build_info['url'], "\033[0m")
 
         self._get_current_stage(job_name, build_info['number'], build_info['result'])
