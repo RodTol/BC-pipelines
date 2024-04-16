@@ -24,7 +24,7 @@ class Jenkins_trigger:
             try :
                 console_output = self.server.get_build_console_output(job_name, build_number)
             except Exception as exc:
-                print("Reconnecting")
+                print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),  " Reconnecting")
                 self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
                 console_output = self.server.get_build_console_output(job_name, build_number)
             #print(console_output)
