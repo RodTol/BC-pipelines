@@ -21,7 +21,12 @@ class Jenkins_trigger:
 
     def _get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
         while build_status not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
-            console_output = self.server.get_build_console_output(job_name, build_number)
+            try :
+                console_output = self.server.get_build_console_output(job_name, build_number)
+            except Exception as exc:
+                print("Reconnecting")
+                self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
+                console_output = self.server.get_build_console_output(job_name, build_number)
             #print(console_output)
             last_stage_line = ""
             for i,line in enumerate(console_output.split('\n')):
