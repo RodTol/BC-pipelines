@@ -185,7 +185,7 @@ class Live_Reading :
 
         return jenkins_parameter
 
-    def live_reading_dir(self, threshold=5, scanning_time=5):
+    def live_reading_dir(self, threshold=5, scanning_time=5, max_retry=5):
         '''
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
@@ -199,6 +199,7 @@ class Live_Reading :
         pod5_files = []
         pod5_assigned = []
         prev_total_files = 0
+        counter = 0
         print("\033[91mI am watching\033[0m: ", self.input_dir)
 
         while True:
@@ -231,10 +232,20 @@ class Live_Reading :
                 tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
                 print(tmp_job_config)
                 self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
-                
-                # How can I exit gracefully ? What tells me that 
-                # the writing has stopped ? 
+                counter = 0
+            else :
+                # How can I exit gracefully ? What tells me that the writing has stopped ? 
                 # I need to dispatch of all the remaing files
+                # This is a temporary solution that if the directory does not change for 
+                # 5 times, will shutdown
+                counter = counter +1
+                print (f"This is the {counter} time the directory is the same")
+                if counter == max_retry:
+                    print("\033[31m" + f"For {max_retry} times the directory wasn't updated" + "\033[0m")
+                    print("\033[31m" + "Exiting gracefully..." + "\033[0m")
+                    sys.exit(0)
+
+
 
 
 
