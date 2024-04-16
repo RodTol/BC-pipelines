@@ -208,9 +208,9 @@ class Live_Reading :
             
             number_new_file = curr_total_files-prev_total_files
 
-            print("Current amount of files : ", curr_total_files, "\n",
-                   "Previous : ", prev_total_files, "\n",
-                   "Number of assigned files : ", len(pod5_assigned))
+            print("\033[32m" + "Current amount of files : " + "\033[0m", curr_total_files, "\n",
+                "\033[32m" + "Previous : " + "\033[0m", prev_total_files, "\n",
+                "\033[32m" + "Number of assigned files : " + "\033[0m", len(pod5_assigned))
 
             if number_new_file >= threshold or curr_total_files-len(pod5_assigned)>=threshold :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
