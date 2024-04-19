@@ -173,6 +173,7 @@ class Live_Reading :
         tmp_config['Basecalling']['logs_dir'] = tmp_logs_dir_fullpath
 
         # Slurm log dir
+        os.makedirs(tmp_logs_dir_fullpath, exist_ok=True)
         tmp_config['Slurm']['output'] = os.path.join(tmp_logs_dir_fullpath, "%x-%j.out")
         tmp_config['Slurm']['error'] = os.path.join(tmp_logs_dir_fullpath, "%x-%j.err")
 
