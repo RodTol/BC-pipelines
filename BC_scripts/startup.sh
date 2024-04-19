@@ -18,4 +18,4 @@ model=$(jq -r '.Basecalling.model' "$json_file")
 nodes_list=$(jq -r '.Resources.nodes_list' "$json_file")
 
 send_message "**The $run_name is started at $(date +"%H:%M:%S")**." > /dev/null
-send_message "The basecalling will be executed on ```$nodes_list``` with model **$model**" > /dev/null
+send_message "The basecalling will be executed on ```${nodes_list}``` with model **$model**" > /dev/null
