@@ -10,6 +10,7 @@ def create_table(json_path):
     
     # Extract relevant data
     nodes_queue = data["Resources"]["nodes_queue"]
+    nodes_list = data["Resources"]["nodes_list"]           
     nodes_ip = data["Resources"]["nodes_ip"]
     nodes_cpus = data["Resources"]["nodes_cpus"]
     nodes_mem = data["Resources"]["nodes_mem"]
@@ -19,6 +20,7 @@ def create_table(json_path):
     # Create DataFrame
     df = pd.DataFrame({
         'Nodes Queue': nodes_queue,
+        'Nodes List': nodes_list,
         'Nodes IP': nodes_ip,
         'Nodes CPUs': nodes_cpus,
         'Nodes Memory': nodes_mem,
