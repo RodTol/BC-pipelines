@@ -172,6 +172,10 @@ class Live_Reading :
         tmp_logs_dir_fullpath = os.path.join(template_logs_dir, tmp_logs_dir)
         tmp_config['Basecalling']['logs_dir'] = tmp_logs_dir_fullpath
 
+        # Slurm log dir
+        tmp_config['Slurm']['output'] = os.path.join(tmp_logs_dir_fullpath, "%x-%j.out")
+        tmp_config['Slurm']['error'] = os.path.join(tmp_logs_dir_fullpath, "%x-%j.err")
+
         # Convert the modified data structure back to JSON format
         json_content = json.dumps(tmp_config, indent=2)
 
@@ -231,6 +235,7 @@ class Live_Reading :
 
                 tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
                 print(tmp_job_config)
+                # Launch the Jenkins pipeline
                 self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
                 counter = 0
             if number_new_file==0:

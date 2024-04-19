@@ -18,14 +18,14 @@
     },
     "Resources": {
       "index_host" : "0",
-      "nodes_queue" : ["GPU", "GPU"],
-      "nodes_list" : ["gpu004", ""],
-      "nodes_ip" : ["10.128.2.154", ""],
-      "nodes_cpus" : ["24", "24"],
+      "nodes_queue" : ["DGX", "GPU"],
+      "nodes_list" : ["dgx001", ""],
+      "nodes_ip" : ["10.128.2.161", ""],
+      "nodes_cpus" : ["64", "24"],
       "nodes_mem" : ["200GB", "200GB"],      
-      "nodes_gpus" : ["None", "None"],
+      "nodes_gpus" : ["2", "None"],
       "gpus" : ["cuda:all", "cuda:all"],
-      "batch_size_list" : ["4", "4"]
+      "batch_size_list" : ["40", "4"]
     }
   }
   
