@@ -161,3 +161,4 @@ cython_debug/
 slurm_runner.py
 my-first-jenkins-pipeline/
 Final_processing/output.csv
+utility/resource_table.png
