@@ -24,7 +24,7 @@ send_file() {
 
 BC_MODEL=$(jq -r '.Basecalling.model' < $1)
 INPUT_DIR="/u/area/jenkins_onpexp/scratch/test_10G_dataset_POD5"
-message="**I am watching directory $INPUT_DIR **\nWith Basecalling model $BC_MODEL\nand the following computing resources:"
+message="**I am watching directory $INPUT_DIR ** \n With Basecalling model $BC_MODEL \n and the following computing resources:"
 
 python3 /u/area/jenkins_onpexp/BC-pipelines/utility/resources_recap.py $1
 
@@ -33,7 +33,7 @@ if [ -n "$BC_TOKEN_BOT" ]; then
     # Send a "Hello World" message to the Telegram bot
     echo "Sending message to bot"
     send_message "$message" > /dev/null
-    send_file "/u/area/jenkins_onpexp/BC-pipelines/utility/resource_table.png" "First plot." > /dev/null
+    send_file "/u/area/jenkins_onpexp/BC-pipelines/utility/resource_table.png" "Resources" > /dev/null
 else
     # Print an error message if BC_TOKEN_BOT is not found
     echo "BC_TOKEN_BOT not found "
