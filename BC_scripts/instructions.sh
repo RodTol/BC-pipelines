@@ -43,10 +43,12 @@ echo -e "${RED}-----------------------${RESET}"
 mkdir ~/BC-pipelines/BC_software/server_node_$node_name
 cd ~/BC-pipelines/BC_software/server_node_$node_name
 
+sleep 5 # Maybe I need this pause to be able to create the TCP file correctly
+
 # Starting the dorado_basecall_server, using the script
 echo "Launching the server"
 ~/BC-pipelines/BC_scripts/server.sh $model $logs_dir $gpus_settings &
-sleep 5
+sleep 10
 
 # Load virtualenv for Python, necessary for BC Software
 # Note that each node needs its own virtualenv since they 
