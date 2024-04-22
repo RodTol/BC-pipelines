@@ -48,7 +48,7 @@ sleep 5 # Maybe I need this pause to be able to create the TCP file correctly
 # Starting the dorado_basecall_server, using the script
 echo "Launching the server"
 ~/BC-pipelines/BC_scripts/server.sh $model $logs_dir $gpus_settings &
-sleep 10
+sleep 20 # Maybe I need this pause to be able to create the TCP file correctly
 
 # Load virtualenv for Python, necessary for BC Software
 # Note that each node needs its own virtualenv since they 
