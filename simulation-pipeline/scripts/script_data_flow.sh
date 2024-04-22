@@ -14,4 +14,4 @@ source=$1
 dest=$2
 
 source /u/area/jenkins_onpexp/python_venvs/epyc_venv_jenkins/bin/activate
-python3 /u/area/jenkins_onpexp/BC-pipelines/utility/data_flow_emulator.py $source $dest
+python3 /u/area/jenkins_onpexp/BC-pipelines/simulation-pipeline/utility/data_flow_emulator.py $source $dest

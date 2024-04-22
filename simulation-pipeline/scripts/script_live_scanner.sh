@@ -14,4 +14,4 @@
 # The $2 is the path to the input directory that will be studied
 
 source /u/area/jenkins_onpexp/python_venvs/epyc_venv_jenkins/bin/activate
-python3 /u/area/jenkins_onpexp/BC-pipelines/utility/main.py Alfredo95 elefante $1 $2
+python3 /u/area/jenkins_onpexp/BC-pipelines/simulation-pipeline/utility/main.py Alfredo95 elefante $1 $2

@@ -28,14 +28,14 @@ message="**I am watching directory /u/area/jenkins_onpexp/scratch/test_10G_datas
 With Basecalling model dna_r10.4.1_e8.2_400bps_hac.cfg
 and the following computing resources:"
 
-python3 /u/area/jenkins_onpexp/BC-pipelines/utility/resources_recap.py $1
+python3 /u/area/jenkins_onpexp/BC-pipelines/simulation-pipeline/utility/resources_recap.py $1
 
 # Check if BC_TOKEN_BOT is defined
 if [ -n "$BC_TOKEN_BOT" ]; then
     # Send a "Hello World" message to the Telegram bot
     echo "Sending message to bot"
     send_message "$message" > /dev/null
-    send_file "/u/area/jenkins_onpexp/BC-pipelines/utility/resource_table.png" "Resources" > /dev/null
+    send_file "/u/area/jenkins_onpexp/BC-pipelines/simulation-pipeline/utility/resource_table.png" "Resources" > /dev/null
 else
     # Print an error message if BC_TOKEN_BOT is not found
     echo "BC_TOKEN_BOT not found "

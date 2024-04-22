@@ -1,0 +1,82 @@
+pipeline {
+    agent { 
+        node {
+            label 'docker'
+            }
+    }
+    parameters {
+        /*The idea is to set as parameter the path to the JSON and not the actual JSON. 
+        I assumed that the starting directory is the pipeline one*/
+        string(name: 'template_configFilePath', defaultValue: '/u/area/jenkins_onpexp/BC-pipelines/configurations/config_template.json', description: 'Path to the template_config JSON file')
+        string(name: 'input_directory', defaultValue: '/u/area/jenkins_onpexp/scratch/test_CliveOME', description: 'Path to input directory where POD5 files will be written')
+        string(name: 'source_directory', defaultValue: '/u/area/jenkins_onpexp/scratch/CliveOME', description: 'Path to source directory with the POD5 files that will be copied')
+    }    
+    stages {
+        stage ('Cleanup Pipeline') {
+            steps {
+                build job: "tolloi/cleanup_pipeline", wait: true
+            }
+        }
+        stage('Pull project repository on the Cluster') {
+                        steps {
+                            script {
+                                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                                    sh '''
+                                        ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                                            echo "**********Running ''git pull'' in BC-pipelines directory**********"
+                                            cd BC-pipelines && git pull
+                                        '
+                                    '''
+                                }
+                            }    
+                        }
+                    }        
+        stage('Send recap of the run to User') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                    sh '''
+                        ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                            cd ~/BC-pipelines/simulation-pipeline/scripts
+                            ./telegram_bot_start.sh '${template_configFilePath}'
+                        '                    
+                    '''
+                }                        
+            }
+        }        
+        stage('Launching the file scanner') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
+                    sh '''
+                        ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                            cd ~/BC-pipelines/simulation-pipeline/scripts
+                            sbatch script_live_scanner.sh '${template_configFilePath}' '${input_directory}' 
+                        '    
+                    '''
+                    }
+                }
+            }
+        stage('Launching the data flow emulator') {
+            steps {    
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {                                
+                    sh '''
+                        ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                            cd ~/BC-pipelines/simulation-pipeline/scripts
+                            sbatch script_data_flow.sh '${source_directory}' '${input_directory}' 
+                        '    
+                    '''
+                    }
+                }
+            }
+        stage('Merge and QC') {
+            steps {    
+                withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {                                
+                    sh '''
+                        ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
+                            echo "TO BE DEVELOPED"
+                        '    
+                    '''
+                    }
+                }
+            }
+        }          
+    }
