@@ -23,8 +23,8 @@ send_file() {
 }
 
 BC_MODEL=$(jq -r '.Basecalling.model' < $1)
-INPUT_DIR="/u/area/jenkins_onpexp/scratch/test_10G_dataset_POD5"
-message="**I am watching directory /u/area/jenkins_onpexp/scratch/test_10G_dataset_POD5**
+INPUT_DIR=$2
+message="** I am watching directory $2 **
 With Basecalling model dna_r10.4.1_e8.2_400bps_hac.cfg
 and the following computing resources:"
 

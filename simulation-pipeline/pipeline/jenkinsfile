@@ -37,7 +37,7 @@ pipeline {
                     sh '''
                         ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                             cd ~/BC-pipelines/simulation-pipeline/scripts
-                            ./telegram_bot_start.sh '${template_configFilePath}'
+                            ./telegram_bot_start.sh '${template_configFilePath}' '${input_directory}'
                         '                    
                     '''
                 }                        
