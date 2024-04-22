@@ -249,7 +249,8 @@ class Live_Reading :
                 if counter == max_retry:
                     print("\033[31m" + f"For {max_retry} times the directory wasn't updated" + "\033[0m")
                     print("\033[31m" + "Exiting gracefully..." + "\033[0m")
-                    sys.exit(0)
+                    
+                    return #no sys.exit(0) otherwise I will not perform the final processing
 
 
 
