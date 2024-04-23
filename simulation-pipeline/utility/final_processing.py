@@ -27,7 +27,6 @@ class Final_processing :
     def _move_files_from_pass_directory(self, batch_dir, total_pass_dir):
         batch_pass_dir = os.path.join(batch_dir, 'pass')
         batch_id = batch_dir.split('BATCH_')[1]
-        print(batch_id)
         
         if not os.path.isdir(batch_pass_dir):
             print("Batch 'pass' directory not found.")
@@ -46,7 +45,7 @@ class Final_processing :
 
     def _move_files_from_fail_directory(self, batch_dir, total_fail_dir):
         batch_fail_dir = os.path.join(batch_dir, 'fail')
-        batch_id = batch_dir.split('_')[1]
+        batch_id = batch_dir.split('BATCH_')[1]
 
         if not os.path.isdir(batch_fail_dir):
             print("Batch 'fail' directory not found.")
