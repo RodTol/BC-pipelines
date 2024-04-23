@@ -25,7 +25,7 @@
       "nodes_mem" : ["200GB", "200GB"],      
       "nodes_gpus" : ["2", "None"],
       "gpus" : ["cuda:all", "cuda:all"],
-      "batch_size_list" : ["3", "1"]
+      "batch_size_list" : ["18", "2"]
     }
   }
   
