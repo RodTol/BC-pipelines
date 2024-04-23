@@ -19,7 +19,7 @@ class Final_processing :
                     batch_directories.append(os.path.join(root, dir_name))
         return batch_directories
 
-    def _move_files_from_pass_directory(batch_dir, total_pass_dir):
+    def _move_files_from_pass_directory(self, batch_dir, total_pass_dir):
         batch_pass_dir = os.path.join(batch_dir, 'pass')
         if not os.path.isdir(batch_pass_dir):
             print("Batch 'pass' directory not found.")
@@ -34,7 +34,7 @@ class Final_processing :
                 file_path = os.path.join(root, file_name)
                 shutil.move(file_path, total_pass_dir)
 
-    def _move_files_from_fail_directory(batch_dir, total_fail_dir):
+    def _move_files_from_fail_directory(self, batch_dir, total_fail_dir):
         batch_fail_dir = os.path.join(batch_dir, 'fail')
         if not os.path.isdir(batch_fail_dir):
             print("Batch 'fail' directory not found.")
