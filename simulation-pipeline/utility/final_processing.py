@@ -51,8 +51,12 @@ class Final_processing :
 
     def put_togheter_outputs(self):
         batch_directories = self._find_batch_directories(self.total_output_dir)
+        print("\033[31m" + "Batch directories" + "\033[0m")
+        print(batch_directories)
         for dir in batch_directories:
             self._move_files_from_pass_directory(dir, self.total_pass_dir)
+            print("\033[31m" + "Pass file moved" + "\033[0m")
             self._move_files_from_fail_directory(dir, self.total_fail_dir)
+            print("\033[31m" + "Fail file moved" + "\033[0m")
 
         
