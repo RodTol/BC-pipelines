@@ -26,7 +26,7 @@ class Final_processing :
 
     def _move_files_from_pass_directory(self, batch_dir, total_pass_dir):
         batch_pass_dir = os.path.join(batch_dir, 'pass')
-        batch_id = batch_dir.split('_')[1]
+        batch_id = batch_dir.split('BATCH_')[1]
         print(batch_id)
         
         if not os.path.isdir(batch_pass_dir):
