@@ -32,7 +32,7 @@ if __name__ == "__main__":
    
    reader = Live_Reading(sys.argv[4], jenkins_handler, job_name, job_config)
    # reader = Live_Reading('/home/rodolfo/dataset_10G_bc/test', jenkins_handler, job_name, job_config)
-   reader.live_reading_dir(threshold=2)
+   reader.live_reading_dir(threshold=5)
 
    final_processing = Final_processing(job_config["configFilePath"])
    final_processing.put_togheter_outputs()
