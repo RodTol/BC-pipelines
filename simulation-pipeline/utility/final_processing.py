@@ -18,9 +18,16 @@ class Final_processing :
                 if dir_name.startswith("BATCH"):
                     batch_directories.append(os.path.join(root, dir_name))
         return batch_directories
+    
+    def _tag_file_with_batch_name(file_name, batch_id):
+        parts = file_name.split('.fastq')
+        new_file_name = parts[0] + '_batch_' + batch_id + '.fastq'
+        return new_file_name
 
     def _move_files_from_pass_directory(self, batch_dir, total_pass_dir):
         batch_pass_dir = os.path.join(batch_dir, 'pass')
+        batch_id = batch_dir.split('_')[1]
+        
         if not os.path.isdir(batch_pass_dir):
             print("Batch 'pass' directory not found.")
             return
@@ -31,11 +38,15 @@ class Final_processing :
     
         for root, dirs, files in os.walk(batch_pass_dir):
             for file_name in files:
+                new_file_name = self._tag_file_with_batch_name(file_name, batch_id)
                 file_path = os.path.join(root, file_name)
-                shutil.move(file_path, total_pass_dir)
+                new_file_path = os.path.join(total_pass_dir, new_file_name)
+                shutil.move(file_path, new_file_path)
 
     def _move_files_from_fail_directory(self, batch_dir, total_fail_dir):
         batch_fail_dir = os.path.join(batch_dir, 'fail')
+        batch_id = batch_dir.split('_')[1]
+
         if not os.path.isdir(batch_fail_dir):
             print("Batch 'fail' directory not found.")
             return
@@ -46,8 +57,10 @@ class Final_processing :
     
         for root, dirs, files in os.walk(batch_fail_dir):
             for file_name in files:
+                new_file_name = self._tag_file_with_batch_name(file_name, batch_id)
                 file_path = os.path.join(root, file_name)
-                shutil.move(file_path, total_fail_dir)
+                new_file_path = os.path.join(total_fail_dir, new_file_name)
+                shutil.move(file_path, new_file_path)
 
     def put_togheter_outputs(self):
         batch_directories = self._find_batch_directories(self.total_output_dir)
