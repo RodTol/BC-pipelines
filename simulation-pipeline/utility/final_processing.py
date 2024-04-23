@@ -21,7 +21,7 @@ class Final_processing :
     
     def _tag_file_with_batch_name(self, file_name, batch_id):
         parts = file_name.split('.fastq')
-        new_file_name = parts[0] + '_batch_' + batch_id + '.fastq'
+        new_file_name = parts[0] + '_BATCH_' + batch_id + '.fastq'
         return new_file_name
 
     def _move_files_from_pass_directory(self, batch_dir, total_pass_dir):
