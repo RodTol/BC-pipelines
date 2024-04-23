@@ -34,8 +34,8 @@ python3 /u/area/jenkins_onpexp/BC-pipelines/simulation-pipeline/utility/resource
 if [ -n "$BC_TOKEN_BOT" ]; then
     # Send a "Hello World" message to the Telegram bot
     echo "Sending message to bot"
-    send_message "$message" 
-    send_file "/u/area/jenkins_onpexp/BC-pipelines/simulation-pipeline/scripts/resource_table.png" "Resources"
+    send_message "$message" > /dev/null
+    send_file "/u/area/jenkins_onpexp/BC-pipelines/simulation-pipeline/scripts/resource_table.png" "Resources" > /dev/null
 else
     # Print an error message if BC_TOKEN_BOT is not found
     echo "BC_TOKEN_BOT not found "
