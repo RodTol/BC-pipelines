@@ -19,7 +19,7 @@ class Final_processing :
                     batch_directories.append(os.path.join(root, dir_name))
         return batch_directories
     
-    def _tag_file_with_batch_name(file_name, batch_id):
+    def _tag_file_with_batch_name(self, file_name, batch_id):
         parts = file_name.split('.fastq')
         new_file_name = parts[0] + '_batch_' + batch_id + '.fastq'
         return new_file_name
