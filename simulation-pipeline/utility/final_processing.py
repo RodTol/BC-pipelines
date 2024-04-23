@@ -11,7 +11,7 @@ class Final_processing :
         self.total_pass_dir = os.path.join(self.total_output_dir, "pass") 
         self.total_fail_dir = os.path.join(self.total_output_dir, "fail")       
     
-    def _find_batch_directories(output_dir):
+    def _find_batch_directories(self, output_dir):
         batch_directories = []
         for root, dirs, files in os.walk(output_dir):
             for dir_name in dirs:
