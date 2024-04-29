@@ -6,11 +6,11 @@ CHAT_ID="-4074077922"
 
 # Function to send a message to Telegram
 send_message() {
- local message="$1"
- curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
- -d "chat_id=$CHAT_ID" \
- -d "parse_mode=HTML" \ 
- -d "text=$message"
+    local message=$1
+    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+    -d "chat_id=$CHAT_ID" \
+    -d "text=$message" \
+    -d "parse_mode=HTML"
 }
 
 # Function to send a file to Telegram
