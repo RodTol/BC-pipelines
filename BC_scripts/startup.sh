@@ -6,6 +6,7 @@ send_message() {
   
  curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
  -d "chat_id=$CHAT_ID" \
+ -d "parse_mode=HTML" \
  -d "text=$message"
 }
 
@@ -17,5 +18,6 @@ run_name=$(jq -r '.General.run_name' "$json_file")
 model=$(jq -r '.Basecalling.model' "$json_file")
 nodes_list=$(jq -r '.Resources.nodes_list' "$json_file")
 
-send_message "**The $run_name is started at $(date +"%H:%M:%S")**." > /dev/null
-send_message "The basecalling will be executed on ```${nodes_list}``` with model **$model**" > /dev/null
+message="<b> Jenkins is building for $run_name is at $(date +"%H:%M:%S")."
+
+send_message $message > /dev/null

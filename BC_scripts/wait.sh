@@ -18,6 +18,15 @@ send_message() {
     -d "parse_mode=MarkdownV2"
 }
 
+# Function to send a message to Telegram with standard formatting
+send_message_standard() {
+    local message=$1
+    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+    -d "chat_id=$CHAT_ID" \
+    -d "text=$message" \
+    -d "parse_mode=HTML"
+}
+
 
 BOT_TOKEN="$BC_TOKEN_BOT"
 CHAT_ID="-4074077922"
@@ -26,7 +35,7 @@ CHAT_ID="-4074077922"
 start_time=$(date +%s)
 interval=120 
 
-send_message "Job $JOB_ID is queued at $(date +"%H:%M:%S")" > /dev/null
+send_message_standard "Job $JOB_ID is queued at $(date +"%H:%M:%S")" > /dev/null
 
 # Loop until the job is completed
 while check_job_status; do
@@ -38,14 +47,15 @@ while check_job_status; do
     if ((elapsed_time >= interval)); then
         JOB_STATUS=$(scontrol show job $JOB_ID | awk '/JobState=/{print $1}')
         echo "Slurm job $JOB_ID status: $JOB_STATUS"
-        send_message "At $(date +"%H:%M:%S") Slurm job $JOB_ID status is $JOB_STATUS" > /dev/null
-        
-        # Capture the output of squeue -p DGX,GPU
-        squeue_output=$(squeue -p DGX,GPU)
+        send_message_standard "At $(date +"%H:%M:%S") Slurm job $JOB_ID status is <b>$JOB_STATUS</b>" > /dev/null
 
-        # Send the captured output as a message
-        send_message "$squeue_output" > /dev/null
+        if ((elapsed_time >= 3*interval)); then        
+            # Capture the output of squeue -p DGX,GPU
+            squeue_output=$(squeue -p DGX,GPU)
 
+            # Send the captured output as a message
+            send_message "$squeue_output" > /dev/null
+        fi
         # Reset the start time
         start_time=$current_time
     fi
