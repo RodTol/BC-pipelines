@@ -34,6 +34,7 @@ CHAT_ID="-4074077922"
 # Set initial time and interval
 start_time=$(date +%s)
 interval=120 
+count=0
 
 send_message_standard "Job $JOB_ID is queued at $(date +"%H:%M:%S")" > /dev/null
 
@@ -48,13 +49,15 @@ while check_job_status; do
         JOB_STATUS=$(scontrol show job $JOB_ID | awk '/JobState=/{print $1}')
         echo "Slurm job $JOB_ID status: $JOB_STATUS"
         send_message_standard "At $(date +"%H:%M:%S") Slurm job $JOB_ID status is <b>$JOB_STATUS</b>" > /dev/null
-
-        if ((elapsed_time >= 3*interval)); then        
+        
+        ((count++))
+        if ((count >= 3)); then        
             # Capture the output of squeue -p DGX,GPU
             squeue_output=$(squeue -p DGX,GPU)
 
             # Send the captured output as a message
             send_message "$squeue_output" > /dev/null
+            count=0
         fi
         # Reset the start time
         start_time=$current_time

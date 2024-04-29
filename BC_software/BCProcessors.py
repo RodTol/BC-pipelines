@@ -65,7 +65,7 @@ class BCKeepAlive(threading.Thread):
         self.keep_alive_url = conf.keep_alive_url
         self.keep_alive_terminate_url = conf.keep_alive_terminate_url 
         
-        print('------------------DEBUG2------------------' , flush=True)
+        print('------------------DEBUG------------------' , flush=True)
         print('keepalive_url: ', self.keep_alive_terminate_url)
         print('completed_url: ', self.keep_alive_url )
         print('------------------------------------------' , flush=True)
