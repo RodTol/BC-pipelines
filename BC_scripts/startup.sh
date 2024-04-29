@@ -27,6 +27,6 @@ nodes_list=$(jq -r '.Resources.nodes_list' "$json_file")
 input_dir=$(jq -r '.Basecalling.input_dir' "$json_file")
 symlink_count=$(count_symbolic_links $input_dir)
 
-message="<b> Jenkins is building for $run_name is at $(date +"%H:%M:%S"). This run will process $symlink_count files, located at $input_dir"
+message="<b> Jenkins is building for $run_name is at $(date +"%H:%M:%S"). This run will process $symlink_count files </b>, located at $input_dir"
 
 send_message $message > /dev/null
