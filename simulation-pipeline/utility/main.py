@@ -31,7 +31,6 @@ if __name__ == "__main__":
    jenkins_handler = Jenkins_trigger(jenkins_url, username, password, token)
    
    reader = Live_Reading(sys.argv[4], jenkins_handler, job_name, job_config)
-   # reader = Live_Reading('/home/rodolfo/dataset_10G_bc/test', jenkins_handler, job_name, job_config)
    reader.live_reading_dir(threshold=20)
 
    final_processing = Final_processing(job_config["configFilePath"])
