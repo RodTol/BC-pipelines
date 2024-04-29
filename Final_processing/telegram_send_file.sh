@@ -15,16 +15,6 @@ STD=$(echo -e "\033[0m") # Clear colour
 BOT_TOKEN="$BC_TOKEN_BOT"
 CHAT_ID="-4074077922"
 
-# Function to send a message to Telegram
-send_message() {
- local message="$1"
- curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
- -d "chat_id=$CHAT_ID" \
- -d "text=$message"
-}
-
-send_message "UPLOADING your files!! " > /dev/null
-
 echo "_____________________________________"
 echo " "
 echo " ${RED} Message Sent ${STD}"
@@ -40,8 +30,8 @@ send_file() {
  -F "caption=$caption"
 }
 
-send_file "$1" "First plot." > /dev/null
+send_file "$1" "Speed plot ." > /dev/null
 echo " ${ON_BLUE} File Upload Complete ${STD}"
 
-send_file "$2" "Second plot." > /dev/null
+send_file "$2" "File distribution plot." > /dev/null
 echo " ${ON_BLUE} File2 Upload Complete ${STD}"
