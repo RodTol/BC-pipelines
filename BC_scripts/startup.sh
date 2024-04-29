@@ -2,13 +2,13 @@
 
 # Function to send a message to Telegram
 send_message() {
- local message="$1"
-  
- curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
- -d "chat_id=$CHAT_ID" \
- -d "parse_mode=HTML" \
- -d "text=$message"
+    local message="$1"
+    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+    -d "chat_id=$CHAT_ID" \
+    -d "parse_mode=HTML" \
+    -d "text=$message"
 }
+
 
 count_symbolic_links() {
     local directory="$1"
@@ -25,8 +25,12 @@ model=$(jq -r '.Basecalling.model' "$json_file")
 nodes_list=$(jq -r '.Resources.nodes_list' "$json_file")
 
 input_dir=$(jq -r '.Basecalling.input_dir' "$json_file")
-symlink_count=$(count_symbolic_links $input_dir)
+symlink_count=$(count_symbolic_links "$input_dir")
 
-message="<b> Jenkins is building for $run_name is at $(date +"%H:%M:%S"). This run will process $symlink_count files </b>, located at $input_dir"
+# Use double quotes for variable interpolation
+message="Jenkins started building for $run_name at $(date +'%H:%M:%S')
+<b>This run will process $symlink_count files<\b>,
+located at $input_dir"
 
-send_message $message > /dev/null
+# Pass the message as a single argument
+send_message "$message" > /dev/null

@@ -162,3 +162,4 @@ slurm_runner.py
 my-first-jenkins-pipeline/
 Final_processing/output.csv
 utility/resource_table.png
+Final_processing/BCManager_log.txt
