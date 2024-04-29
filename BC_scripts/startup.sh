@@ -32,5 +32,6 @@ message="Jenkins started building for $run_name at $(date +'%H:%M:%S')
 <b>This run will process $symlink_count files<\b>,
 located at $input_dir"
 
+
 # Pass the message as a single argument
 send_message "$message" > /dev/null
