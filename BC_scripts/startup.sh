@@ -29,7 +29,7 @@ symlink_count=$(count_symbolic_links "$input_dir")
 
 # Use double quotes for variable interpolation
 message="Jenkins started building for $run_name at $(date +'%H:%M:%S')
-<b>This run will process $symlink_count files<\b>,
+<b>This run will process $symlink_count files</b>,
 located at $input_dir"
 
 
