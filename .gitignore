@@ -159,7 +159,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 slurm_runner.py
+configurations/tmp_config/
 my-first-jenkins-pipeline/
 Final_processing/output.csv
-utility/resource_table.png
+simulation-pipeline/scripts/resource_table.png
 Final_processing/BCManager_log.txt
