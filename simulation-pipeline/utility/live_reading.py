@@ -1,6 +1,7 @@
 import time
 import os
 import uuid
+import requests
 import json
 from datetime import datetime
 import sys
@@ -43,6 +44,18 @@ def inspect_pod5(
         kwargs["reader"] = reader
         kwargs["write_header"] = idx == 0
         commands[command](**kwargs)
+
+def telegram_send_message(message) :
+    token = str(os.environ.get('BC_TOKEN_BOT'))
+    chat_id = "-4074077922"
+    url_req = "https://api.telegram.org/bot" + token + "/sendMessage" + "?chat_id=" + chat_id + "&text=" + message 
+    results = requests.get(url_req)
+    
+    if results.status_code == 200:
+        print('Message sent successfully!')
+    else:
+        error_message = f'Failed to send message. Status code: {results.status_code}, Response: {results.text}'
+        print(error_message)          
 
 
 class Live_Reading :
@@ -218,6 +231,13 @@ class Live_Reading :
                 "\033[32m" + "Previous : " + "\033[0m", prev_total_files, "\n",
                 "\033[32m" + "Number of assigned files : " + "\033[0m", len(pod5_assigned), flush=True)
 
+            #TODO: send message to telegram about the scanning            
+            message = ("Current amount of files : " + str(curr_total_files) + "\n" +
+            "Previous : " + str(prev_total_files) + "\n" +
+            "Number of assigned files : " + str(len(pod5_assigned)))
+
+            telegram_send_message(message)          
+
             if number_new_file >= threshold or curr_total_files-len(pod5_assigned)>=threshold :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
                 prev_total_files = curr_total_files
@@ -237,7 +257,7 @@ class Live_Reading :
                 tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
                 print(tmp_job_config)
                 # Launch the Jenkins pipeline
-                self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
+                #self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
                 counter = 0
             if number_new_file==0:
                 # How can I exit gracefully ? What tells me that the writing has stopped ? 
