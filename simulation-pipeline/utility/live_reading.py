@@ -256,7 +256,7 @@ class Live_Reading :
                 tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
                 print(tmp_job_config)
                 # Launch the Jenkins pipeline
-                #self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
+                self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
                 counter = 0
             if number_new_file==0:
                 # How can I exit gracefully ? What tells me that the writing has stopped ? 
