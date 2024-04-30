@@ -231,10 +231,10 @@ class Live_Reading :
                 "\033[32m" + "Previous : " + "\033[0m", prev_total_files, "\n",
                 "\033[32m" + "Number of assigned files : " + "\033[0m", len(pod5_assigned), flush=True)
 
-            #TODO: send message to telegram about the scanning            
-            message = ("Current amount of files : " + str(curr_total_files) + "\n" +
-            "Previous : " + str(prev_total_files) + "\n" +
-            "Number of assigned files : " + str(len(pod5_assigned)))
+            if number_new_file!=0:
+                message = ("Current amount of files : " + str(curr_total_files) + "\n" +
+                "Previous : " + str(prev_total_files) + "\n" +
+                "Number of assigned files : " + str(len(pod5_assigned)))
 
             telegram_send_message(message)          
 
