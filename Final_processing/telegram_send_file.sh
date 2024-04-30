@@ -35,3 +35,6 @@ echo " ${ON_BLUE} File Upload Complete ${STD}"
 
 send_file "$2" "File distribution plot." > /dev/null
 echo " ${ON_BLUE} File2 Upload Complete ${STD}"
+
+send_file "$3" "BCM times plot." > /dev/null
+echo " ${ON_BLUE} File3 Upload Complete ${STD}"
