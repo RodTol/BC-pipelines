@@ -235,8 +235,7 @@ class Live_Reading :
                 message = ("Current amount of files : " + str(curr_total_files) + "\n" +
                 "Previous : " + str(prev_total_files) + "\n" +
                 "Number of assigned files : " + str(len(pod5_assigned)))
-
-            telegram_send_message(message)          
+                telegram_send_message(message)          
 
             if number_new_file >= threshold or curr_total_files-len(pod5_assigned)>=threshold :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
