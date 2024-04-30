@@ -87,10 +87,12 @@
                             ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                                 cd ~/BC-pipelines/Final_processing
                                 python final_report.py '${configFilePath}'
+                                python BCM_parsing.py '${configFilePath}'
 
                                 run_name=$(jq -r '.General.run_name' '${configFilePath}' )
 
                                 cat output_$run_name.csv
+                                cat times.csv
                                 python plots.py output_$run_name.csv
                             '    
                         '''
