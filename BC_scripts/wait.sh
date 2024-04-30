@@ -48,7 +48,7 @@ while check_job_status; do
     if ((elapsed_time >= interval)); then
         JOB_STATUS=$(scontrol show job $JOB_ID | awk '/JobState=/{print $1}')
         echo "Slurm job $JOB_ID status: $JOB_STATUS"
-        send_message_standard "At $(date +"%H:%M:%S") Slurm job $JOB_ID status is <b>$JOB_STATUS</b>" > /dev/null
+        send_message_standard "At $(date +"%H:%M:%S") Slurm job $JOB_ID status is $JOB_STATUS" > /dev/null
         
         ((count++))
         if ((count >= 3)); then        
