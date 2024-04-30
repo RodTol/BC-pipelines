@@ -2,7 +2,8 @@
     "General": {
       "run_name": "Run",
       "run_time": "00:20:00",
-      "version": "2.0"
+      "version": "3.0",
+      "batch_size": "40"
     },
     "Slurm": {
       "output": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out",

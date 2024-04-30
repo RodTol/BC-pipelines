@@ -203,7 +203,7 @@ class Live_Reading :
 
         return jenkins_parameter
 
-    def live_reading_dir(self, threshold=12, scanning_time=5, max_retry=5):
+    def live_reading_dir(self, scanning_time=5, max_retry=5):
         '''
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
@@ -218,6 +218,11 @@ class Live_Reading :
         pod5_assigned = []
         prev_total_files = 0
         counter = 0
+
+        with open(self.job_config["configFilePath"], 'r') as file:
+            template_config = json.load(file)
+        threshold = template_config['General']['batch_size']
+
         print("\033[91mI am watching\033[0m: ", self.input_dir)
 
         while True:

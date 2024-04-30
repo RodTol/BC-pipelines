@@ -31,7 +31,7 @@ if __name__ == "__main__":
    jenkins_handler = Jenkins_trigger(jenkins_url, username, password, token)
    
    reader = Live_Reading(sys.argv[4], jenkins_handler, job_name, job_config)
-   reader.live_reading_dir(threshold=40)
+   reader.live_reading_dir()
 
    final_processing = Final_processing(job_config["configFilePath"])
    final_processing.put_togheter_outputs()
