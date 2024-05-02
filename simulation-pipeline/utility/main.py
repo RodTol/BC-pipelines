@@ -4,6 +4,7 @@ from live_reading import Live_Reading
 from final_processing import Final_processing
 import os
 from merge_and_QC import merge_files
+from merge_and_QC import run_nanoplot
 
 if __name__ == "__main__":
    # Authentication
@@ -48,5 +49,8 @@ if __name__ == "__main__":
    fail_total_file = os.path.join(final_processing.total_output_dir, "total_fail_reads.fastq")
 
    merge_files(fail_total_dir, fail_total_file)
+
+   run_nanoplot(pass_total_file, os.path.join(final_processing.total_output_dir, "nanoplot_pass"))
+   run_nanoplot(fail_total_file, os.path.join(final_processing.total_output_dir, "nanoplot_fail"))
 
 
