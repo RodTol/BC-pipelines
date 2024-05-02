@@ -22,7 +22,7 @@
       "nodes_queue" : ["DGX", "GPU"],
       "nodes_list" : ["dgx001", ""],
       "nodes_ip" : ["10.128.2.161", ""],
-      "nodes_cpus" : ["64", "24"],
+      "nodes_cpus" : ["64", "48"],
       "nodes_mem" : ["200GB", "200GB"],      
       "nodes_gpus" : ["2", "None"],
       "gpus" : ["cuda:all", "cuda:all"],
