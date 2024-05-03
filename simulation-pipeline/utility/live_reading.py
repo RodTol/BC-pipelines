@@ -221,7 +221,7 @@ class Live_Reading :
 
         with open(self.job_config["configFilePath"], 'r') as file:
             template_config = json.load(file)
-        threshold = template_config['General']['batch_size']
+        threshold = int(template_config['General']['batch_size'])
 
         print("\033[91mI am watching\033[0m: ", self.input_dir)
 
