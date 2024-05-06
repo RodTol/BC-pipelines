@@ -4,11 +4,11 @@
 #SBATCH --output=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/live_scanner.out
 #SBATCH --error=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/live_scanner.err
 #SBATCH -A lage
-#SBATCH -p EPYC
+#SBATCH -p DGX
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=6
-#SBATCH --mem=100GB
+#SBATCH --cpus-per-task=20
+#SBATCH --mem=200GB
 
 # The $1 argument is the path to the template_config.json file
 # The $2 is the path to the input directory that will be studied
