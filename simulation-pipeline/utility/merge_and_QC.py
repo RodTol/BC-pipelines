@@ -16,12 +16,13 @@ def run_nanoplot(input_fastq, output_dir):
     subprocess.run(command)   
 
 # Send report to telegram bot             
-def telegram_send_file(path_to_file) :
+def telegram_send_file(path_to_file, caption) :
     token = str(os.environ.get('BC_TOKEN_BOT'))
     chat_id = "-4074077922"
     url = f"https://api.telegram.org/bot{token}/sendDocument"
     files = {'document': open(path_to_file, 'rb')}
     data = {'chat_id': chat_id}
+    caption = {'caption': caption}
     results = requests.post(url, files=files, data=data)
     
     if results.status_code == 200:

@@ -54,4 +54,4 @@ if __name__ == "__main__":
    run_nanoplot(pass_total_file, os.path.join(final_processing.total_output_dir, "nanoplot_pass"))
    run_nanoplot(fail_total_file, os.path.join(final_processing.total_output_dir, "nanoplot_fail"))
 
-   telegram_send_file(os.path.join(final_processing.total_output_dir, "nanoplot_pass/NanoPlot-report.html"))
+   telegram_send_file(os.path.join(final_processing.total_output_dir, "nanoplot_pass/NanoPlot-report.html"), "Pass QC report")
