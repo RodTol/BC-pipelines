@@ -21,8 +21,7 @@ def telegram_send_file(path_to_file, caption) :
     chat_id = "-4074077922"
     url = f"https://api.telegram.org/bot{token}/sendDocument"
     files = {'document': open(path_to_file, 'rb')}
-    data = {'chat_id': chat_id}
-    caption = {'caption': caption}
+    data = {'chat_id': chat_id,'caption': caption}
     results = requests.post(url, files=files, data=data)
     
     if results.status_code == 200:
