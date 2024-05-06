@@ -203,7 +203,7 @@ class Live_Reading :
 
         return jenkins_parameter
 
-    def live_reading_dir(self, scanning_time=10, max_retry=5):
+    def live_reading_dir(self, scanning_time=5, max_retry=5):
         '''
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
@@ -263,11 +263,11 @@ class Live_Reading :
                 # Launch the Jenkins pipeline
                 self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
                 counter = 0
-            if number_new_file==0:
+            if number_new_file==0 and curr_total_files!=0:
                 # How can I exit gracefully ? What tells me that the writing has stopped ? 
                 # I need to dispatch of all the remaing files
                 # This is a temporary solution that if the directory does not change for 
-                # 5 times, will shutdown
+                # 5 times, will shutdown. Note that this not applies if there are zero files
                 counter = counter +1
                 print (f"This is the {counter} time the directory is the same", flush=True)
                 if counter == max_retry:
