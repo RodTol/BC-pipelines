@@ -203,7 +203,7 @@ class Live_Reading :
 
         return jenkins_parameter
 
-    def live_reading_dir(self, scanning_time=5, max_retry=5):
+    def live_reading_dir(self, scanning_time=10, max_retry=5):
         '''
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
