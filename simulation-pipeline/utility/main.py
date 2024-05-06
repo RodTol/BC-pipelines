@@ -5,6 +5,7 @@ from final_processing import Final_processing
 import os
 from merge_and_QC import merge_files
 from merge_and_QC import run_nanoplot
+from merge_and_QC import telegram_send_file
 
 if __name__ == "__main__":
    # Authentication
@@ -53,4 +54,4 @@ if __name__ == "__main__":
    run_nanoplot(pass_total_file, os.path.join(final_processing.total_output_dir, "nanoplot_pass"))
    run_nanoplot(fail_total_file, os.path.join(final_processing.total_output_dir, "nanoplot_fail"))
 
-
+   telegram_send_file(os.path.join(final_processing.total_output_dir, "nanoplot_pass/NanoPlot-report.html"))

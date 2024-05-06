@@ -8,7 +8,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=6
-#SBATCH --mem=10GB
+#SBATCH --mem=100GB
 
 # The $1 argument is the path to the template_config.json file
 # The $2 is the path to the input directory that will be studied
