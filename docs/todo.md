@@ -9,9 +9,6 @@ nav_order: 6
 ## Errors 
 1. [ ] **GPU node do not see cuda:0,1.** Probably it's something related to how I launch
 the scripts and the env variables
-2. [ ] if I run with gpu004 specified, there's something wrong with how I launch the server since I am 
-not able to **find the connection file and also the log** (ExampleRun.out) does not say exist, like for the
-others. Maybe too few time ?
 
 <!-- ## File to comment
 1. BC software
@@ -52,7 +49,7 @@ others. Maybe too few time ?
 2. [x] Send report to user
 3. [ ] JSON check to see if it's compatible ?
 4. [ ] Adding modifiable number of clients for ont supervisor. Now fixed to 5
-5. [ ] **Live reading trigger from an input directory**
+5. [x] **Live reading trigger from an input directory**
    
 
 ## Observations
