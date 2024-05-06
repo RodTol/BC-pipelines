@@ -19,8 +19,10 @@ def run_nanoplot(input_fastq, output_dir):
 def telegram_send_file(path_to_file) :
     token = str(os.environ.get('BC_TOKEN_BOT'))
     chat_id = "-4074077922"
-    url_req = "https://api.telegram.org/bot" + token + "/sendDocument" + "?chat_id=" + chat_id + "&document=" + path_to_file 
-    results = requests.get(url_req)
+    url = f"https://api.telegram.org/bot{token}/sendDocument"
+    files = {'document': open(path_to_file, 'rb')}
+    data = {'chat_id': chat_id}
+    results = requests.post(url, files=files, data=data)
     
     if results.status_code == 200:
         print('Message sent successfully!')
