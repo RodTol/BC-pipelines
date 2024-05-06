@@ -50,7 +50,7 @@ echo "Launching the server"
 ~/BC-pipelines/BC_scripts/server.sh $model $logs_dir $gpus_settings &
 sleep 40 # Maybe I need this pause to be able to create the TCP file correctly
 
-# TODO: insert quick check to monitor if the startup was correct, otherwise retry ?
+#TODO: insert quick check to monitor if the startup was correct, otherwise retry ?
 
 # Load virtualenv for Python, necessary for BC Software
 # Note that each node needs its own virtualenv since they 
