@@ -47,7 +47,7 @@ def inspect_pod5(
 
 def telegram_send_message(message) :
     token = str(os.environ.get('BC_TOKEN_BOT'))
-    chat_id = "-4074077922"
+    chat_id = "-4270864261"
     url_req = "https://api.telegram.org/bot" + token + "/sendMessage" + "?chat_id=" + chat_id + "&text=" + message 
     results = requests.get(url_req)
     

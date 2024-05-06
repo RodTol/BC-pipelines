@@ -29,7 +29,7 @@ send_message_standard() {
 
 
 BOT_TOKEN="$BC_TOKEN_BOT"
-CHAT_ID="-4074077922"
+CHAT_ID="-4270864261"
 
 # Set initial time and interval
 start_time=$(date +%s)

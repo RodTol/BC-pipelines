@@ -18,7 +18,7 @@ def run_nanoplot(input_fastq, output_dir):
 # Send report to telegram bot             
 def telegram_send_file(path_to_file, caption) :
     token = str(os.environ.get('BC_TOKEN_BOT'))
-    chat_id = "-4074077922"
+    chat_id = "-4270864261"
     url = f"https://api.telegram.org/bot{token}/sendDocument"
     files = {'document': open(path_to_file, 'rb')}
     data = {'chat_id': chat_id,'caption': caption}

@@ -2,7 +2,7 @@
 
 ######################## BOT INFO ############################
 BOT_TOKEN="$BC_TOKEN_BOT"
-CHAT_ID="-4074077922"
+CHAT_ID="-4270864261"
 
 # Function to send a message to Telegram
 send_message() {

@@ -17,7 +17,7 @@ count_symbolic_links() {
 }
 
 BOT_TOKEN="$BC_TOKEN_BOT"
-CHAT_ID="-4074077922"
+CHAT_ID="-4270864261"
 
 json_file=$1
 run_name=$(jq -r '.General.run_name' "$json_file")
