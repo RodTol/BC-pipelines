@@ -8,23 +8,25 @@ check_job_status() {
 }
 
 # Function to send a message to Telegram with code block formatting
-send_message() {
+send_formatted_message() {
     local message=$1
     local formatted_message="\`\`\` $message \`\`\`"
 
-    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+    response=$(curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
     -d "chat_id=$CHAT_ID" \
-    -d "text=$formatted_message" \
-    -d "parse_mode=MarkdownV2"
+    -d "text=$message" \
+    -d "parse_mode=HTML")
+    # Extract message ID from response and save it to a variable
+    message_id=$(echo "$response" | jq -r '.result.message_id')    
 }
 
 # Function to send a message to Telegram with standard formatting
 send_message_standard() {
     local message=$1
-    response=curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+    response=$(curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
     -d "chat_id=$CHAT_ID" \
     -d "text=$message" \
-    -d "parse_mode=HTML"
+    -d "parse_mode=HTML")
     # Extract message ID from response and save it to a variable
     message_id=$(echo "$response" | jq -r '.result.message_id')    
 }
@@ -54,7 +56,7 @@ while check_job_status; do
     if ((count >= 3)); then        
         # Capture the output of squeue -p DGX,GPU
         squeue_output=$(squeue -p DGX,GPU -o " %.9P %.8j %.8u %.2t %.10M %.6C %.6m %.10N %.10l")
-        send_message "$squeue_output" > /dev/null
+        send_formatted_message "$squeue_output" > /dev/null
         count=0
     fi
 
