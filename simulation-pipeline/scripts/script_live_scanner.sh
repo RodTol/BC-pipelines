@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=live_scanner_jenkins
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/live_scanner.out
 #SBATCH --error=/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/live_scanner.err
 #SBATCH -A lage
