@@ -54,6 +54,7 @@ while check_job_status; do
         
     ((count++))
     if ((count >= 3)); then        
+        delete_message "$message_id"
         # Capture the output of squeue -p DGX,GPU
         squeue_output=$(squeue -p DGX,GPU -o " %.9P %.8j %.8u %.2t %.10M %.6C %.6m %.10N %.10l")
         send_formatted_message "$squeue_output" > /dev/null
