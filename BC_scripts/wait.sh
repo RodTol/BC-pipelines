@@ -21,7 +21,7 @@ send_message() {
 # Function to send a message to Telegram with standard formatting
 send_message_standard() {
     local message=$1
-    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+    response=curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
     -d "chat_id=$CHAT_ID" \
     -d "text=$message" \
     -d "parse_mode=HTML"
@@ -72,4 +72,5 @@ while check_job_status; do
 
     sleep 120
     delete_message "$message_id"
+    echo "Deleted $message_id"
 done

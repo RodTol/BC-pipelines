@@ -9,7 +9,6 @@ send_message() {
     -d "text=$message"
 }
 
-
 count_symbolic_links() {
     local directory="$1"
     local symlink_count=$(find "$directory" -type l | wc -l)
