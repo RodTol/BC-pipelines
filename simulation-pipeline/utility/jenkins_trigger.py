@@ -11,25 +11,19 @@ class Jenkins_trigger:
         self.username = username
         self.password = password
         self.token = token
+        self.session = requests.Session()
+        self.session.auth = (self.username, self.password)
 
         #Get the Jenkins server info
-
-        # self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
-        # user = self.server.get_whoami()
-        # version = self.server.get_version()
-        # print('Hello %s from Jenkins %s' % (user['fullName'], version))
-
         self._get_jenkins_info
 
     def _get_jenkins_info(self):
         # Create a session to persist the authentication cookies
         api_url = f"{self.jenkins_url}/me/api/json"
-        session = requests.Session()
-        session.auth = (self.username, self.password)
 
         try:
             # Fetch user information
-            response = session.get(api_url)
+            response = self.session.get(api_url)
             response.raise_for_status() 
         except requests.exceptions.RequestException as e:
             print(f"Error connecting to Jenkins: {e}")
@@ -42,13 +36,33 @@ class Jenkins_trigger:
             # Fetch Jenkins version
             request = requests.Request('GET', self.jenkins_url)
             request.headers['X-Jenkins'] = '0.0'
-            response = session.send(session.prepare_request(request))
+            response = self.session.send(self.session.prepare_request(request))
         except (requests.exceptions.RequestException, requests.exceptions.HTTPError):
             raise Exception("Error communicating with server[%s]" % self.url)
 
         # Parse response JSON
         jenkins_version = response.headers.get('X-Jenkins')
         print('Hello %s from Jenkins %s' % (user_name, jenkins_version))
+
+    def _get_build_console_output(self, name, number):
+            '''Get build console text.
+
+            :param name: Job name, ``str``
+            :param number: Build number, ``str`` (also accepts ``int``)
+            :returns: Build console output,  ``str``
+            '''
+            # Create url to job console
+            console_url = f'{self.jenkins_url}job/{name}/{number}/consoleText'
+            cookies = self.session.cookies.get_dict()
+
+            try:
+                response = self.session.get(console_url, cookies=cookies)
+                if response.status_code == 200:
+                    return response.text
+                else:
+                    return f"Error: Failed to retrieve console output. Status code: {response.status_code}"
+            except requests.RequestException as e:
+                return f"Error: {e}"
 
 
     def _get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
