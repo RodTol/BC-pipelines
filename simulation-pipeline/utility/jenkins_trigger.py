@@ -40,7 +40,7 @@ class Jenkins_trigger:
             
         try:
             # Fetch Jenkins version
-            request = requests.Request('GET', self.url)
+            request = requests.Request('GET', self.jenkins_url)
             request.headers['X-Jenkins'] = '0.0'
             response = self.session.send(self.session.prepare_request(request))
         except (requests.exceptions.RequestException, requests.exceptions.HTTPError):
