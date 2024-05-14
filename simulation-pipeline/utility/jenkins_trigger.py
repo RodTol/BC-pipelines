@@ -66,15 +66,16 @@ class Jenkins_trigger:
             # Create url to job console
             folder_url, short_name = self._get_job_folder(name)
             console_url = f'{folder_url}job/{short_name}/{number}/consoleText'
+            full_url = self.jenkins_url + console_url
             cookies = self.session.cookies.get_dict()
 
             try:
-                response = self.session.get(console_url, cookies=cookies)
+                response = self.session.get(full_url, cookies=cookies)
                 if response:
                     return response.text
                 else:
                     print(f"Error: Failed to retrieve console output. Status code: {response.status_code}")
-                    print("Console url is ", console_url )
+                    print("Console url is ", full_url )
                     return
             except requests.RequestException as e:
                 return f"Error: {e}"
