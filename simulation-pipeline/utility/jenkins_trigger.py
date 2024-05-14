@@ -31,24 +31,25 @@ class Jenkins_trigger:
             # Fetch user information
             response = session.get(api_url)
             response.raise_for_status() 
-            
-            # Parse response JSON
-            user_info = response.json()
-            user_name = user_info.get('fullName', 'Unknown')
-            
-            # Fetch Jenkins version
-            version_url = f"{self.jenkins_url}/api/json"
-            response = session.get(version_url)
-            response.raise_for_status()
-            
-            # Parse response JSON
-            version_info = response.json()
-            print(version_info)
-            jenkins_version = version_info.get('version', 'Unknown')
-            
-            print('Hello %s from Jenkins %s' % (user_name, jenkins_version))
         except requests.exceptions.RequestException as e:
             print(f"Error connecting to Jenkins: {e}")
+
+        # Parse response JSON
+        user_info = response.json()
+        user_name = user_info.get('fullName', 'Unknown')
+            
+        try:
+            # Fetch Jenkins version
+            request = requests.Request('GET', self.url)
+            request.headers['X-Jenkins'] = '0.0'
+            response = self.session.send(self.session.prepare_request(request))
+        except (requests.exceptions.RequestException, requests.exceptions.HTTPError):
+            raise Exception("Error communicating with server[%s]" % self.url)
+
+        # Parse response JSON
+        jenkins_version = response.headers.get('X-Jenkins')
+        print('Hello %s from Jenkins %s' % (user_name, jenkins_version))
+
 
     def _get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
         while build_status not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
