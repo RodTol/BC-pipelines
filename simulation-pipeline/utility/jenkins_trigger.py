@@ -57,7 +57,7 @@ class Jenkins_trigger:
 
             try:
                 response = self.session.get(console_url, cookies=cookies)
-                if response.status_code == 200:
+                if response:
                     return response.text
                 else:
                     return f"Error: Failed to retrieve console output. Status code: {response.status_code}"
