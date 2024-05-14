@@ -65,7 +65,7 @@ class Jenkins_trigger:
             '''
             # Create url to job console
             folder_url, short_name = self._get_job_folder(name)
-            console_url = f'{folder_url}job/{short_name}/{number}/consoleText'
+            console_url = f'/{folder_url}job/{short_name}/{number}/consoleText'
             full_url = self.jenkins_url + console_url
             cookies = self.session.cookies.get_dict()
 
