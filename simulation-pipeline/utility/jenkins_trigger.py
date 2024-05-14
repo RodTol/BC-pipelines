@@ -83,13 +83,15 @@ class Jenkins_trigger:
 
     def _get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
         while build_status not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
-            try :
-                console_output = self.server.get_build_console_output(job_name, build_number)
-            except Exception as exc:
-                print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),  " Reconnecting", flush=True)
-                self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
-                console_output = self.server.get_build_console_output(job_name, build_number)
+            # Reconnection try. Old version
+            # try :
+            #     console_output = self.server.get_build_console_output(job_name, build_number)
+            # except Exception as exc:
+            #     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),  " Reconnecting", flush=True)
+            #     self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
+            #     console_output = self.server.get_build_console_output(job_name, build_number)
             #print(console_output)
+            console_output = self._get_build_console_output(job_name, build_number)
             last_stage_line = ""
             for i,line in enumerate(console_output.split('\n')):
                     if line.endswith("[Pipeline] stage") and i < len(console_output.split('\n')) - 1:
