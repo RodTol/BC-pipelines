@@ -43,6 +43,7 @@ class Jenkins_trigger:
             
             # Parse response JSON
             version_info = response.json()
+            print(version_info)
             jenkins_version = version_info.get('version', 'Unknown')
             
             print('Hello %s from Jenkins %s' % (user_name, jenkins_version))
