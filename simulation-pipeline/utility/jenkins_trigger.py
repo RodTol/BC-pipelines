@@ -44,6 +44,18 @@ class Jenkins_trigger:
         jenkins_version = response.headers.get('X-Jenkins')
         print('Hello %s from Jenkins %s' % (user_name, jenkins_version))
 
+    def _get_job_folder(self, name):
+        '''Return the name and folder (see cloudbees plugin)
+        :param name: Job name, ``str``
+        :returns: Tuple [ 'folder path for Request', 'Name of job without folder path' ]
+        '''
+        a_path = name.split('/')
+        short_name = a_path[-1]
+        folder_url = (('job/' + '/job/'.join(a_path[:-1]) + '/')
+                      if len(a_path) > 1 else '')
+
+        return folder_url, short_name
+
     def _get_build_console_output(self, name, number):
             '''Get build console text.
 
@@ -52,7 +64,8 @@ class Jenkins_trigger:
             :returns: Build console output,  ``str``
             '''
             # Create url to job console
-            console_url = f'{self.jenkins_url}/job/{name}/{number}/consoleText'
+            folder_url, short_name = self._get_job_folder(name)
+            console_url = f'{folder_url}job/{short_name}/{number}/consoleText'
             cookies = self.session.cookies.get_dict()
 
             try:
