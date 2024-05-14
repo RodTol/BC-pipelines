@@ -60,7 +60,9 @@ class Jenkins_trigger:
                 if response:
                     return response.text
                 else:
-                    return f"Error: Failed to retrieve console output. Status code: {response.status_code}"
+                    print(f"Error: Failed to retrieve console output. Status code: {response.status_code}")
+                    print("Console url is ", console_url )
+                    return
             except requests.RequestException as e:
                 return f"Error: {e}"
 
