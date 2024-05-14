@@ -1,4 +1,4 @@
-import jenkins
+import requests
 from datetime import datetime
 import re
 import time
@@ -12,12 +12,42 @@ class Jenkins_trigger:
         self.password = password
         self.token = token
 
-        #Get the Jenkins server 
-        self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
-        user = self.server.get_whoami()
-        version = self.server.get_version()
-        print('Hello %s from Jenkins %s' % (user['fullName'], version))
+        #Get the Jenkins server info
 
+        # self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
+        # user = self.server.get_whoami()
+        # version = self.server.get_version()
+        # print('Hello %s from Jenkins %s' % (user['fullName'], version))
+
+        self._get_jenkins_info
+
+    def _get_jenkins_info(self):
+        # Create a session to persist the authentication cookies
+        api_url = f"{self.jenkins_url}/me/api/json"
+        session = requests.Session()
+        session.auth = (self.username, self.password)
+
+        try:
+            # Fetch user information
+            response = session.get(api_url)
+            response.raise_for_status() 
+            
+            # Parse response JSON
+            user_info = response.json()
+            user_name = user_info.get('fullName', 'Unknown')
+            
+            # Fetch Jenkins version
+            version_url = f"{self.jenkins_url}/api/json"
+            response = session.get(version_url)
+            response.raise_for_status()
+            
+            # Parse response JSON
+            version_info = response.json()
+            jenkins_version = version_info.get('version', 'Unknown')
+            
+            print('Hello %s from Jenkins %s' % (user_name, jenkins_version))
+        except requests.exceptions.RequestException as e:
+            print(f"Error connecting to Jenkins: {e}")
 
     def _get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
         while build_status not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
