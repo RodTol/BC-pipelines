@@ -52,7 +52,7 @@ class Jenkins_trigger:
             :returns: Build console output,  ``str``
             '''
             # Create url to job console
-            console_url = f'{self.jenkins_url}job/{name}/{number}/consoleText'
+            console_url = f'{self.jenkins_url}/job/{name}/{number}/consoleText'
             cookies = self.session.cookies.get_dict()
 
             try:
