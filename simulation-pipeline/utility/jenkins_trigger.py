@@ -134,13 +134,14 @@ class Jenkins_trigger:
     #     return job_url    
 
     def _build_job_url(self, job_name, parameters):
-        base_url = f"{self.jenkins_url}/job/{job_name}/buildWithParameters"
+        folder_url, short_name = self._get_job_folder(job_name)
+        print(folder_url)
+        base_url = folder_url + "/buildWithParameters"
         params_string = '&'.join([f"{key}={value}" for key, value in parameters.items()])
 
         url = f"{base_url}?{params_string}&token={self.token}"
 
         return url
-
 
     def get_jenkins_crumb(self):
         crumb_url = f"{self.jenkins_url}/crumbIssuer/api/json"
