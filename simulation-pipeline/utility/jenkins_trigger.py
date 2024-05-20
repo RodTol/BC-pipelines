@@ -127,7 +127,18 @@ class Jenkins_trigger:
         if token:
             job_url += f"&token={token}" 
         
-        return job_url       
+        return job_url    
+
+    def get_jenkins_crumb(self):
+        crumb_url = f"{self.jenkins_url}/crumbIssuer/api/json"
+
+        try:
+            response = self.session.get(crumb_url)
+            response.raise_for_status()
+            crumb_data = response.json()
+            return {crumb_data['crumbRequestField']: crumb_data['crumb']}
+        except requests.RequestException as e:
+            raise RuntimeError(f"Failed to get Jenkins crumb: {e}")       
 
     def trigger_jenkins_pipeline(self, job_name, parameters):
         
@@ -135,10 +146,15 @@ class Jenkins_trigger:
         #queue_item = self.server.build_job(job_name, parameters, token=self.token)
         build_url = self._build_job_url(job_name, parameters, self.token)
         print(build_url)
+
+        crumb_header = self.get_jenkins_crumb()
+
         try:
-            response = self.session.post(build_url)
+            response = self.session.post(build_url, headers=crumb_header)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            return f"Build triggered successfully: {response.status_code}"
         except requests.RequestException as e:
-            return f"Error: {e}"
+            return f"Error triggering build: {e}"
         
         #Missing the part to retrieve the queue item
         # TRY FIRST IF THE JOB IS BEING LAUNCHED
