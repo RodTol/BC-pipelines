@@ -126,7 +126,9 @@ class Jenkins_trigger:
         
         # Add token to the URL if provided
         if token:
-            job_url += f"&token={token}"        
+            job_url += f"&token={token}" 
+        
+        return job_url       
 
     def trigger_jenkins_pipeline(self, job_name, parameters):
         
