@@ -133,7 +133,7 @@ class Jenkins_trigger:
         
     #     return job_url    
 
-    def _build_jenkins_url(self, job_name, parameters):
+    def _build_job_url(self, job_name, parameters):
         base_url = f"{self.jenkins_url}/job/{job_name}/buildWithParameters"
         params_string = '&'.join([f"{key}={value}" for key, value in parameters.items()])
 
