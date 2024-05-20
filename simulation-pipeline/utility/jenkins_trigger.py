@@ -131,7 +131,7 @@ class Jenkins_trigger:
         
     #     return job_url    
 
-    def build_job_url(self, name, parameters=None, token=None):
+    def _build_job_url(self, name, parameters=None, token=None):
         BUILD_JOB = '%(folder_url)sjob/%(short_name)s/build'
         BUILD_WITH_PARAMS_JOB = '%(folder_url)sjob/%(short_name)s/buildWithParameters'
 
@@ -155,8 +155,6 @@ class Jenkins_trigger:
                     '?' + urlencode({'token': token}))
         else:
             return self._build_url(BUILD_JOB, {'folder_url': folder_url, 'short_name': short_name})
-
-
 
     def get_jenkins_crumb(self):
         crumb_url = f"{self.jenkins_url}/crumbIssuer/api/json"
