@@ -132,12 +132,8 @@ class Jenkins_trigger:
     #         job_url += f"&token={token}" 
         
     #     return job_url    
-    def _build_url(self, format_spec, variables=None):
-        if variables:
-            url_path = format_spec % self._get_encoded_params(variables)
-        else:
-            url_path = format_spec
-
+    def _build_url(self, format_spec):
+        url_path = format_spec
         return str(urljoin(self.server, url_path))
 
     def _build_job_url(self, name, parameters=None, token=None):
