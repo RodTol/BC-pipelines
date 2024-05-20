@@ -117,12 +117,11 @@ class Jenkins_trigger:
     def _build_job_url(self, name, parameters, token=False):
         # Construct the base build URL
         folder_url, short_name = self._get_job_folder(name)
-        job_url = f"{self.jenkins_url.rstrip('/')}/job/{short_name}/build"
+        job_url = f"{self.jenkins_url.rstrip('/')}/job/{short_name}/buildWithParameters"
         
-        # Add parameters to the URL if provided
-        if parameters:
-            params_str = "&".join([f"{key}={value}" for key, value in parameters.items()])
-            job_url += f"?{params_str}"
+ 
+        params_str = "&".join([f"{key}={value}" for key, value in parameters.items()])
+        job_url += f"?{params_str}"
         
         # Add token to the URL if provided
         if token:
