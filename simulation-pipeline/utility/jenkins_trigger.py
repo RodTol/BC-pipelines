@@ -2,6 +2,8 @@ import requests
 from datetime import datetime
 import re
 import time
+from urllib.parse import urlencode
+
 
 class Jenkins_trigger:
 
@@ -114,20 +116,26 @@ class Jenkins_trigger:
             time.sleep(5)
         print("Build is ", build_status)        
  
-    def _build_job_url(self, name, parameters, token=False):
-        # Construct the base build URL
-        folder_url, short_name = self._get_job_folder(name)
-        job_url = f"{self.jenkins_url.rstrip('/')}/job/{short_name}/buildWithParameters"
+    # def _build_job_url(self, name, parameters, token=False):
+    #     # Construct the base build URL
+    #     folder_url, short_name = self._get_job_folder(name)
+    #     job_url = f"{self.jenkins_url.rstrip('/')}/job/{short_name}/buildWithParameters"
         
  
-        params_str = "&".join([f"{key}={value}" for key, value in parameters.items()])
-        job_url += f"?{params_str}"
+    #     params_str = "&".join([f"{key}={value}" for key, value in parameters.items()])
+    #     job_url += f"?{params_str}"
         
-        # Add token to the URL if provided
-        if token:
-            job_url += f"&token={token}" 
+    #     # Add token to the URL if provided
+    #     if token:
+    #         job_url += f"&token={token}" 
         
-        return job_url    
+    #     return job_url    
+
+    def _build_job_url(self, job_name, parameters):
+        # Ensure parameters are URL-encoded
+        parameters_encoded = urlencode(parameters)
+        build_url = f"{self.jenkins_url}/job/{job_name}/buildWithParameters?{parameters_encoded}&token={self.token}"
+        return build_url    
 
     def get_jenkins_crumb(self):
         crumb_url = f"{self.jenkins_url}/crumbIssuer/api/json"
