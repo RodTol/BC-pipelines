@@ -3,6 +3,8 @@ from datetime import datetime
 import re
 import time
 from urllib.parse import urlencode
+from urllib.parse import urljoin
+
 
 
 class Jenkins_trigger:
@@ -130,6 +132,13 @@ class Jenkins_trigger:
     #         job_url += f"&token={token}" 
         
     #     return job_url    
+    def _build_url(self, format_spec, variables=None):
+        if variables:
+            url_path = format_spec % self._get_encoded_params(variables)
+        else:
+            url_path = format_spec
+
+        return str(urljoin(self.server, url_path))
 
     def _build_job_url(self, name, parameters=None, token=None):
         BUILD_JOB = '%(folder_url)sjob/%(short_name)s/build'
