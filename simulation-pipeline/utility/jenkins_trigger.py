@@ -136,7 +136,7 @@ class Jenkins_trigger:
     def _build_job_url(self, job_name, parameters):
         folder_url, short_name = self._get_job_folder(job_name)
         print(f'/{folder_url}job/{short_name}')
-        base_url = f'/{folder_url}job/{short_name}' + "/buildWithParameters"
+        base_url = self.jenkins_url + f'/{folder_url}job/{short_name}' + "/buildWithParameters"
         params_string = '&'.join([f"{key}={value}" for key, value in parameters.items()])
 
         url = f"{base_url}?{params_string}&token={self.token}"
