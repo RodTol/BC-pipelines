@@ -133,7 +133,11 @@ class Jenkins_trigger:
         #Trigger the build on jenkins
         #queue_item = self.server.build_job(job_name, parameters, token=self.token)
         build_url = self._build_job_url(job_name, parameters, self.token)
-        response = self.session.post(build_url)
+        print(build_url)
+        try:
+            response = self.session.post(build_url)
+        except requests.RequestException as e:
+            return f"Error: {e}"
         
         #Missing the part to retrieve the queue item
         # TRY FIRST IF THE JOB IS BEING LAUNCHED
