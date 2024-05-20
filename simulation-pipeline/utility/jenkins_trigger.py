@@ -131,11 +131,32 @@ class Jenkins_trigger:
         
     #     return job_url    
 
-    def _build_job_url(self, job_name, parameters, token):
-        # Ensure parameters are URL-encoded
-        parameters_encoded = urlencode(parameters)
-        build_url = f"{self.jenkins_url}/job/{job_name}/buildWithParameters?{parameters_encoded}&token={token}"
-        return build_url    
+    def build_job_url(self, name, parameters=None, token=None):
+        BUILD_JOB = '%(folder_url)sjob/%(short_name)s/build'
+        BUILD_WITH_PARAMS_JOB = '%(folder_url)sjob/%(short_name)s/buildWithParameters'
+
+        folder_url, short_name = self._get_job_folder(name)
+        
+        if parameters:
+            if token:
+                if isinstance(parameters, list):
+                    parameters.append(('token', token))
+                elif isinstance(parameters, dict):
+                    parameters.update({'token': token})
+                else:
+                    raise ValueError('build parameters can be a dictionary '
+                                 'like {"param_key": "param_value", ...} '
+                                 'or a list of two membered tuples '
+                                 'like [("param_key", "param_value",), ...]')
+            return (self._build_url(BUILD_WITH_PARAMS_JOB, {'folder_url': folder_url, 'short_name': short_name}) +
+                    '?' + urlencode(parameters))
+        elif token:
+            return (self._build_url(BUILD_JOB, {'folder_url': folder_url, 'short_name': short_name}) +
+                    '?' + urlencode({'token': token}))
+        else:
+            return self._build_url(BUILD_JOB, {'folder_url': folder_url, 'short_name': short_name})
+
+
 
     def get_jenkins_crumb(self):
         crumb_url = f"{self.jenkins_url}/crumbIssuer/api/json"
