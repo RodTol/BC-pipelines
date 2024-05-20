@@ -131,10 +131,10 @@ class Jenkins_trigger:
         
     #     return job_url    
 
-    def _build_job_url(self, job_name, parameters):
+    def _build_job_url(self, job_name, parameters, token):
         # Ensure parameters are URL-encoded
         parameters_encoded = urlencode(parameters)
-        build_url = f"{self.jenkins_url}/job/{job_name}/buildWithParameters?{parameters_encoded}&token={self.token}"
+        build_url = f"{self.jenkins_url}/job/{job_name}/buildWithParameters?{parameters_encoded}&token={token}"
         return build_url    
 
     def get_jenkins_crumb(self):
