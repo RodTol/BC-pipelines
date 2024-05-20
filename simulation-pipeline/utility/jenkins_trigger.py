@@ -157,7 +157,7 @@ class Jenkins_trigger:
         
         #Trigger the build on jenkins
         #queue_item = self.server.build_job(job_name, parameters, token=self.token)
-        build_url = self._build_job_url(job_name, parameters, self.token)
+        build_url = self._build_job_url(job_name, parameters)
         print(build_url)
 
         crumb_header = self.get_jenkins_crumb()
