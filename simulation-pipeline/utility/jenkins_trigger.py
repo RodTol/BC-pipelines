@@ -156,7 +156,7 @@ class Jenkins_trigger:
         #Trigger the build on jenkins
         #queue_item = self.server.build_job(job_name, parameters, token=self.token)
         build_url = self._build_job_url(job_name, parameters)
-        print(build_url)
+        #print(build_url)
 
         crumb_header = self._get_jenkins_crumb()
 
@@ -182,9 +182,8 @@ class Jenkins_trigger:
         while True:
             #queue_info = self.server.get_queue_item(queue_item)
             queue_url = f"{self.jenkins_url}/queue/item/{queue_item}/api/json"
-            queue_info = self.session.get(queue_url)
-
-            print(queue_info)
+            queue_info = json.loads(self.session.get(queue_url))
+            print("Queue info ", queue_info)
 
             if 'executable' in queue_info:
                 #build_info = self._get_build_info(job_name, queue_info['executable']['number'])
