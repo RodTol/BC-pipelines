@@ -4,6 +4,7 @@ import re
 import time
 from urllib.parse import urlencode
 from urllib.parse import urljoin
+import json
 
 
 
@@ -117,21 +118,6 @@ class Jenkins_trigger:
                     break
             time.sleep(5)
         print("Build is ", build_status)        
- 
-    # def _build_job_url(self, name, parameters, token=False):
-    #     # Construct the base build URL
-    #     folder_url, short_name = self._get_job_folder(name)
-    #     job_url = f"{self.jenkins_url.rstrip('/')}/job/{short_name}/buildWithParameters"
-        
- 
-    #     params_str = "&".join([f"{key}={value}" for key, value in parameters.items()])
-    #     job_url += f"?{params_str}"
-        
-    #     # Add token to the URL if provided
-    #     if token:
-    #         job_url += f"&token={token}" 
-        
-    #     return job_url    
 
     def _build_job_url(self, job_name, parameters):
         folder_url, short_name = self._get_job_folder(job_name)
@@ -143,7 +129,7 @@ class Jenkins_trigger:
 
         return url
 
-    def get_jenkins_crumb(self):
+    def _get_jenkins_crumb(self):
         crumb_url = f"{self.jenkins_url}/crumbIssuer/api/json"
 
         try:
@@ -154,6 +140,16 @@ class Jenkins_trigger:
         except requests.RequestException as e:
             raise RuntimeError(f"Failed to get Jenkins crumb: {e}")    
 
+    def _get_build_info(self, job_name, number):
+        folder_url, short_name = self._get_job_folder(job_name)
+        build_info_url = self.jenkins_url + f'/{folder_url}job/{short_name}/{number}/api/json' 
+        try:
+            response = self.session.get(build_info_url)
+            if response:
+                return json.loads(response)
+        except Exception as e:
+            print(f"Error fetching build info: {e}")
+            return None
 
     def trigger_jenkins_pipeline(self, job_name, parameters):
         
@@ -162,7 +158,7 @@ class Jenkins_trigger:
         build_url = self._build_job_url(job_name, parameters)
         print(build_url)
 
-        crumb_header = self.get_jenkins_crumb()
+        crumb_header = self._get_jenkins_crumb()
 
         try:
             response = self.session.post(build_url, headers=crumb_header)
@@ -173,9 +169,6 @@ class Jenkins_trigger:
         if 'Location' not in response.headers:
             raise requests.RequestException(
                 "Header 'Location' not found")
-
-        # Job is being launched    
-        #Missing the part to retrieve the queue item
 
         location = response.headers['Location']
         # location is a queue item, eg. "http://jenkins/queue/item/25/"
@@ -195,7 +188,8 @@ class Jenkins_trigger:
 
             if 'executable' in queue_info:
                 #build_info = self._get_build_info(job_name, queue_info['executable']['number'])
-                #build_info = 
+                build_info = self._get_build_info(job_name, queue_info)
+                print(build_info)
                 break
             else:
                 print("Build not started yet. Waiting...")
