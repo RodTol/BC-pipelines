@@ -183,6 +183,7 @@ class Jenkins_trigger:
         print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
         print("\033[91murl", build_info['url'], "\033[0m", flush=True)
 
+        previous_stage = ""
         while  build_info['result'] not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
             match = self._get_current_stage(job_name, build_info['number'])
             if match:
