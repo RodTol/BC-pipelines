@@ -182,7 +182,7 @@ class Jenkins_trigger:
         while True:
             #queue_info = self.server.get_queue_item(queue_item)
             queue_url = f"{self.jenkins_url}/queue/item/{queue_item}/api/json"
-            queue_info = json.loads(self.session.get(queue_url))
+            queue_info = json.loads(self.session.get(queue_url, headers=crumb_header).text)
             print("Queue info ", queue_info)
 
             if 'executable' in queue_info:
