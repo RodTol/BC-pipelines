@@ -83,41 +83,7 @@ class Jenkins_trigger:
                     print("Console url is ", full_url )
                     return
             except requests.RequestException as e:
-                return f"Error: {e}"
-
-
-    def _get_current_stage(self,job_name, build_number, build_status, previous_stage = None):
-        while build_status not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
-            # Reconnection try. Old version
-            # try :
-            #     console_output = self.server.get_build_console_output(job_name, build_number)
-            # except Exception as exc:
-            #     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),  " Reconnecting", flush=True)
-            #     self.server = jenkins.Jenkins(self.jenkins_url, username=self.username, password=self.password, timeout=60)
-            #     console_output = self.server.get_build_console_output(job_name, build_number)
-            #print(console_output)
-            console_output = self._get_build_console_output(job_name, build_number)
-            last_stage_line = ""
-            for i,line in enumerate(console_output.split('\n')):
-                    if line.endswith("[Pipeline] stage") and i < len(console_output.split('\n')) - 1:
-                        last_stage_line = console_output.split('\n')[i + 1]
-
-            #print(last_stage_line)
-            
-            pattern = r'\((.*?)\)'
-            match = re.search(pattern, last_stage_line)    
-
-            if match:
-                stage = match.group(1)
-                if previous_stage != stage:
-                    timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                    print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
-                    print("\033[36m" + "Build is " + "\033[0m", build_status)
-                    previous_stage = stage
-                elif stage == 'Send Report to User':
-                    break
-            time.sleep(5)
-        print("Build is ", build_status)        
+                return f"Error: {e}"      
 
     def _build_job_url(self, job_name, parameters):
         folder_url, short_name = self._get_job_folder(job_name)
@@ -151,6 +117,19 @@ class Jenkins_trigger:
             print(f"Error fetching build info: {e}")
             return None
 
+    def _get_current_stage(self,job_name, build_number):
+        console_output = self._get_build_console_output(job_name, build_number)
+        last_stage_line = ""
+        for i,line in enumerate(console_output.split('\n')):
+                if line.endswith("[Pipeline] stage") and i < len(console_output.split('\n')) - 1:
+                    last_stage_line = console_output.split('\n')[i + 1]
+
+        #print(last_stage_line)
+        
+        pattern = r'\((.*?)\)'
+        match = re.search(pattern, last_stage_line)    
+        return match
+
     def trigger_jenkins_pipeline(self, job_name, parameters):
         
         #Trigger the build on jenkins
@@ -183,9 +162,8 @@ class Jenkins_trigger:
             #print("Queue info ", queue_info)
 
             if 'executable' in queue_info:
-                #build_info = self._get_build_info(job_name, queue_info['executable']['number'])
                 build_info = self._get_build_info(job_name, queue_info['executable']['number'])
-                print(build_info)
+                #print("Build info ", build_info)
                 break
             else:
                 print("Build not started yet. Waiting...")
@@ -205,4 +183,18 @@ class Jenkins_trigger:
         print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
         print("\033[91murl", build_info['url'], "\033[0m", flush=True)
 
-        self._get_current_stage(job_name, build_info['number'], build_info['result'])
+        while  build_info['result'] not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
+            match = self._get_current_stage(job_name, build_info['number'], build_info['result'])
+            if match:
+                stage = match.group(1)
+            if previous_stage != stage:
+                timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
+                print("\033[36m" + "Build is " + "\033[0m", build_info['result'])
+                previous_stage = stage
+            elif stage == 'Send Report to User':
+                build_info = self._get_build_info(job_name, queue_info['executable']['number'])
+                break
+        time.sleep(5)
+        print("Build is ", build_info['result']) 
+        print("I am ending the build..") 
