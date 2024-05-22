@@ -166,35 +166,45 @@ class Jenkins_trigger:
         try:
             response = self.session.post(build_url, headers=crumb_header)
             response.raise_for_status()  # Raise an exception for HTTP errors
-            return f"Build triggered successfully: {response.status_code}"
         except requests.RequestException as e:
-            return f"Error triggering build: {e}"
-        
+            print(f"Error triggering build: {e}")
+
+        if 'Location' not in response.headers:
+            raise requests.RequestException(
+                "Header 'Location' not found")
+
+        # Job is being launched    
         #Missing the part to retrieve the queue item
-        # TRY FIRST IF THE JOB IS BEING LAUNCHED
+
+        location = response.headers['Location']
+        # location is a queue item, eg. "http://jenkins/queue/item/25/"
+        if location.endswith('/'):
+            location = location[:-1]
+        parts = location.split('/')
+        queue_item = int(parts[-1])
 
         #Get build number and infos
-        # while True:
-        #     queue_info = self.server.get_queue_item(queue_item)
-        #     if 'executable' in queue_info:
-        #         build_info = self.server.get_build_info(job_name, queue_info['executable']['number'])
-        #         break
-        #     else:
-        #         print("Build not started yet. Waiting...")
-        #         time.sleep(5)  # Wait for 5 seconds before checking the queue again            
+        while True:
+            queue_info = self.server.get_queue_item(queue_item)
+            if 'executable' in queue_info:
+                build_info = self.server.get_build_info(job_name, queue_info['executable']['number'])
+                break
+            else:
+                print("Build not started yet. Waiting...")
+                time.sleep(5)  # Wait for 5 seconds before checking the queue again            
 
-        # # Convert duration from milliseconds to seconds
-        # duration_seconds = build_info['duration'] / 1000
+        # Convert duration from milliseconds to seconds
+        duration_seconds = build_info['duration'] / 1000
 
-        # # Convert timestamp to standard date format
-        # timestamp_seconds = build_info['timestamp'] / 1000
-        # timestamp_date = datetime.utcfromtimestamp(timestamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
+        # Convert timestamp to standard date format
+        timestamp_seconds = build_info['timestamp'] / 1000
+        timestamp_date = datetime.utcfromtimestamp(timestamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
 
-        # # Print basic information about the build
-        # print("\033[91mBuild Number:", build_info['number'], "\033[0m")
-        # print("\033[91mResult:", build_info['result'], "\033[0m")
-        # print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
-        # print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
-        # print("\033[91murl", build_info['url'], "\033[0m", flush=True)
+        # Print basic information about the build
+        print("\033[91mBuild Number:", build_info['number'], "\033[0m")
+        print("\033[91mResult:", build_info['result'], "\033[0m")
+        print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
+        print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
+        print("\033[91murl", build_info['url'], "\033[0m", flush=True)
 
-        # self._get_current_stage(job_name, build_info['number'], build_info['result'])
+        self._get_current_stage(job_name, build_info['number'], build_info['result'])
