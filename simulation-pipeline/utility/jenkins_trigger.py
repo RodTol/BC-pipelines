@@ -191,18 +191,18 @@ class Jenkins_trigger:
                 print("Build not started yet. Waiting...")
                 time.sleep(5)  # Wait for 5 seconds before checking the queue again            
 
-        # # Convert duration from milliseconds to seconds
-        # duration_seconds = build_info['duration'] / 1000
+        # Convert duration from milliseconds to seconds
+        duration_seconds = build_info['duration'] / 1000
 
-        # # Convert timestamp to standard date format
-        # timestamp_seconds = build_info['timestamp'] / 1000
-        # timestamp_date = datetime.utcfromtimestamp(timestamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
+        # Convert timestamp to standard date format
+        timestamp_seconds = build_info['timestamp'] / 1000
+        timestamp_date = datetime.utcfromtimestamp(timestamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
 
-        # # Print basic information about the build
-        # print("\033[91mBuild Number:", build_info['number'], "\033[0m")
-        # print("\033[91mResult:", build_info['result'], "\033[0m")
-        # print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
-        # print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
-        # print("\033[91murl", build_info['url'], "\033[0m", flush=True)
+        # Print basic information about the build
+        print("\033[91mBuild Number:", build_info['number'], "\033[0m")
+        print("\033[91mResult:", build_info['result'], "\033[0m")
+        print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
+        print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
+        print("\033[91murl", build_info['url'], "\033[0m", flush=True)
 
-        # self._get_current_stage(job_name, build_info['number'], build_info['result'])
+        self._get_current_stage(job_name, build_info['number'], build_info['result'])
