@@ -146,7 +146,7 @@ class Jenkins_trigger:
         try:
             response = self.session.get(build_info_url)
             if response:
-                return json.loads(response)
+                return json.loads(response.text)
         except Exception as e:
             print(f"Error fetching build info: {e}")
             return None
@@ -154,10 +154,8 @@ class Jenkins_trigger:
     def trigger_jenkins_pipeline(self, job_name, parameters):
         
         #Trigger the build on jenkins
-        #queue_item = self.server.build_job(job_name, parameters, token=self.token)
         build_url = self._build_job_url(job_name, parameters)
         #print(build_url)
-
         crumb_header = self._get_jenkins_crumb()
 
         try:
@@ -180,14 +178,13 @@ class Jenkins_trigger:
 
         #Get build number and infos
         while True:
-            #queue_info = self.server.get_queue_item(queue_item)
             queue_url = f"{self.jenkins_url}/queue/item/{queue_item}/api/json"
             queue_info = json.loads(self.session.get(queue_url, headers=crumb_header).text)
-            print("Queue info ", queue_info)
+            #print("Queue info ", queue_info)
 
             if 'executable' in queue_info:
                 #build_info = self._get_build_info(job_name, queue_info['executable']['number'])
-                build_info = self._get_build_info(job_name, queue_info)
+                build_info = self._get_build_info(job_name, queue_info['executable']['number'])
                 print(build_info)
                 break
             else:
