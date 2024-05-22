@@ -117,7 +117,7 @@ class Jenkins_trigger:
             print(f"Error fetching build info: {e}")
             return None
 
-    def _get_current_stage(self,job_name, build_number):
+    def _get_current_stage(self, job_name, build_number):
         console_output = self._get_build_console_output(job_name, build_number)
         last_stage_line = ""
         for i,line in enumerate(console_output.split('\n')):
@@ -184,7 +184,7 @@ class Jenkins_trigger:
         print("\033[91murl", build_info['url'], "\033[0m", flush=True)
 
         while  build_info['result'] not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
-            match = self._get_current_stage(job_name, build_info['number'], build_info['result'])
+            match = self._get_current_stage(job_name, build_info['number'])
             if match:
                 stage = match.group(1)
             if previous_stage != stage:
