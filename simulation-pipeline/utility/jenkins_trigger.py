@@ -152,7 +152,8 @@ class Jenkins_trigger:
             crumb_data = response.json()
             return {crumb_data['crumbRequestField']: crumb_data['crumb']}
         except requests.RequestException as e:
-            raise RuntimeError(f"Failed to get Jenkins crumb: {e}")       
+            raise RuntimeError(f"Failed to get Jenkins crumb: {e}")    
+
 
     def trigger_jenkins_pipeline(self, job_name, parameters):
         
@@ -182,29 +183,36 @@ class Jenkins_trigger:
             location = location[:-1]
         parts = location.split('/')
         queue_item = int(parts[-1])
+        print("Queue item: ", queue_item)
 
         #Get build number and infos
         while True:
-            queue_info = self.server.get_queue_item(queue_item)
+            #queue_info = self.server.get_queue_item(queue_item)
+            queue_url = f"{self.jenkins_url}/queue/item/{queue_item}/api/json"
+            queue_info = self.session.get(queue_url)
+
+            print(queue_info)
+
             if 'executable' in queue_info:
-                build_info = self.server.get_build_info(job_name, queue_info['executable']['number'])
+                #build_info = self._get_build_info(job_name, queue_info['executable']['number'])
+                #build_info = 
                 break
             else:
                 print("Build not started yet. Waiting...")
                 time.sleep(5)  # Wait for 5 seconds before checking the queue again            
 
-        # Convert duration from milliseconds to seconds
-        duration_seconds = build_info['duration'] / 1000
+        # # Convert duration from milliseconds to seconds
+        # duration_seconds = build_info['duration'] / 1000
 
-        # Convert timestamp to standard date format
-        timestamp_seconds = build_info['timestamp'] / 1000
-        timestamp_date = datetime.utcfromtimestamp(timestamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
+        # # Convert timestamp to standard date format
+        # timestamp_seconds = build_info['timestamp'] / 1000
+        # timestamp_date = datetime.utcfromtimestamp(timestamp_seconds).strftime('%Y-%m-%d %H:%M:%S')
 
-        # Print basic information about the build
-        print("\033[91mBuild Number:", build_info['number'], "\033[0m")
-        print("\033[91mResult:", build_info['result'], "\033[0m")
-        print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
-        print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
-        print("\033[91murl", build_info['url'], "\033[0m", flush=True)
+        # # Print basic information about the build
+        # print("\033[91mBuild Number:", build_info['number'], "\033[0m")
+        # print("\033[91mResult:", build_info['result'], "\033[0m")
+        # print("\033[91mDuration (seconds):", duration_seconds, "\033[0m")
+        # print("\033[91mTimestamp (UTC):", timestamp_date, "\033[0m")
+        # print("\033[91murl", build_info['url'], "\033[0m", flush=True)
 
-        self._get_current_stage(job_name, build_info['number'], build_info['result'])
+        # self._get_current_stage(job_name, build_info['number'], build_info['result'])
