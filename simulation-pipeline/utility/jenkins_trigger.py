@@ -189,15 +189,15 @@ class Jenkins_trigger:
             if match:
                 stage = match.group(1)
             else:
-                stage = "I was not able to parse the stage"
+                stage = "I was not able to parse the stage" #maybe skip iteration
             if previous_stage != stage:
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
-                print("\033[36m" + "Build is " + "\033[0m", build_info['result'])
+                print("\033[36m" + "Build is " + "\033[0m", build_info['result'], flush=True)
                 previous_stage = stage
             elif stage == 'Send Report to User':
                 build_info = self._get_build_info(job_name, queue_info['executable']['number'])
                 break
-        time.sleep(5)
+        time.sleep(10)
         print("Build is ", build_info['result']) 
         print("I am ending the build..") 
