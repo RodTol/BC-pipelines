@@ -66,12 +66,15 @@ class Live_Reading :
         self.job_name = Jenkins_job_name 
         self.job_config = Jenkins_job_config
 
-    def _list_all_pod5_files(self) :
+    def _list_all_pod5_files(self, to_be_skipped=[]) :
         '''
         This function will list only the closed files, which means
         that they are fully copied into the filesystem. If a file is open, an
         exception will be thrown and catched and a debug message printed. This
-        will continue until the file is closed 
+        will continue until the file is closed .
+
+        All the files contained in the to_be_skipped, should skip the pod5_inspect 
+        check, in order to improve speed.
         '''
         pod5_files = []
         all_files= os.listdir(self.input_dir)
@@ -81,27 +84,30 @@ class Live_Reading :
         for file in all_files:
             # Check if it is .pod5
             if file.endswith('.pod5'):
-                # Check if it is closed
-                path_to_file = os.path.join(self.input_dir, file)
+                if file not in to_be_skipped:
+                    path_to_file = os.path.join(self.input_dir, file)
+                    # I have to parse the inputs with the provided parser
+                    parser = prepare_pod5_inspect_argparser()
+                    args = parser.parse_args(['debug', path_to_file])
 
-                # I have to parse the inputs with the provided parser
-                parser = prepare_pod5_inspect_argparser()
-                args = parser.parse_args(['debug', path_to_file])
-
-                # Redirect stdout in order to have no prints
-                sys.stdout = open(os.devnull, 'w')
-                try :
-                    inspect_pod5(command=args.command, input_files=args.input_files)
-                except Exception as exc:
-                    # This is how we handle this exception THAT IS NOT RAISEED
-                    sys.stdout = sys.__stdout__ 
-                    #print(f"Failed to open file {file} due to {exc}") 
-                else:
-                    # But we must reset stdout to its default value every time
-                    sys.stdout = sys.__stdout__ 
-                    #print('Added ', file , ' to the list')
+                    # Redirect stdout in order to have no prints
+                    sys.stdout = open(os.devnull, 'w')
+                    try :
+                        # Check if it is closed
+                        inspect_pod5(command=args.command, input_files=args.input_files)
+                    except Exception as exc:
+                        # This is how we handle this exception THAT IS NOT RAISEED
+                        sys.stdout = sys.__stdout__ 
+                        #print(f"Failed to open file {file} due to {exc}") 
+                    else:
+                        # But we must reset stdout to its default value every time
+                        sys.stdout = sys.__stdout__ 
+                        #print('Added ', file , ' to the list')
+                        pod5_files.append(file)
+                        print(f'Appended file {file} at ', datetime.now().strftime("%H:%M:%S"))
+                else: 
                     pod5_files.append(file)
-                    print(f'Appended file {file} at ', datetime.now().strftime("%H:%M:%S"))
+                    print(f'Appended file {file} at (skipped check) ', datetime.now().strftime("%H:%M:%S"))                        
         return pod5_files        
     
     def _create_batch(self,  all_files, assigned_files, size=5):
@@ -208,7 +214,7 @@ class Live_Reading :
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
         Idea: 
-        1. Each 10 seconds the dir will be scanned
+        1. Each "scanning_time" seconds the dir will be scanned
         2. If # of files has reached a threshold, create a tmp dir with a work 
         batch. Save what files have been assigned. For now the batch size is made
         of all the files that have been added over the threshold
@@ -227,32 +233,34 @@ class Live_Reading :
 
         while True:
             time.sleep(scanning_time)
-            pod5_files = self._list_all_pod5_files()
+            pod5_files = self._list_all_pod5_files(to_be_skipped=pod5_assigned)
             curr_total_files = len(pod5_files)
             
             number_new_file = curr_total_files-prev_total_files
 
             print("\033[32m" + "Current amount of files : " + "\033[0m", curr_total_files, "\n",
                 "\033[32m" + "Previous : " + "\033[0m", prev_total_files, "\n",
-                "\033[32m" + "Number of assigned files : " + "\033[0m", len(pod5_assigned), flush=True)
+                "\033[32m" + "Number of previously assigned files : " + "\033[0m", len(pod5_assigned), flush=True)
 
             if number_new_file!=0:
                 message = ("Current amount of files : " + str(curr_total_files) + "\n" +
                 "Previous : " + str(prev_total_files) + "\n" +
-                "Number of assigned files : " + str(len(pod5_assigned)))
+                "Number of previously assigned files : " + str(len(pod5_assigned)))
                 telegram_send_message(message)          
 
             if number_new_file >= threshold or curr_total_files-len(pod5_assigned)>=threshold :
                 print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
+                #update the number of files
                 prev_total_files = curr_total_files
 
-                print("All files: ", pod5_files)
-                print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
+                #print("All files: ", pod5_files)
+                #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
                 # Update unassigned files and create a batch
                 batch = self._create_batch(pod5_files, pod5_assigned, size=number_new_file)
                 batchid = str(uuid.uuid4().int)
 
+                print("\033[91m Number of assigned files after this batch: ", len(pod5_assigned), "\033[0m")
                 #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
                 print("Create and launch batch ", batchid, flush=True)
