@@ -10,6 +10,7 @@ def merge_files(input_dir, output_file):
                 outfile.write(infile.read())
 
 def run_nanoplot(input_fastq, output_dir):
+    print("Creating Nanoplot Report")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     command = ["NanoPlot", "-t", "2", "--fastq", input_fastq, "-o", output_dir]
