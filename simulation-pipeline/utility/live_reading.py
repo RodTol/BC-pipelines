@@ -233,7 +233,8 @@ class Live_Reading :
 
         while True:
             time.sleep(scanning_time)
-            pod5_files = self._list_all_pod5_files(to_be_skipped=pod5_assigned)
+            #pod5_files = self._list_all_pod5_files(to_be_skipped=pod5_assigned) #maybe try with pod5_files? 
+            pod5_files = self._list_all_pod5_files(to_be_skipped=pod5_files)
             curr_total_files = len(pod5_files)
             
             number_new_file = curr_total_files-prev_total_files
