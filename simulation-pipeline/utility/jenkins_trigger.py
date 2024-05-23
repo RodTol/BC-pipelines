@@ -153,7 +153,7 @@ class Jenkins_trigger:
             location = location[:-1]
         parts = location.split('/')
         queue_item = int(parts[-1])
-        print("Queue item: ", queue_item)
+        #print("Queue item: ", queue_item)
 
         #Get build number and infos
         while True:
@@ -188,6 +188,8 @@ class Jenkins_trigger:
             match = self._get_current_stage(job_name, build_info['number'])
             if match:
                 stage = match.group(1)
+            else:
+                stage = "I was not able to parse the stage"
             if previous_stage != stage:
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
