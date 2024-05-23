@@ -3,7 +3,7 @@
       "run_name": "Run",
       "run_time": "10:00:00",
       "version": "3.0",
-      "batch_size": "43"
+      "batch_size": "80"
     },
     "Slurm": {
       "output": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out",
@@ -19,14 +19,14 @@
     },
     "Resources": {
       "index_host" : "0",
-      "nodes_queue" : ["DGX", "GPU"],
-      "nodes_list" : ["dgx002", ""],
-      "nodes_ip" : ["10.128.2.162", ""],
-      "nodes_cpus" : ["64", "48"],
+      "nodes_queue" : ["DGX", "DGX"],
+      "nodes_list" : ["dgx002", "dgx001"],
+      "nodes_ip" : ["10.128.2.162", "10.128.2.161"],
+      "nodes_cpus" : ["64", "64"],
       "nodes_mem" : ["200GB", "200GB"],      
-      "nodes_gpus" : ["2", "None"],
+      "nodes_gpus" : ["2", "2"],
       "gpus" : ["cuda:all", "cuda:all"],
-      "batch_size_list" : ["40", "3"]
+      "batch_size_list" : ["40", "40"]
     }
   }
   
