@@ -195,7 +195,7 @@ class BCWorkloadState:
             destpassdir = os.path.join(self.OUTPUTDIR, 'pass')
             if os.path.exists(passdir) & os.path.exists(destpassdir):
                 for entry in os.scandir(passdir):
-                    str_name = entry.name
+                    str_name = jobid + entry.name
                     dst = os.path.join(destpassdir, str_name)
                     os.rename(entry.path, dst)  # it will move the fastq file to the final destination
             faildir = os.path.join(full_job_output_dir,'fail')
