@@ -209,7 +209,7 @@ class Live_Reading :
 
         return jenkins_parameter
 
-    def live_reading_dir(self, scanning_time=5, max_retry=10):
+    def live_reading_dir(self, scanning_time=10, max_retry=10):
         '''
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
@@ -236,7 +236,6 @@ class Live_Reading :
             #pod5_files = self._list_all_pod5_files(to_be_skipped=pod5_assigned) #maybe try with pod5_files? 
             pod5_files = self._list_all_pod5_files(to_be_skipped=pod5_files)
             curr_total_files = len(pod5_files)
-            
             number_new_file = curr_total_files-prev_total_files
 
             print("\033[32m" + "Current amount of files : " + "\033[0m", curr_total_files, "\n",
@@ -246,14 +245,13 @@ class Live_Reading :
             if number_new_file!=0 :
                 message = ("Current amount of files : " + str(curr_total_files) + "\n" +
                 "Previous : " + str(prev_total_files) + "\n" +
-                "Number of previously assigned files : " + str(len(pod5_assigned)))
-                telegram_send_message(message)          
-
-            if number_new_file >= threshold or curr_total_files-len(pod5_assigned)>=threshold :
-                print("Current amount of files : ", curr_total_files, "Previous : ", prev_total_files)
+                "Number of processed files : " + str(len(pod5_assigned)))
+                telegram_send_message(message)
                 #update the number of files
-                prev_total_files = curr_total_files
+                prev_total_files = curr_total_files          
 
+            if curr_total_files-len(pod5_assigned)>=threshold :
+                print("Current amount of files : ", curr_total_files, "Amount of processed files : ", len(pod5_assigned))
                 #print("All files: ", pod5_files)
                 #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
@@ -261,7 +259,7 @@ class Live_Reading :
                 batch = self._create_batch(pod5_files, pod5_assigned, size=number_new_file)
                 batchid = str(uuid.uuid4().int)
 
-                print("\033[91m Number of assigned files after this batch: ", len(pod5_assigned), "\033[0m")
+                print("\033[91m Number of processed files after this batch: ", len(pod5_assigned), "\033[0m")
                 #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
                 print("Create and launch batch ", batchid, flush=True)
