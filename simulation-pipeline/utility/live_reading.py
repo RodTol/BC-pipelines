@@ -104,10 +104,10 @@ class Live_Reading :
                         sys.stdout = sys.__stdout__ 
                         #print('Added ', file , ' to the list')
                         pod5_files.append(file)
-                        print(f'Appended file {file} at ', datetime.now().strftime("%H:%M:%S"))
+                        #print(f'Appended file {file} at ', datetime.now().strftime("%H:%M:%S"))
                 else: 
                     pod5_files.append(file)
-                    print(f'Appended file {file} at (skipped check) ', datetime.now().strftime("%H:%M:%S"))                        
+                    #print(f'Appended file {file} at (skipped check) ', datetime.now().strftime("%H:%M:%S"))                        
         return pod5_files        
     
     def _create_batch(self,  all_files, assigned_files, size=5):
@@ -209,7 +209,7 @@ class Live_Reading :
 
         return jenkins_parameter
 
-    def live_reading_dir(self, scanning_time=5, max_retry=5):
+    def live_reading_dir(self, scanning_time=5, max_retry=10):
         '''
         The purpouse of this function is to scan the input directory and trigger
         the basecalling pipeline when we have added more than "threshold" files.
@@ -243,7 +243,7 @@ class Live_Reading :
                 "\033[32m" + "Previous : " + "\033[0m", prev_total_files, "\n",
                 "\033[32m" + "Number of previously assigned files : " + "\033[0m", len(pod5_assigned), flush=True)
 
-            if number_new_file!=0:
+            if number_new_file!=0 :
                 message = ("Current amount of files : " + str(curr_total_files) + "\n" +
                 "Previous : " + str(prev_total_files) + "\n" +
                 "Number of previously assigned files : " + str(len(pod5_assigned)))
