@@ -248,7 +248,9 @@ class Live_Reading :
                 "Number of processed files : " + str(len(pod5_assigned)))
                 telegram_send_message(message)
                 #update the number of files
-                prev_total_files = curr_total_files          
+                prev_total_files = curr_total_files   
+                #reset counter for closing
+                counter = 0          
 
             if curr_total_files-len(pod5_assigned)>=threshold :
                 print("Current amount of files : ", curr_total_files, "Amount of processed files : ", len(pod5_assigned))
@@ -269,19 +271,19 @@ class Live_Reading :
                 print(tmp_job_config)
                 # Launch the Jenkins pipeline
                 self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
-                counter = 0
+                
             if number_new_file==0 and curr_total_files!=0:
                 # How can I exit gracefully ? What tells me that the writing has stopped ? 
                 # I need to dispatch of all the remaing files
                 # This is a temporary solution that if the directory does not change for 
-                # 5 times, will shutdown. Note that this not applies if there are zero files
+                # N times, will shutdown. Note that this not applies if there are zero files
                 counter = counter +1
                 print (f"This is the {counter} time the directory is the same", flush=True)
                 if counter == max_retry:
                     print("\033[31m" + f"For {max_retry} times the directory wasn't updated" + "\033[0m")
                     print("\033[31m" + "Exiting gracefully..." + "\033[0m")
+                    return #no sys.exit(0) otherwise I will not perform the final processing     
                     
-                    return #no sys.exit(0) otherwise I will not perform the final processing
 
 
 
