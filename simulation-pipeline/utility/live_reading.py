@@ -258,7 +258,8 @@ class Live_Reading :
                 #print("Assigned files: ", pod5_assigned, " \033[91m LENGTH: ", len(pod5_assigned), "\033[0m")
 
                 # Update unassigned files and create a batch
-                batch = self._create_batch(pod5_files, pod5_assigned, size=number_new_file)
+                #batch = self._create_batch(pod5_files, pod5_assigned, size=number_new_file)
+                batch = self._create_batch(pod5_files, pod5_assigned, size=curr_total_files-len(pod5_assigned))
                 batchid = str(uuid.uuid4().int)
 
                 print("\033[91m Number of processed files after this batch: ", len(pod5_assigned), "\033[0m")
@@ -281,7 +282,21 @@ class Live_Reading :
                 print (f"This is the {counter} time the directory is the same", flush=True)
                 if counter == max_retry:
                     print("\033[31m" + f"For {max_retry} times the directory wasn't updated" + "\033[0m")
-                    print("\033[31m" + "Exiting gracefully..." + "\033[0m")
+                    if curr_total_files - len(pod5_assigned) >= 0:
+                        # Update unassigned files and create a batch
+                        batch = self._create_batch(pod5_files, pod5_assigned, size=number_new_file)
+                        batchid = str(uuid.uuid4().int)
+                        print("Create and launch the last batch ", batchid, flush=True)
+                        print("\033[91m Number of processed files after this batch: ", len(pod5_assigned), "\033[0m")
+
+                        self._create_tmp_input_dir(batchid, batch)
+                        tmp_job_config = self._modify_configurations_file(self.job_config, batchid)
+                        print(tmp_job_config)
+                        # Launch the Jenkins pipeline
+                        self.Jenkins.trigger_jenkins_pipeline(self.job_name,tmp_job_config)
+                    else:
+                        print("No more file to be processed")
+                        print("\033[31m" + "Exiting gracefully..." + "\033[0m")
                     return #no sys.exit(0) otherwise I will not perform the final processing     
                     
 

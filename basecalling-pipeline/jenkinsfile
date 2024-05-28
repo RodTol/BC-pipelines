@@ -94,7 +94,7 @@
                     }
                 }
             }
-            stage('Create Final file') {
+            stage('Create report files') {
                 steps {
                     withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                         sh '''
@@ -124,6 +124,13 @@
                             '                    
                         '''
                     }                        
+                }
+            }
+            stage('Start the alignment') {
+                steps {
+                    sh '''
+                        echo "Launche the AL-pipeline"
+                    '''
                 }
             }
         }
