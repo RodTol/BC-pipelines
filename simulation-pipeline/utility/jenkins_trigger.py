@@ -190,12 +190,12 @@ class Jenkins_trigger:
             if match:
                 stage = match.group(1)
             else:
-                stage = "I was not able to parse the stage" #maybe skip iteration
-                continue
+                stage = "I was not able to parse the stage" 
+                # continue #maybe skip iteration
             if previous_stage != stage:
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
-                print("\033[36m" + "Stage is " + "\033[0m", build_info['results'], flush=True)
+                print("\033[36m" + "Build is " + "\033[0m", build_info['result'], flush=True)
                 previous_stage = stage
             elif stage == 'Start the alignment':
                 break
