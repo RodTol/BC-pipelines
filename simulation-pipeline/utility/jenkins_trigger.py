@@ -190,12 +190,13 @@ class Jenkins_trigger:
                 stage = match.group(1)
             else:
                 stage = "I was not able to parse the stage" #maybe skip iteration
+                continue
             if previous_stage != stage:
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
-                print("\033[36m" + "Build is " + "\033[0m", build_info['result'], flush=True)
+                print("\033[36m" + "Stage is " + "\033[0m", build_info['stages'][stage]['status'], flush=True)
                 previous_stage = stage
-            elif stage == 'Send Report to User':
+            elif stage == 'Start the alignment':
                 build_info = self._get_build_info(job_name, queue_info['executable']['number'])
                 break
         time.sleep(10)
