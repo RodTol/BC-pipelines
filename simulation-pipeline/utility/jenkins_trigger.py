@@ -185,6 +185,7 @@ class Jenkins_trigger:
 
         previous_stage = ""
         while  build_info['result'] not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
+            time.sleep(10)
             match = self._get_current_stage(job_name, build_info['number'])
             build_info = self._get_build_info(job_name, queue_info['executable']['number'])
             if match:
@@ -200,6 +201,5 @@ class Jenkins_trigger:
             elif stage == 'Start the alignment':
                 break
         build_info = self._get_build_info(job_name, queue_info['executable']['number'])
-        time.sleep(10)
         print("Build is ", build_info['result']) 
         print("I am ending the build..") 

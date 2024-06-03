@@ -3,7 +3,7 @@ from merge_and_config import *
 
 sys.path.append("../simulation-pipeline/utility/")
 from jenkins_trigger import Jenkins_trigger
-from live_reading import telegram_send_message
+#from live_reading import telegram_send_message
 
 
 if __name__ == "__main__":
@@ -28,5 +28,5 @@ if __name__ == "__main__":
     job_name = "tolloi/alignment_pipeline"  
     #Launch the alignment
     jenkins = Jenkins_trigger(jenkins_url, username, password, token)
-    telegram_send_message("Launching the alignment")
+    #telegram_send_message("Launching the alignment")
     jenkins.trigger_jenkins_pipeline(job_name, jenkins_parameter)
