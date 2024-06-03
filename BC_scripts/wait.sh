@@ -14,7 +14,7 @@ send_formatted_message() {
 
     response=$(curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
     -d "chat_id=$CHAT_ID" \
-    -d "text=$message" \
+    -d "text=$formatted_message" \
     -d "parse_mode=MarkdownV2")
     # Extract message ID from response and save it to a variable
     message_id=$(echo "$response" | jq -r '.result.message_id')    
