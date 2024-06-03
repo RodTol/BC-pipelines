@@ -27,6 +27,10 @@
       "nodes_gpus" : ["2", "2"],
       "gpus" : ["cuda:all", "cuda:all"],
       "batch_size_list" : ["40", "40"]
+    },
+    "Alignment": {
+      "template_config" : "/u/area/jenkins_onpexp/AL-pipelines/configurations/template_config.json",
+      "path_to_tmp_config" : "/u/area/jenkins_onpexp/AL-pipelines/configurations/tmp_config"
     }
   }
   
