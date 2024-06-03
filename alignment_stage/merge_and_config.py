@@ -59,12 +59,12 @@ def create_configurations_file(job_config_path) :
     # Slurm log dir is the same of BC but different name
     # Split the path into directory and file name
     log_dir_path, log_file_name = os.path.split(BC_config["Slurm"]["output"])
-    modified_log_file_name = "AL" + log_file_name
+    modified_log_file_name = log_file_name
     modified_path = os.path.join(log_dir_path, modified_log_file_name)
     al_tmp_config['Slurm']['output'] = modified_path
 
     log_dir_path, log_file_name = os.path.split(BC_config["Slurm"]["error"])
-    modified_log_file_name = "AL" + log_file_name
+    modified_log_file_name = log_file_name
     modified_path = os.path.join(log_dir_path, modified_log_file_name)
     al_tmp_config['Slurm']['error'] = modified_path
 
@@ -83,6 +83,6 @@ def create_configurations_file(job_config_path) :
     with open(path_for_al_tmp_config, 'w') as file:
         file.write(json_content)    
     
-
+    return path_for_al_tmp_config
 
 
