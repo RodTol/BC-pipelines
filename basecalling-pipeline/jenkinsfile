@@ -128,9 +128,17 @@
             }
             stage('Start the alignment') {
                 steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'orfeo_jenkins_onpexp', keyFileVariable: 'SSH_ONPEXP_KEY', passphraseVariable: '', usernameVariable: 'SSH_ONPEXP_USER')]) {
                     sh '''
-                        echo "Launche the AL-pipeline"
+                        echo "Merging file of this batch"
+                        cd ~/BC-pipelines/alignment_stage
+                        python3 main.py '${configFilePath}'
+                        echo "Building config file for AL-pipeline"
                     '''
+                    }
+                    // build(job: 'tolloi/alignment_pipeline', parameters: [
+                    // string(name: 'configFilePath', value: '')
+                    //])
                 }
             }
         }
