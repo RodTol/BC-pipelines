@@ -30,12 +30,6 @@ def merge_fastq(job_config_path):
     merge_files(pass_dir, pass_merged_file)
     merge_files(fail_dir, fail_merged_file)
 
-def create_align_output_dirs(job_config):
-    '''
-    This function will create in the output dir of the align
-    job the BATCH dir with correct name where all the results of the alignment will be stored
-    '''
-
 def create_configurations_file(job_config_path) :
     '''
     This function needs to modify the template_config.json for the alignment in order
@@ -79,7 +73,7 @@ def create_configurations_file(job_config_path) :
     al_tmp_config["Alignment"]["input_file"] = pass_merged_file
 
     #Output file
-    sam_file_name = "Batch_" + run_number + ".sam"
+    sam_file_name = "batch_" + run_number + ".sam"
     output_file = os.path.join(BC_config["Basecalling"]["output_dir"], sam_file_name)
     al_tmp_config["Alignment"]["output_file"] = output_file
 

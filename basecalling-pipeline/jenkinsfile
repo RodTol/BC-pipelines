@@ -133,14 +133,14 @@
                         echo "Merging file of this batch"
                         ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                             cd ~/BC-pipelines/alignment_stage 
-                            python3 main.py '${configFilePath}'
+                            srun -p EPYC -N 1 -c 1 --mem=20GB python3 main.py '${configFilePath}'
                             '
                         echo "Building config file for AL-pipeline"
                     '''
                     }
-                    // build(job: 'tolloi/alignment_pipeline', parameters: [
-                    // string(name: 'configFilePath', value: '')
-                    //])
+                    build(job: 'tolloi/alignment_pipeline', parameters: [
+                    string(name: 'configFilePath', value: '')
+                    ])
                 }
             }
         }
