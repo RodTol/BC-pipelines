@@ -133,7 +133,7 @@
                         echo "Merging file of this batch"
                         ssh -i ${SSH_ONPEXP_KEY} ${SSH_ONPEXP_USER}@10.128.2.80 '
                             cd ~/BC-pipelines/alignment_stage 
-                            python3 main.py '${configFilePath}
+                            python3 main.py '${configFilePath}'
                             '
                         echo "Building config file for AL-pipeline"
                     '''
