@@ -198,7 +198,7 @@ class Jenkins_trigger:
                 print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
                 print("\033[36m" + "Build is " + "\033[0m", build_info['result'], flush=True)
                 previous_stage = stage
-            elif stage == 'Start the alignment':
+            elif stage == 'Send Report to User':
                 break
         build_info = self._get_build_info(job_name, queue_info['executable']['number'])
         print("Build is ", build_info['result']) 
