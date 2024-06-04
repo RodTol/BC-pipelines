@@ -1,20 +1,20 @@
 {
     "General": {
-      "run_name": "Run",
+      "run_name": "Run_",
       "run_time": "10:00:00",
       "version": "3.0",
       "batch_size": "80"
     },
     "Slurm": {
-      "output": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.out",
-      "error": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp/%x-%j.err",
+      "output": "/u/area/jenkins_onpexp/scratch/TEST/logs/%x-%j.out",
+      "error": "/u/area/jenkins_onpexp/scratch/TEST/logs/%x-%j.err",
       "instructions": "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/instructions.sh "
     },
     "Basecalling": {
       "model": "dna_r10.4.1_e8.2_400bps_hac.cfg",
       "input_dir": "",
-      "output_dir": "/u/area/jenkins_onpexp/scratch/BC-pipeline_output_test/tmp",
-      "logs_dir": "/u/area/jenkins_onpexp/scratch/jenkins_logs/tmp",
+      "output_dir": "/u/area/jenkins_onpexp/scratch/TEST/output",
+      "logs_dir": "/u/area/jenkins_onpexp/scratch/TEST/logs",
       "supervisor_script_path" : "/u/area/jenkins_onpexp/BC-pipelines/BC_scripts/supervisor.sh"
     },
     "Resources": {
@@ -32,5 +32,5 @@
       "template_config" : "/u/area/jenkins_onpexp/AL-pipelines/configurations/template_config.json",
       "path_to_tmp_config" : "/u/area/jenkins_onpexp/AL-pipelines/configurations/tmp_config"
     }
-  }
+}
   
