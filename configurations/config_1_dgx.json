@@ -30,7 +30,12 @@
     },
     "Alignment": {
       "template_config" : "/u/area/jenkins_onpexp/AL-pipelines/configurations/template_config.json",
-      "path_to_tmp_config" : "/u/area/jenkins_onpexp/AL-pipelines/configurations/tmp_config"
+      "path_to_tmp_config" : "/u/area/jenkins_onpexp/AL-pipelines/configurations/tmp_config",
+      "Resources": {
+        "Cores": "4",
+        "Mem": "200GB",
+        "time": "3:0:0"
+      }  
     }
   }
   
