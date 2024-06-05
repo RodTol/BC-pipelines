@@ -185,7 +185,6 @@ class Jenkins_trigger:
 
         previous_stage = ""
         while  build_info['result'] not in ['SUCCESS', 'UNSTABLE', 'FAILURE', 'NOT_BUILT', 'ABORTED']  :
-            time.sleep(10)
             match = self._get_current_stage(job_name, build_info['number'])
             build_info = self._get_build_info(job_name, queue_info['executable']['number'])
             if match:
@@ -198,6 +197,7 @@ class Jenkins_trigger:
                 print("\033[36m" + f"{timestamp} - Stage : {stage}" + "\033[0m")
                 print("\033[36m" + "Build is " + "\033[0m", build_info['result'], flush=True)
                 previous_stage = stage
+                time.sleep(20)
             elif stage == 'Send Report to User':
                 break
         build_info = self._get_build_info(job_name, queue_info['executable']['number'])
